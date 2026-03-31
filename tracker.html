@@ -85,23 +85,25 @@ body {
 .section { display: none; }
 .section.active { display: block; }
 
-/* VIA Selector */
-.via-selector {
-  display: flex; gap: 8px; margin-bottom: 16px;
+/* Week Selector */
+.week-selector {
+  display: flex; gap: 6px; margin-bottom: 16px;
 }
 
-.via-btn {
-  flex: 1; padding: 14px 8px; border-radius: var(--radius);
+.day-btn {
+  flex: 1; padding: 10px 4px; border-radius: var(--radius-sm);
   border: 2px solid var(--bg4); background: var(--bg2);
-  color: var(--text2); font-size: 13px; font-weight: 600;
+  color: var(--text3); font-size: 11px; font-weight: 600;
   cursor: pointer; text-align: center; transition: all 0.2s;
 }
 
-.via-btn.active { border-color: var(--accent); color: var(--accent2); background: rgba(108,92,231,0.1); }
-.via-btn small { display: block; font-size: 10px; font-weight: 400; margin-top: 2px; opacity: 0.7; }
+.day-btn .day-label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 2px; }
+.day-btn .day-via { display: block; font-size: 9px; font-weight: 400; opacity: 0.7; }
 
-.via-btn.rest { border-color: var(--bg4); }
-.via-btn.rest.active { border-color: var(--green); color: var(--green2); background: rgba(0,184,148,0.1); }
+.day-btn.active { border-color: var(--accent); color: var(--accent2); background: rgba(108,92,231,0.1); }
+.day-btn.today { box-shadow: 0 0 0 1px var(--green) inset; }
+.day-btn.done { border-color: var(--green); color: var(--green2); background: rgba(0,184,148,0.08); }
+.day-btn.done .day-label::after { content: ' ✓'; font-size: 9px; }
 
 /* Exercise Card */
 .exercise-card {
@@ -296,6 +298,13 @@ body {
 
 .history-date { font-size: 13px; color: var(--text2); margin-bottom: 4px; }
 .history-via { font-size: 16px; font-weight: 600; }
+
+.delete-entry-btn {
+  width: 100%; margin-top: 12px; padding: 10px;
+  border-radius: var(--radius-sm); border: 1px solid rgba(231,76,60,0.3);
+  background: rgba(231,76,60,0.08); color: var(--red);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+}
 .history-summary { font-size: 12px; color: var(--text3); margin-top: 4px; }
 
 .history-detail {
@@ -564,7 +573,7 @@ input.file-input-hidden { display: none; }
 <div class="content">
   <!-- WORKOUT SECTION -->
   <div class="section active" id="sec-workout">
-    <div class="via-selector" id="viaSelector"></div>
+    <div class="week-selector" id="weekSelector"></div>
     <div id="exerciseList"></div>
   </div>
 
@@ -671,10 +680,14 @@ const PROGRAM = {
       ]
     }
   ],
-  // L:V1, M:V2, X:V3, J:V1, V:V2, S:Desc, D:Desc
-  weekSchedule: {
-    1: 1, 2: 2, 3: 3, 4: 1, 5: 2, 6: 0, 0: 0
-  }
+  // 5 training days: L:V1, M:V2, X:V3, J:V1, V:V2
+  trainingDays: [
+    { dow: 1, label: 'LUN', viaId: 1 },
+    { dow: 2, label: 'MAR', viaId: 2 },
+    { dow: 3, label: 'MIÉ', viaId: 3 },
+    { dow: 4, label: 'JUE', viaId: 1 },
+    { dow: 5, label: 'VIE', viaId: 2 },
+  ]
 };
 
 const MEALS = [
@@ -714,6 +727,7 @@ const MEALS = [
 
 let currentDate = new Date();
 let selectedVia = null;
+let selectedDayDate = null;
 let timerInterval = null;
 let timerSeconds = 0;
 
@@ -734,7 +748,9 @@ function isToday(d) {
 }
 
 function changeDate(delta) {
-  currentDate.setDate(currentDate.getDate() + delta);
+  currentDate.setDate(currentDate.getDate() + (delta * 7));
+  selectedDayDate = null;
+  selectedVia = null;
   render();
 }
 
@@ -743,7 +759,7 @@ function switchTab(tab) {
   document.querySelectorAll('.nav-item').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('sec-' + tab).classList.add('active');
-  document.getElementById('saveBar').style.display = (tab === 'workout' && selectedVia > 0) ? '' : 'none';
+  document.getElementById('saveBar').style.display = (tab === 'workout' && selectedVia) ? '' : 'none';
   if (tab === 'history') renderHistory();
   if (tab === 'medidas') renderMedidas();
 }
@@ -756,14 +772,27 @@ function setStorage(key, val) {
   localStorage.setItem(key, JSON.stringify(val));
 }
 
-function getSuggestedVia() {
-  return PROGRAM.weekSchedule[currentDate.getDay()] || 0;
+function getWeekDates() {
+  const d = new Date(currentDate);
+  const dow = d.getDay();
+  const monday = new Date(d);
+  monday.setDate(d.getDate() - ((dow + 6) % 7));
+  return PROGRAM.trainingDays.map(td => {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + td.dow - 1);
+    return { ...td, date };
+  });
+}
+
+function getSelectedDayKey() {
+  return selectedDayDate ? selectedDayDate.toISOString().split('T')[0] : dateKey();
 }
 
 function getPreviousWeight(viaId, exerciseIdx) {
   const allKeys = Object.keys(localStorage).filter(k => k.startsWith('workout-')).sort().reverse();
+  const currentKey = 'workout-' + getSelectedDayKey();
   for (const key of allKeys) {
-    if (key === 'workout-' + dateKey()) continue;
+    if (key === currentKey) continue;
     const data = getStorage(key);
     if (data && data.viaId === viaId) {
       const ex = data.exercises[exerciseIdx];
@@ -776,49 +805,52 @@ function getPreviousWeight(viaId, exerciseIdx) {
   return null;
 }
 
-function selectVia(viaId) {
-  selectedVia = viaId;
-  document.getElementById('saveBar').style.display = viaId > 0 ? '' : 'none';
+function selectDay(dow) {
+  const week = getWeekDates();
+  const day = week.find(d => d.dow === dow);
+  if (!day) return;
+  selectedVia = day.viaId;
+  selectedDayDate = day.date;
+  document.getElementById('saveBar').style.display = 'block';
+  renderWeekSelector();
   renderExercises();
-  renderViaSelector();
 }
 
-function renderViaSelector() {
-  const suggested = getSuggestedVia();
-  const savedWorkout = getStorage('workout-' + dateKey());
+function renderWeekSelector() {
+  const week = getWeekDates();
+  const today = new Date();
   let html = '';
-  PROGRAM.vias.forEach(v => {
-    const isSaved = savedWorkout && savedWorkout.viaId === v.id;
-    html += `<button class="via-btn ${selectedVia === v.id ? 'active' : ''}" onclick="selectVia(${v.id})">
-      ${v.name}<small>${v.subtitle}${suggested === v.id ? ' (hoy)' : ''}${isSaved ? ' ✓' : ''}</small>
+  week.forEach(day => {
+    const via = PROGRAM.vias.find(v => v.id === day.viaId);
+    const dk = day.date.toISOString().split('T')[0];
+    const isSelected = selectedDayDate && dk === selectedDayDate.toISOString().split('T')[0];
+    const isToday = day.date.getDate() === today.getDate() && day.date.getMonth() === today.getMonth() && day.date.getFullYear() === today.getFullYear();
+    const isSaved = !!getStorage('workout-' + dk);
+    let cls = 'day-btn';
+    if (isSelected) cls += ' active';
+    if (isToday) cls += ' today';
+    if (isSaved) cls += ' done';
+    html += `<button class="${cls}" onclick="selectDay(${day.dow})">
+      <span class="day-label">${day.label}</span>
+      <span class="day-via">${via.subtitle}</span>
     </button>`;
   });
-  html += `<button class="via-btn rest ${selectedVia === 0 ? 'active' : ''}" onclick="selectVia(0)">
-    DESC<small>Descanso</small>
-  </button>`;
-  document.getElementById('viaSelector').innerHTML = html;
+  document.getElementById('weekSelector').innerHTML = html;
 }
 
 function renderExercises() {
   const container = document.getElementById('exerciseList');
-  if (selectedVia === 0 || selectedVia === null) {
-    if (selectedVia === 0) {
-      container.innerHTML = `<div class="rest-day-msg">
-        <div class="icon">&#128564;</div>
-        <h2>Día de descanso</h2>
-        <p>Recupera, descansa y prepárate para el próximo entreno.</p>
-      </div>`;
-    } else {
-      container.innerHTML = `<div class="empty-state">
-        <div class="icon">&#128170;</div>
-        <p>Selecciona una vía para empezar</p>
-      </div>`;
-    }
+  if (!selectedVia || selectedVia <= 0) {
+    container.innerHTML = `<div class="empty-state">
+      <div class="icon">&#128170;</div>
+      <p>Selecciona un día para empezar</p>
+    </div>`;
     return;
   }
 
   const via = PROGRAM.vias.find(v => v.id === selectedVia);
-  const savedWorkout = getStorage('workout-' + dateKey());
+  const dayKey = getSelectedDayKey();
+  const savedWorkout = getStorage('workout-' + dayKey);
   let html = '';
 
   via.exercises.forEach((ex, ei) => {
@@ -863,7 +895,7 @@ function renderExercises() {
   });
 
   // Cardio post-entreno
-  const cardioKey = 'cardio-' + dateKey();
+  const cardioKey = 'cardio-' + dayKey;
   const cardioDone = getStorage(cardioKey);
   html += `<div class="exercise-card" style="border-left: 3px solid var(--green);">
     <div class="exercise-header">
@@ -885,25 +917,18 @@ function renderExercises() {
 
 function toggleCardio(btn) {
   btn.classList.toggle('done');
-  setStorage('cardio-' + dateKey(), btn.classList.contains('done'));
+  setStorage('cardio-' + getSelectedDayKey(), btn.classList.contains('done'));
 }
 
 function onSetChange(input) {
-  autoSave();
+  // No auto-save: only persist on explicit "Guardar"
 }
 
 function toggleSet(btn, restTime) {
   btn.classList.toggle('done');
-  autoSave();
   if (btn.classList.contains('done')) {
     startTimer(restTime);
   }
-}
-
-function autoSave() {
-  if (!selectedVia || selectedVia <= 0) return;
-  const data = collectWorkoutData();
-  if (data) setStorage('workout-' + dateKey(), data);
 }
 
 function collectWorkoutData() {
@@ -925,15 +950,16 @@ function collectWorkoutData() {
     return { name: ex.name, target: `${ex.sets}×${ex.reps}`, sets, comment: commentEl ? commentEl.value : '' };
   });
 
-  const cardioDone = getStorage('cardio-' + dateKey()) || false;
-  return { date: dateKey(), viaId: selectedVia, viaName: via.name + ' ' + via.subtitle, exercises, cardio: cardioDone };
+  const cardioDone = getStorage('cardio-' + getSelectedDayKey()) || false;
+  return { date: getSelectedDayKey(), viaId: selectedVia, viaName: via.name + ' ' + via.subtitle, exercises, cardio: cardioDone };
 }
 
 function saveWorkout() {
   const data = collectWorkoutData();
   if (!data) return;
-  setStorage('workout-' + dateKey(), data);
+  setStorage('workout-' + getSelectedDayKey(), data);
   showToast('Entreno guardado');
+  renderWeekSelector();
   const btn = document.getElementById('saveBtn');
   btn.classList.add('saved');
   btn.textContent = '✓ Guardado';
@@ -1124,6 +1150,7 @@ function renderHistory() {
         }
       });
 
+      html += `<button class="delete-entry-btn" onclick="confirmDelete('${key}', event)">Eliminar registro</button>`;
       html += '</div></div>';
     });
     html += '</div>';
@@ -1135,6 +1162,22 @@ function renderHistory() {
 function toggleHistoryDetail(el) {
   const detail = el.querySelector('.history-detail');
   if (detail) detail.classList.toggle('open');
+}
+
+function confirmDelete(key, event) {
+  event.stopPropagation();
+  const data = getStorage(key);
+  if (!data) return;
+  const d = new Date(data.date + 'T12:00:00');
+  const label = `${data.viaName} — ${formatDate(d)}`;
+  if (confirm('¿Eliminar este registro?\\n\\n' + label)) {
+    localStorage.removeItem(key);
+    const cardioKey = key.replace('workout-', 'cardio-');
+    localStorage.removeItem(cardioKey);
+    showToast('Registro eliminado');
+    renderHistory();
+    renderWeekSelector();
+  }
 }
 
 function filterHistory(via, btn) {
@@ -1157,15 +1200,26 @@ function showToast(msg) {
 }
 
 function render() {
-  document.getElementById('dateDisplay').textContent = isToday(currentDate) ? 'Hoy · ' + formatDate(currentDate) : formatDate(currentDate);
-  const suggested = getSuggestedVia();
-  const savedWorkout = getStorage('workout-' + dateKey());
-  if (savedWorkout) {
-    selectedVia = savedWorkout.viaId;
-  } else if (selectedVia === null) {
-    selectedVia = suggested;
+  const week = getWeekDates();
+  const mon = week[0].date;
+  const fri = week[4].date;
+  const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const weekLabel = `${mon.getDate()} - ${fri.getDate()} ${months[fri.getMonth()]}`;
+  document.getElementById('dateDisplay').textContent = weekLabel;
+  const today = new Date();
+  if (!selectedDayDate) {
+    const todayDay = week.find(d =>
+      d.date.getDate() === today.getDate() && d.date.getMonth() === today.getMonth() && d.date.getFullYear() === today.getFullYear()
+    );
+    if (todayDay) {
+      selectedDayDate = todayDay.date;
+      selectedVia = todayDay.viaId;
+    } else {
+      selectedDayDate = week[0].date;
+      selectedVia = week[0].viaId;
+    }
   }
-  renderViaSelector();
+  renderWeekSelector();
   renderExercises();
   renderDiet();
 }
@@ -1392,11 +1446,8 @@ function importData(event) {
 // PWA: Service Worker for offline support
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE_NAME = 'marc-tracker-v1';
+    const CACHE_NAME = 'marc-tracker-v2';
     self.addEventListener('install', e => {
-      e.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(['/tracker.html', '/']))
-      );
       self.skipWaiting();
     });
     self.addEventListener('activate', e => {
@@ -1409,11 +1460,11 @@ if ('serviceWorker' in navigator) {
     });
     self.addEventListener('fetch', e => {
       e.respondWith(
-        caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
+        fetch(e.request).then(resp => {
           const clone = resp.clone();
           caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
           return resp;
-        }))
+        }).catch(() => caches.match(e.request))
       );
     });
   `;
