@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0a0f">
-<link rel="manifest" href="data:application/json,{%22name%22:%22Marc%20Tracker%22,%22short_name%22:%22Tracker%22,%22start_url%22:%22/tracker.html%22,%22display%22:%22standalone%22,%22background_color%22:%22%230a0a0f%22,%22theme_color%22:%22%230a0a0f%22}">
+<link rel="manifest" href="data:application/json,{%22name%22:%22Marc%20Tracker%22,%22short_name%22:%22Tracker%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%230a0a0f%22,%22theme_color%22:%22%230a0a0f%22}">
 <title>Marc Tracker</title>
 <style>
 :root {
@@ -236,6 +236,48 @@ body {
 }
 
 .meal-check-row:last-child { border-bottom: none; }
+
+.diet-item {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.diet-item:last-child { border-bottom: none; }
+
+.diet-item-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+
+.diet-item-label { font-size: 14px; font-weight: 600; color: var(--text); }
+
+.diet-item-controls {
+  display: flex; gap: 8px; align-items: center; padding-left: 34px;
+}
+
+.diet-select {
+  flex: 1; background: var(--bg3); color: var(--text);
+  border: 1px solid var(--bg4); border-radius: var(--radius-sm);
+  padding: 8px 10px; font-size: 13px; font-family: inherit;
+  -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239090a8'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+  padding-right: 28px;
+}
+
+.diet-qty-wrap {
+  display: flex; align-items: center; gap: 2px;
+  background: var(--bg3); border: 1px solid var(--bg4);
+  border-radius: var(--radius-sm); padding: 0 8px;
+  min-width: 80px;
+}
+
+.diet-qty {
+  width: 48px; background: transparent; border: none; color: var(--text);
+  font-size: 14px; font-weight: 600; text-align: center; padding: 8px 0;
+  font-family: inherit;
+}
+.diet-qty:focus { outline: none; }
+
+.diet-unit { font-size: 12px; color: var(--text3); font-weight: 500; white-space: nowrap; }
 
 .meal-checkbox {
   width: 24px; height: 24px; border-radius: 6px;
@@ -858,6 +900,29 @@ const PROGRAM = {
   ]
 };
 
+const PROTEIN_CHOICES = [
+  { name: 'Pollo/Pavo', qty: 200, unit: 'g' },
+  { name: 'Ternera/Hamburguesa', qty: 150, unit: 'g' },
+  { name: 'Huevos grandes', qty: 2, unit: 'ud' },
+  { name: 'Atún (latas)', qty: 2, unit: 'ud' },
+  { name: 'Lomo de cerdo', qty: 150, unit: 'g' },
+  { name: 'Pescado/Marisco', qty: 250, unit: 'g' },
+];
+const CARB_CHOICES = [
+  { name: 'Pan', qty: 150, unit: 'g' },
+  { name: 'Biscotes', qty: 12, unit: 'ud' },
+  { name: 'Tortas de arroz', qty: 12, unit: 'ud' },
+  { name: 'Patata', qty: 500, unit: 'g' },
+  { name: 'Boniato', qty: 400, unit: 'g' },
+  { name: 'Arroz/Pasta/Legumbre (crudo)', qty: 100, unit: 'g' },
+];
+const FAT_CHOICES = [
+  { name: 'Aceite de oliva', qty: 1, unit: 'cuch.' },
+  { name: 'Medio aguacate', qty: 0.5, unit: 'ud' },
+  { name: 'Tomate frito', qty: 2, unit: 'cuch.' },
+  { name: 'Salsa', qty: 1, unit: 'cuch.' },
+];
+
 const MEALS = [
   {
     name: 'Desayuno', icon: '☀️',
@@ -868,26 +933,26 @@ const MEALS = [
   {
     name: 'Comida', icon: '🍽️',
     items: [
-      { id: 'comida-prote', label: 'Proteína', desc: '200g pollo/pavo · 150g ternera/hamburguesa · 2 huevos · 2 latas atún · 150g lomo cerdo · 250g pescado/marisco' },
-      { id: 'comida-carbs', label: 'Carbos', desc: '150g pan · 12 biscotes · 12 tortas arroz · 500g patata · 400g boniato · 300g arroz/pasta/legumbre cocidos (100g crudo)' },
-      { id: 'comida-grasa', label: 'Grasa', desc: '1 cuch. aceite oliva · ½ aguacate · 2 cuch. tomate frito · 1 cuch. salsa' },
-      { id: 'comida-verdura', label: 'Ensalada/Verduras', desc: 'Cantidad libre, cualquier tipo' },
+      { id: 'comida-prote', label: 'Proteína', choices: PROTEIN_CHOICES },
+      { id: 'comida-carbs', label: 'Carbohidratos', choices: CARB_CHOICES },
+      { id: 'comida-grasa', label: 'Grasa', choices: FAT_CHOICES },
+      { id: 'comida-verdura', label: 'Ensalada/Verduras', desc: 'Cantidad libre' },
     ]
   },
   {
     name: 'Merienda', icon: '🥜',
     items: [
-      { id: 'merienda-snack', label: 'Snack', desc: 'Café + 15g almendras/nueces/avellanas + café con leche de avena + 1 fruta + sándwich de pavo/jamón/lomo/atún' },
+      { id: 'merienda-snack', label: 'Snack', desc: 'Café + 15g almendras/nueces/avellanas + café con leche de avena + 1 fruta + sándwich' },
       { id: 'merienda-batido', label: 'Batido', desc: '40g crema de arroz + 20g proteína en polvo + agua/bebida vegetal + 10g crema de cacahuete' },
     ]
   },
   {
     name: 'Cena', icon: '🌙',
     items: [
-      { id: 'cena-prote', label: 'Proteína', desc: '200g pollo/pavo · 150g ternera/hamburguesa · 2 huevos · 2 latas atún · 150g lomo cerdo · 250g pescado/marisco' },
-      { id: 'cena-carbs', label: 'Carbos', desc: '150g pan · 12 biscotes · 12 tortas arroz · 500g patata · 400g boniato · 300g arroz/pasta/legumbre cocidos (100g crudo)' },
-      { id: 'cena-grasa', label: 'Grasa', desc: '1 cuch. aceite oliva · ½ aguacate · 2 cuch. tomate frito · 1 cuch. salsa' },
-      { id: 'cena-verdura', label: 'Ensalada/Verduras', desc: 'Cantidad libre, cualquier tipo' },
+      { id: 'cena-prote', label: 'Proteína', choices: PROTEIN_CHOICES },
+      { id: 'cena-carbs', label: 'Carbohidratos', choices: CARB_CHOICES },
+      { id: 'cena-grasa', label: 'Grasa', choices: FAT_CHOICES },
+      { id: 'cena-verdura', label: 'Ensalada/Verduras', desc: 'Cantidad libre' },
     ]
   }
 ];
@@ -899,6 +964,19 @@ let workoutDate = new Date();
 let dietDate = new Date();
 let timerInterval = null;
 let timerSeconds = 0;
+let wakeLock = null;
+
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+    }
+  } catch(e) {}
+}
+
+function releaseWakeLock() {
+  if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
+}
 
 function dateKey(d) {
   const dd = d || currentDate;
@@ -969,7 +1047,7 @@ function renderWeeklyDietOverview() {
     const done = data && data.savedAt;
     let pct = '';
     if (done) {
-      const checked = allIds.filter(id => data[id]).length;
+      const checked = allIds.filter(id => isDietDone(data, id)).length;
       pct = ' ' + Math.round((checked / allIds.length) * 100) + '%';
     }
     html += `<span class="weekly-pill ${done ? 'diet-done' : ''}">${dayNames[cursor.getDay()]}${pct}</span>`;
@@ -1243,6 +1321,7 @@ function startTimer(seconds) {
   updateTimerDisplay();
   document.getElementById('timerLabel').textContent = `Descanso · ${seconds}s`;
   document.getElementById('timerOverlay').classList.add('active');
+  requestWakeLock();
 
   timerInterval = setInterval(() => {
     timerSeconds--;
@@ -1276,6 +1355,7 @@ function stopTimer() {
   if (timerInterval) clearInterval(timerInterval);
   timerInterval = null;
   document.getElementById('timerOverlay').classList.remove('active');
+  releaseWakeLock();
 }
 
 // DIET
@@ -1289,6 +1369,13 @@ function changeDietDate(delta) {
   renderWeeklyDietOverview();
 }
 
+function isDietDone(saved, id) {
+  const v = saved[id];
+  if (v === true) return true;
+  if (v && typeof v === 'object' && v.done) return true;
+  return false;
+}
+
 function renderDiet() {
   const dk = dietDateKey();
   const key = 'diet-' + dk;
@@ -1300,7 +1387,6 @@ function renderDiet() {
   if (display) display.textContent = isTodayDiet ? 'Hoy · ' + formatDate(dietDate) : formatDate(dietDate);
 
   let html = '';
-
   const allCheckIds = [];
 
   MEALS.forEach(meal => {
@@ -1309,48 +1395,59 @@ function renderDiet() {
         <span class="meal-name">${meal.icon} ${meal.name}</span>
       </div>`;
 
-    if (meal.options) {
-      meal.options.forEach(opt => {
-        allCheckIds.push(opt.id);
-        const checked = saved[opt.id] || false;
-        html += `<div class="meal-check-row">
-          <button class="meal-checkbox ${checked ? 'checked' : ''}"
-            onclick="toggleDiet('${opt.id}', this)">✓</button>
-          <span class="meal-option">${opt.label}</span>
-        </div>`;
-      });
-    }
+    meal.items.forEach(item => {
+      allCheckIds.push(item.id);
+      const val = saved[item.id];
+      const done = isDietDone(saved, item.id);
 
-    if (meal.items) {
-      meal.items.forEach(item => {
-        allCheckIds.push(item.id);
-        const checked = saved[item.id] || false;
-        html += `<div class="meal-check-row">
-          <button class="meal-checkbox ${checked ? 'checked' : ''}"
-            onclick="toggleDiet('${item.id}', this)">✓</button>
-          <span class="meal-option"><strong>${item.label}</strong><br>${item.desc}</span>
+      if (item.choices) {
+        const choiceIdx = (val && typeof val === 'object' && val.choice !== undefined) ? val.choice : 0;
+        const selectedChoice = item.choices[choiceIdx];
+        const qty = (val && typeof val === 'object' && val.qty !== undefined) ? val.qty : selectedChoice.qty;
+
+        html += `<div class="diet-item">
+          <div class="diet-item-row">
+            <button class="meal-checkbox ${done ? 'checked' : ''}"
+              onclick="toggleDietItem('${item.id}')">✓</button>
+            <span class="diet-item-label">${item.label}</span>
+          </div>
+          <div class="diet-item-controls">
+            <select class="diet-select" data-diet-id="${item.id}" onchange="onDietChoiceChange('${item.id}', this)">`;
+
+        item.choices.forEach((c, ci) => {
+          html += `<option value="${ci}" ${ci === choiceIdx ? 'selected' : ''}>${c.name}</option>`;
+        });
+
+        html += `</select>
+            <div class="diet-qty-wrap">
+              <input type="number" inputmode="decimal" class="diet-qty" value="${qty}"
+                data-diet-id="${item.id}" step="any"
+                onchange="onDietQtyChange('${item.id}', this)">
+              <span class="diet-unit">${selectedChoice.unit}</span>
+            </div>
+          </div>
         </div>`;
-      });
-    }
+      } else {
+        html += `<div class="meal-check-row">
+          <button class="meal-checkbox ${done ? 'checked' : ''}"
+            onclick="toggleDiet('${item.id}', this)">✓</button>
+          <span class="meal-option"><strong>${item.label}</strong>${item.desc ? '<br>' + item.desc : ''}</span>
+        </div>`;
+      }
+    });
 
     html += '</div>';
   });
 
-  const SUPPLEMENTS = [
-    { id: 'creatina', label: '7g Creatina' },
-  ];
-
   html += `<div class="supplement-card">
-    <div class="meal-header"><span class="meal-name">💊 Suplementación</span></div>`;
-  SUPPLEMENTS.forEach(sup => {
-    allCheckIds.push(sup.id);
-    html += `<div class="meal-check-row">
-      <button class="meal-checkbox ${saved[sup.id] ? 'checked' : ''}"
-        onclick="toggleDiet('${sup.id}', this)">✓</button>
-      <span class="meal-option">${sup.label}</span>
-    </div>`;
-  });
-  html += '</div>';
+    <div class="meal-header"><span class="meal-name">💊 Suplementación</span></div>
+    <div class="meal-check-row">
+      <button class="meal-checkbox ${isDietDone(saved, 'creatina') ? 'checked' : ''}"
+        onclick="toggleDiet('creatina', this)">✓</button>
+      <span class="meal-option">7g Creatina</span>
+    </div>
+  </div>`;
+  allCheckIds.push('creatina');
 
   if (saved.extras) {
     html += `<div class="supplement-card">
@@ -1361,22 +1458,74 @@ function renderDiet() {
 
   document.getElementById('dietContent').innerHTML = html;
 
-  // Compliance
-  const checked = allCheckIds.filter(id => saved[id]).length;
+  const checkedCount = allCheckIds.filter(id => isDietDone(saved, id)).length;
   const total = allCheckIds.length;
-  const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+  const pct = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
   document.getElementById('dietCompliance').innerHTML = `
     <div class="compliance-label"><span class="compliance-pct">${pct}%</span> cumplimiento</div>
     <div class="compliance-bar"><div class="compliance-fill" style="width:${pct}%"></div></div>`;
 }
 
 function toggleDiet(id, btn) {
-  btn.classList.toggle('checked');
   const key = 'diet-' + dietDateKey();
   const saved = getStorage(key) || {};
-  saved[id] = btn.classList.contains('checked');
+  saved[id] = !isDietDone(saved, id);
   setStorage(key, saved);
   renderDiet();
+}
+
+function toggleDietItem(id) {
+  const key = 'diet-' + dietDateKey();
+  const saved = getStorage(key) || {};
+  let val = saved[id];
+  let item = null;
+  MEALS.forEach(m => m.items.forEach(i => { if (i.id === id) item = i; }));
+
+  if (val && typeof val === 'object') {
+    val.done = !val.done;
+  } else if (val === true) {
+    val = { choice: 0, qty: item.choices[0].qty, done: false };
+  } else {
+    val = { choice: 0, qty: item.choices[0].qty, done: true };
+  }
+  saved[id] = val;
+  setStorage(key, saved);
+  renderDiet();
+}
+
+function onDietChoiceChange(id, select) {
+  const key = 'diet-' + dietDateKey();
+  const saved = getStorage(key) || {};
+  const choiceIdx = parseInt(select.value);
+  let item = null;
+  MEALS.forEach(m => m.items.forEach(i => { if (i.id === id) item = i; }));
+  if (!item || !item.choices) return;
+
+  const choice = item.choices[choiceIdx];
+  let val = saved[id];
+  if (val && typeof val === 'object') {
+    val.choice = choiceIdx;
+    val.qty = choice.qty;
+  } else {
+    val = { choice: choiceIdx, qty: choice.qty, done: val === true };
+  }
+  saved[id] = val;
+  setStorage(key, saved);
+  renderDiet();
+}
+
+function onDietQtyChange(id, input) {
+  const key = 'diet-' + dietDateKey();
+  const saved = getStorage(key) || {};
+  const qty = parseFloat(input.value) || 0;
+  let val = saved[id];
+  if (val && typeof val === 'object') {
+    val.qty = qty;
+  } else {
+    val = { choice: 0, qty: qty, done: val === true };
+  }
+  saved[id] = val;
+  setStorage(key, saved);
 }
 
 function showExtrasPopup() {
@@ -1467,26 +1616,31 @@ function renderHistory() {
       } else if (entry.type === 'diet') {
         const data = entry.data;
         const allIds = getAllDietCheckIds();
-        const checked = allIds.filter(id => data[id]).length;
-        const pct = allIds.length > 0 ? Math.round((checked / allIds.length) * 100) : 0;
+        const checkedCount = allIds.filter(id => isDietDone(data, id)).length;
+        const pct = allIds.length > 0 ? Math.round((checkedCount / allIds.length) * 100) : 0;
 
         html += `<div class="history-entry" data-type="diet" onclick="toggleHistoryDetail(this)">
           <div class="history-date">${formatDate(d)}</div>
           <div class="history-via">&#9749; Dieta <span class="workout-done-badge" style="background:rgba(243,156,18,0.15); color:var(--orange);">${pct}%</span></div>
-          <div class="history-summary">${checked}/${allIds.length} items completados${data.extras ? ' · Extras: ' + data.extras : ''}</div>
+          <div class="history-summary">${checkedCount}/${allIds.length} items completados${data.extras ? ' · Extras: ' + data.extras : ''}</div>
           <div class="history-detail">`;
 
         MEALS.forEach(meal => {
-          const items = meal.options || meal.items || [];
-          items.forEach(item => {
-            const done = data[item.id];
+          meal.items.forEach(item => {
+            const done = isDietDone(data, item.id);
+            const val = data[item.id];
+            let detail = item.label;
+            if (item.choices && val && typeof val === 'object' && val.choice !== undefined) {
+              const c = item.choices[val.choice];
+              detail += `: ${c.name} ${val.qty || c.qty}${c.unit}`;
+            }
             html += `<div class="history-exercise">
-              <div class="history-exercise-name">${done ? '✓' : '✗'} ${item.label || item.label}</div>
+              <div class="history-exercise-name">${done ? '✓' : '✗'} ${detail}</div>
             </div>`;
           });
         });
 
-        if (data.creatina) html += '<div class="history-exercise"><div class="history-exercise-name">✓ Creatina</div></div>';
+        if (isDietDone(data, 'creatina')) html += '<div class="history-exercise"><div class="history-exercise-name">✓ Creatina</div></div>';
         if (data.extras) html += `<div class="history-exercise"><div class="history-exercise-name" style="color:var(--orange);">🍕 ${data.extras}</div></div>`;
 
         html += `<button class="delete-entry-btn" onclick="confirmDelete('${entry.key}', 'diet', event)">Eliminar</button>`;
@@ -1528,8 +1682,7 @@ function renderHistory() {
 function getAllDietCheckIds() {
   const ids = [];
   MEALS.forEach(meal => {
-    (meal.options || []).forEach(o => ids.push(o.id));
-    (meal.items || []).forEach(i => ids.push(i.id));
+    meal.items.forEach(i => ids.push(i.id));
   });
   ids.push('creatina');
   return ids;
@@ -1907,7 +2060,7 @@ function importData(event) {
 
 // PWA: register proper Service Worker file for reliable offline support
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then(reg => {
+  navigator.serviceWorker.register('sw.js').then(reg => {
     reg.update();
   }).catch(() => {});
 }
