@@ -227,6 +227,12 @@ body {
   margin-bottom: 10px;
 }
 
+.meal-kcal {
+  font-size: 12px; font-weight: 600; color: var(--orange);
+  background: rgba(243,156,18,0.1); padding: 3px 8px;
+  border-radius: 12px;
+}
+
 .meal-name { font-size: 15px; font-weight: 600; }
 .meal-time { font-size: 12px; color: var(--text3); }
 
@@ -769,7 +775,7 @@ input.file-input-hidden { display: none; }
       <button onclick="changeDietDate(1)">&#8250;</button>
     </div>
     <div class="macro-summary">
-      <div class="macro-box kcal"><div class="macro-value">2900</div><div class="macro-label">Kcal</div></div>
+      <div class="macro-box kcal"><div class="macro-value" id="dailyKcalValue">~2900</div><div class="macro-label">Kcal</div></div>
       <div class="macro-box prot"><div class="macro-value">140g</div><div class="macro-label">Proteína</div></div>
       <div class="macro-box carb"><div class="macro-value">380g</div><div class="macro-label">Carbos</div></div>
       <div class="macro-box fat"><div class="macro-value">85g</div><div class="macro-label">Grasa</div></div>
@@ -901,27 +907,27 @@ const PROGRAM = {
 };
 
 const PROTEIN_CHOICES = [
-  { name: 'Pollo/Pavo', qty: 200, unit: 'g' },
-  { name: 'Ternera/Hamburguesa', qty: 150, unit: 'g' },
-  { name: 'Huevos grandes', qty: 2, unit: 'ud' },
-  { name: 'Atún (latas)', qty: 2, unit: 'ud' },
-  { name: 'Lomo de cerdo', qty: 150, unit: 'g' },
-  { name: 'Pescado/Marisco', qty: 250, unit: 'g' },
+  { name: 'Pollo/Pavo', qty: 200, unit: 'g', kcal: 220 },
+  { name: 'Ternera/Hamburguesa', qty: 150, unit: 'g', kcal: 250 },
+  { name: 'Huevos grandes', qty: 2, unit: 'ud', kcal: 155 },
+  { name: 'Atún (latas)', qty: 2, unit: 'ud', kcal: 200 },
+  { name: 'Lomo de cerdo', qty: 150, unit: 'g', kcal: 240 },
+  { name: 'Pescado/Marisco', qty: 250, unit: 'g', kcal: 225 },
 ];
 const CARB_CHOICES = [
-  { name: 'Pan', qty: 150, unit: 'g' },
-  { name: 'Biscotes', qty: 12, unit: 'ud' },
-  { name: 'Tortas de arroz', qty: 12, unit: 'ud' },
-  { name: 'Patata', qty: 500, unit: 'g' },
-  { name: 'Boniato', qty: 400, unit: 'g' },
-  { name: 'Arroz/Pasta/Legumbre (cocido)', qty: 350, unit: 'g' },
+  { name: 'Pan', qty: 150, unit: 'g', kcal: 390 },
+  { name: 'Biscotes', qty: 12, unit: 'ud', kcal: 400 },
+  { name: 'Tortas de arroz', qty: 12, unit: 'ud', kcal: 370 },
+  { name: 'Patata', qty: 500, unit: 'g', kcal: 385 },
+  { name: 'Boniato', qty: 400, unit: 'g', kcal: 360 },
+  { name: 'Arroz/Pasta/Legumbre (cocido)', qty: 350, unit: 'g', kcal: 400 },
 ];
 
 const MEALS = [
   {
     name: 'Desayuno', icon: '☀️',
     items: [
-      { id: 'desayuno', label: 'Desayuno', desc: 'Café con leche de avena + 2 frutas + 2 yogures + 60g cereales' },
+      { id: 'desayuno', label: 'Desayuno', desc: 'Café con leche de avena + 2 frutas + 2 yogures + 60g cereales', kcal: 575 },
     ]
   },
   {
@@ -934,8 +940,8 @@ const MEALS = [
   {
     name: 'Merienda', icon: '🥜',
     items: [
-      { id: 'merienda-snack', label: 'Snack', desc: 'Café + 15g almendras/nueces/avellanas + café con leche de avena + 1 fruta + sándwich' },
-      { id: 'merienda-batido', label: 'Batido', desc: '60g crema de arroz + 40g proteína en polvo + agua/bebida vegetal + 2 tortitas de arroz + 15g cacahuetes' },
+      { id: 'merienda-snack', label: 'Snack', desc: 'Café + 15g almendras/nueces/avellanas + café con leche de avena + 1 fruta + sándwich', kcal: 525 },
+      { id: 'merienda-batido', label: 'Batido', desc: '60g crema de arroz + 40g proteína en polvo + agua/bebida vegetal + 2 tortitas de arroz + 15g cacahuetes', kcal: 530 },
     ]
   },
   {
@@ -1378,11 +1384,27 @@ function renderDiet() {
 
   let html = '';
   const allCheckIds = [];
+  let dailyKcal = 0;
 
   MEALS.forEach(meal => {
+    let mealKcal = 0;
+    meal.items.forEach(item => {
+      const val = saved[item.id];
+      if (item.choices) {
+        const ci = (val && typeof val === 'object' && val.choice !== undefined) ? val.choice : 0;
+        const c = item.choices[ci];
+        const q = (val && typeof val === 'object' && val.qty !== undefined) ? val.qty : c.qty;
+        mealKcal += (q / c.qty) * c.kcal;
+      } else if (item.kcal) {
+        mealKcal += item.kcal;
+      }
+    });
+    dailyKcal += mealKcal;
+
     html += `<div class="meal-card">
       <div class="meal-header">
         <span class="meal-name">${meal.icon} ${meal.name}</span>
+        <span class="meal-kcal">~${Math.round(mealKcal)} kcal</span>
       </div>`;
 
     meal.items.forEach(item => {
@@ -1447,6 +1469,9 @@ function renderDiet() {
   }
 
   document.getElementById('dietContent').innerHTML = html;
+
+  const kcalEl = document.getElementById('dailyKcalValue');
+  if (kcalEl) kcalEl.textContent = '~' + Math.round(dailyKcal);
 
   const checkedCount = allCheckIds.filter(id => isDietDone(saved, id)).length;
   const total = allCheckIds.length;
