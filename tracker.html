@@ -916,12 +916,6 @@ const CARB_CHOICES = [
   { name: 'Boniato', qty: 400, unit: 'g' },
   { name: 'Arroz/Pasta/Legumbre (crudo)', qty: 100, unit: 'g' },
 ];
-const FAT_CHOICES = [
-  { name: 'Aceite de oliva', qty: 1, unit: 'cuch.' },
-  { name: 'Medio aguacate', qty: 0.5, unit: 'ud' },
-  { name: 'Tomate frito', qty: 2, unit: 'cuch.' },
-  { name: 'Salsa', qty: 1, unit: 'cuch.' },
-];
 
 const MEALS = [
   {
@@ -935,8 +929,6 @@ const MEALS = [
     items: [
       { id: 'comida-prote', label: 'Proteína', choices: PROTEIN_CHOICES },
       { id: 'comida-carbs', label: 'Carbohidratos', choices: CARB_CHOICES },
-      { id: 'comida-grasa', label: 'Grasa', choices: FAT_CHOICES },
-      { id: 'comida-verdura', label: 'Ensalada/Verduras', desc: 'Cantidad libre' },
     ]
   },
   {
@@ -951,8 +943,6 @@ const MEALS = [
     items: [
       { id: 'cena-prote', label: 'Proteína', choices: PROTEIN_CHOICES },
       { id: 'cena-carbs', label: 'Carbohidratos', choices: CARB_CHOICES },
-      { id: 'cena-grasa', label: 'Grasa', choices: FAT_CHOICES },
-      { id: 'cena-verdura', label: 'Ensalada/Verduras', desc: 'Cantidad libre' },
     ]
   }
 ];
