@@ -777,6 +777,41 @@ input.file-input-hidden { display: none; }
 .body-changes th { background: var(--bg3); padding: 6px 8px; color: var(--text3); font-weight: 600; text-align: center; font-size: 10px; text-transform: uppercase; }
 .body-changes td { padding: 6px 8px; text-align: center; color: var(--text2); border-bottom: 1px solid rgba(255,255,255,0.03); }
 .body-changes td:first-child { text-align: left; color: var(--text); font-weight: 500; }
+
+/* Weight suggestion */
+.suggestion-badge { font-size: 11px; padding: 2px 8px; border-radius: 12px; font-weight: 600; white-space: nowrap; }
+.suggestion-badge.up { color: var(--green2); background: rgba(0,184,148,0.12); }
+.suggestion-badge.hold { color: var(--accent2); background: rgba(108,92,231,0.12); }
+.suggestion-badge.down { color: var(--orange); background: rgba(243,156,18,0.12); }
+.suggestion-badge.stall { color: var(--red); background: rgba(231,76,60,0.1); }
+.suggestion-badge.pr { color: #ffd700; background: rgba(255,215,0,0.15); animation: prPulse 1s infinite; }
+@keyframes prPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+.stall-alert { font-size: 11px; color: var(--orange); background: rgba(243,156,18,0.08); border: 1px solid rgba(243,156,18,0.15); border-radius: var(--radius-sm); padding: 8px 10px; margin-top: 6px; line-height: 1.4; }
+.pr-toast { background: linear-gradient(135deg, #ffd700, #f39c12) !important; color: #000 !important; font-weight: 700; }
+.e1rm-badge { font-size: 10px; color: var(--text3); background: var(--bg3); padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
+
+/* Daily weight */
+.daily-weight-bar { display: flex; align-items: center; gap: 8px; background: var(--bg2); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.04); }
+.daily-weight-bar label { font-size: 12px; color: var(--text2); font-weight: 600; white-space: nowrap; }
+.daily-weight-input { width: 70px; padding: 8px 6px; border-radius: 6px; border: 1px solid var(--bg4); background: var(--bg); color: var(--text); font-size: 15px; text-align: center; font-weight: 600; -webkit-appearance: none; }
+.daily-weight-input:focus { border-color: var(--accent); outline: none; }
+.daily-weight-saved { font-size: 11px; color: var(--green); font-weight: 500; }
+
+/* Body fat */
+.bf-card { background: var(--bg2); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 14px; border: 1px solid rgba(255,255,255,0.04); text-align: center; }
+.bf-value { font-size: 28px; font-weight: 700; }
+.bf-label { font-size: 11px; color: var(--text3); text-transform: uppercase; margin-top: 2px; }
+.bf-category { font-size: 12px; font-weight: 600; margin-top: 4px; }
+
+/* Share */
+.share-btn { width: 100%; padding: 12px; border-radius: var(--radius); border: 1px solid rgba(108,92,231,0.3); background: rgba(108,92,231,0.08); color: var(--accent2); font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 16px; }
+
+/* Weekly summary */
+.weekly-summary-card { background: var(--bg2); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.04); }
+.weekly-summary-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+.ws-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+.ws-label { color: var(--text2); }
+.ws-val { font-weight: 600; }
 </style>
 </head>
 <body>
@@ -905,67 +940,67 @@ const PROGRAM = {
     {
       id: 1, name: 'VIA 1', subtitle: 'Espalda',
       exercises: [
-        { name: 'Extensiones en banco romano', sets: 2, reps: 15, rest: 60, note: 'Calentamiento · RIR 2' },
-        { name: 'Remo con mancuerna en banco', sets: 2, reps: 12, rest: 150, note: 'x brazo · RIR 1' },
-        { name: 'Remo sentado máquina codos altos', sets: 2, reps: 10, rest: 120, note: 'Agarre abierto' },
-        { name: 'Jalón cerrado en polea', sets: 2, reps: 10, rest: 120 },
-        { name: 'Pájaros en máquina', sets: 2, reps: 12, rest: 90 },
-        { name: 'Encogimientos pesas', sets: 2, reps: 10, rest: 75 },
-        { name: 'Curl polea baja', sets: 3, reps: 8, rest: 75 },
-        { name: 'Elevaciones de piernas', sets: 3, reps: 15, rest: 60 },
+        { name: 'Extensiones en banco romano', sets: 2, reps: 15, rest: 60, step: 0, note: 'Calentamiento · RIR 2' },
+        { name: 'Remo con mancuerna en banco', sets: 2, reps: 12, rest: 150, step: 2.5, note: 'x brazo · RIR 1' },
+        { name: 'Remo sentado máquina codos altos', sets: 2, reps: 10, rest: 120, step: 2.5, note: 'Agarre abierto' },
+        { name: 'Jalón cerrado en polea', sets: 2, reps: 10, rest: 120, step: 2.5 },
+        { name: 'Pájaros en máquina', sets: 2, reps: 12, rest: 90, step: 1.25 },
+        { name: 'Encogimientos pesas', sets: 2, reps: 10, rest: 75, step: 2.5 },
+        { name: 'Curl polea baja', sets: 3, reps: 8, rest: 75, step: 1.25 },
+        { name: 'Elevaciones de piernas', sets: 3, reps: 15, rest: 60, step: 0 },
       ]
     },
     {
       id: 2, name: 'VIA 2', subtitle: 'Pecho',
       exercises: [
-        { name: 'Press inclinado barra guiada', sets: 2, reps: 6, rest: 150, note: 'RIR 1' },
-        { name: 'Press sentado en máquina', sets: 2, reps: 8, rest: 120, note: 'RIR 1' },
-        { name: 'Contractora', sets: 2, reps: 10, rest: 90 },
-        { name: 'Cruces de poleas hacia abajo', sets: 2, reps: 10, rest: 75 },
-        { name: 'Elev. laterales pesas de pie', sets: 3, reps: 12, rest: 90 },
-        { name: 'Tríceps en polea agarre prono', sets: 3, reps: 10, rest: 90 },
-        { name: 'Press francés en polea', sets: 2, reps: 12, rest: 75 },
-        { name: 'Crunch en polea de pie', sets: 3, reps: 15, rest: 60 },
+        { name: 'Press inclinado barra guiada', sets: 2, reps: 6, rest: 150, step: 2.5, note: 'RIR 1' },
+        { name: 'Press sentado en máquina', sets: 2, reps: 8, rest: 120, step: 2.5, note: 'RIR 1' },
+        { name: 'Contractora', sets: 2, reps: 10, rest: 90, step: 1.25 },
+        { name: 'Cruces de poleas hacia abajo', sets: 2, reps: 10, rest: 75, step: 1.25 },
+        { name: 'Elev. laterales pesas de pie', sets: 3, reps: 12, rest: 90, step: 1.25 },
+        { name: 'Tríceps en polea agarre prono', sets: 3, reps: 10, rest: 90, step: 1.25 },
+        { name: 'Press francés en polea', sets: 2, reps: 12, rest: 75, step: 1.25 },
+        { name: 'Crunch en polea de pie', sets: 3, reps: 15, rest: 60, step: 1.25 },
       ]
     },
     {
       id: 3, name: 'VIA 3', subtitle: 'Piernas',
       exercises: [
-        { name: 'Abductores en máquina', sets: 3, reps: 15, rest: 60 },
-        { name: 'Gemelos en prensa', sets: 3, reps: 15, rest: 90 },
-        { name: 'Isquios sentado en máquina', sets: 2, reps: 12, rest: 120, note: 'RIR 1' },
-        { name: 'Isquios tumbado en máquina', sets: 2, reps: 10, rest: 120 },
-        { name: 'Cuádriceps en máquina', sets: 2, reps: 12, rest: 120 },
-        { name: 'Sentadilla cinturón/máquina/hack', sets: 2, reps: 10, rest: 120, note: 'RIR 1' },
-        { name: 'Prensa inclinada', sets: 2, reps: 15, rest: 120, note: 'RIR 1' },
-        { name: 'Aductores en máquina', sets: 3, reps: 15, rest: 60 },
+        { name: 'Abductores en máquina', sets: 3, reps: 15, rest: 60, step: 2.5 },
+        { name: 'Gemelos en prensa', sets: 3, reps: 15, rest: 90, step: 5 },
+        { name: 'Isquios sentado en máquina', sets: 2, reps: 12, rest: 120, step: 2.5, note: 'RIR 1' },
+        { name: 'Isquios tumbado en máquina', sets: 2, reps: 10, rest: 120, step: 2.5 },
+        { name: 'Cuádriceps en máquina', sets: 2, reps: 12, rest: 120, step: 2.5 },
+        { name: 'Sentadilla cinturón/máquina/hack', sets: 2, reps: 10, rest: 120, step: 2.5, note: 'RIR 1' },
+        { name: 'Prensa inclinada', sets: 2, reps: 15, rest: 120, step: 5, note: 'RIR 1' },
+        { name: 'Aductores en máquina', sets: 3, reps: 15, rest: 60, step: 2.5 },
       ]
     },
     {
       id: 4, name: 'VIA 4', subtitle: 'Todos',
       exercises: [
-        { name: 'Dominadas con lastre', sets: 3, reps: 8, rest: 120, note: 'RIR 1' },
-        { name: 'Remo bajo en máquina', sets: 3, reps: 10, rest: 90 },
-        { name: 'Press sentado en máquina', sets: 3, reps: 8, rest: 120, note: 'RIR 1' },
-        { name: 'Fondos en máquina', sets: 3, reps: 10, rest: 90, note: 'Inclínate adelante' },
-        { name: 'Elev. laterales en máquina', sets: 3, reps: 12, rest: 90 },
-        { name: 'Curl barra Z de pie', sets: 3, reps: 12, rest: 75, note: 'Alternas con Press francés' },
-        { name: 'Press francés barra Z', sets: 3, reps: 12, rest: 75, note: 'Alternas con Curl Z' },
-        { name: 'Ab wheel de rodillas', sets: 3, reps: 15, rest: 60 },
+        { name: 'Dominadas con lastre', sets: 3, reps: 8, rest: 120, step: 1.25, note: 'RIR 1' },
+        { name: 'Remo bajo en máquina', sets: 3, reps: 10, rest: 90, step: 2.5 },
+        { name: 'Press sentado en máquina', sets: 3, reps: 8, rest: 120, step: 2.5, note: 'RIR 1' },
+        { name: 'Fondos en máquina', sets: 3, reps: 10, rest: 90, step: 2.5, note: 'Inclínate adelante' },
+        { name: 'Elev. laterales en máquina', sets: 3, reps: 12, rest: 90, step: 1.25 },
+        { name: 'Curl barra Z de pie', sets: 3, reps: 12, rest: 75, step: 1.25, note: 'Alternas con Press francés' },
+        { name: 'Press francés barra Z', sets: 3, reps: 12, rest: 75, step: 1.25, note: 'Alternas con Curl Z' },
+        { name: 'Ab wheel de rodillas', sets: 3, reps: 15, rest: 60, step: 0 },
       ]
     },
     {
       id: 5, name: 'VIA 5', subtitle: 'Brazos (opcional)',
       exercises: [
-        { name: 'Curl barra recta de pie', sets: 2, reps: 6, rest: 120, note: 'Calentar' },
-        { name: 'Curl mancuernas banco inclinado', sets: 2, reps: 8, rest: 90 },
-        { name: 'Curl concentrado mancuerna', sets: 2, reps: 10, rest: 90, note: 'x brazo' },
-        { name: 'Curl 2 poleas', sets: 2, reps: 15, rest: 75 },
-        { name: 'Extensiones polea agarre prono', sets: 2, reps: 8, rest: 120, note: 'Calentar' },
-        { name: 'Press francés + Press cerrado barra Z', sets: 2, reps: 10, rest: 120, note: 'Superseries · +10 press cerrado' },
-        { name: 'Fondos tríceps peso propio', sets: 2, reps: 12, rest: 90 },
-        { name: 'Extensiones polea 1 mano supino', sets: 2, reps: 12, rest: 90, note: 'x brazo' },
-        { name: 'Curl antebrazo barra', sets: 2, reps: 15, rest: 75 },
+        { name: 'Curl barra recta de pie', sets: 2, reps: 6, rest: 120, step: 1.25, note: 'Calentar' },
+        { name: 'Curl mancuernas banco inclinado', sets: 2, reps: 8, rest: 90, step: 1.25 },
+        { name: 'Curl concentrado mancuerna', sets: 2, reps: 10, rest: 90, step: 1.25, note: 'x brazo' },
+        { name: 'Curl 2 poleas', sets: 2, reps: 15, rest: 75, step: 1.25 },
+        { name: 'Extensiones polea agarre prono', sets: 2, reps: 8, rest: 120, step: 1.25, note: 'Calentar' },
+        { name: 'Press francés + Press cerrado barra Z', sets: 2, reps: 10, rest: 120, step: 1.25, note: 'Superseries · +10 press cerrado' },
+        { name: 'Fondos tríceps peso propio', sets: 2, reps: 12, rest: 90, step: 0 },
+        { name: 'Extensiones polea 1 mano supino', sets: 2, reps: 12, rest: 90, step: 1.25, note: 'x brazo' },
+        { name: 'Curl antebrazo barra', sets: 2, reps: 15, rest: 75, step: 1.25 },
       ]
     }
   ],
@@ -1174,17 +1209,104 @@ function getPreviousExerciseData(viaId, exerciseIdx) {
       const ex = data.exercises[exerciseIdx];
       if (ex && ex.sets) {
         const maxWeight = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
-        if (maxWeight > 0) return { maxWeight, feedback: ex.feedback || null };
+        if (maxWeight > 0) return { maxWeight, sets: ex.sets, feedback: ex.feedback || null };
       }
     }
   }
   return null;
 }
 
-function setFeedback(exIdx, value, btn) {
-  const row = btn.parentElement;
-  row.querySelectorAll('.feedback-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+function getExerciseAllHistory(viaId, exerciseIdx) {
+  return Object.keys(localStorage)
+    .filter(k => k.startsWith('workout-')).sort()
+    .reduce((acc, k) => {
+      const d = getStorage(k);
+      if (d && d.viaId === viaId && d.exercises[exerciseIdx]) {
+        const ex = d.exercises[exerciseIdx];
+        const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
+        if (maxW > 0) acc.push({ date: d.date, weight: maxW, sets: ex.sets });
+      }
+      return acc;
+    }, []);
+}
+
+function getAllTimePR(viaId, exerciseIdx) {
+  const hist = getExerciseAllHistory(viaId, exerciseIdx);
+  return hist.length > 0 ? Math.max(...hist.map(h => h.weight)) : 0;
+}
+
+function getWeightSuggestion(ex, viaId, exerciseIdx) {
+  if (!ex.step || ex.step === 0) return null;
+  const hist = getExerciseAllHistory(viaId, exerciseIdx);
+  if (hist.length === 0) return null;
+  const last = hist[hist.length - 1];
+  const targetReps = typeof ex.reps === 'number' ? ex.reps : parseInt(ex.reps) || 10;
+  const setsWithWeight = last.sets.filter(s => parseFloat(s.weight) > 0);
+  if (setsWithWeight.length === 0) return null;
+  const mainWeight = parseFloat(setsWithWeight[0].weight) || 0;
+  const hitsTarget = setsWithWeight.filter(s => (parseInt(s.reps) || 0) >= targetReps).length;
+  const totalSets = setsWithWeight.length;
+  const ratio = hitsTarget / totalSets;
+  const pr = Math.max(...hist.map(h => h.weight));
+  const sameWeightSessions = hist.filter(h => Math.abs(h.weight - mainWeight) < 0.1).length;
+
+  let suggested, status, reason;
+  if (ratio >= 1) {
+    suggested = mainWeight + ex.step;
+    status = suggested > pr ? 'pr' : 'up';
+    reason = status === 'pr' ? `Nuevo PR! → ${suggested}kg` : `Todas las reps OK → sube`;
+  } else if (ratio >= 0.5) {
+    suggested = mainWeight;
+    status = 'hold';
+    reason = `${hitsTarget}/${totalSets} series OK → repite`;
+    if (sameWeightSessions >= 3) {
+      status = 'stall';
+      reason = `${sameWeightSessions} sesiones a ${mainWeight}kg`;
+    }
+  } else {
+    suggested = Math.max(0, mainWeight - ex.step);
+    status = 'down';
+    reason = `Solo ${hitsTarget}/${totalSets} series → baja`;
+  }
+  return { suggested, status, reason, mainWeight, pr };
+}
+
+function calculate1RM(weight, reps) {
+  if (!weight || weight <= 0 || !reps || reps <= 0) return 0;
+  if (reps === 1) return weight;
+  return Math.round(weight * (1 + reps / 30) * 10) / 10;
+}
+
+function calculateBodyFat(waist, neck, height, hip) {
+  if (!waist || !neck || !height) return null;
+  const log10 = Math.log10;
+  return Math.round((495 / (1.0324 - 0.19077 * log10(waist - neck) + 0.15456 * log10(height)) - 450) * 10) / 10;
+}
+
+function getDailyWeight(dateStr) {
+  return getStorage('weight-' + dateStr);
+}
+
+function saveDailyWeight(dateStr, val) {
+  if (val && val > 0) setStorage('weight-' + dateStr, val);
+  else localStorage.removeItem('weight-' + dateStr);
+}
+
+function getWeightHistory() {
+  const entries = [];
+  Object.keys(localStorage).filter(k => k.startsWith('weight-')).sort().forEach(k => {
+    const val = getStorage(k);
+    if (val && val > 0) entries.push({ date: k.replace('weight-', ''), weight: val });
+  });
+  const medidasEntries = Object.keys(localStorage).filter(k => k.startsWith('medidas-')).sort().forEach(k => {
+    const d = getStorage(k);
+    if (d && d.peso) {
+      const date = k.replace('medidas-', '');
+      if (!entries.find(e => e.date === date)) entries.push({ date, weight: parseFloat(d.peso) });
+    }
+  });
+  entries.sort((a, b) => a.date.localeCompare(b.date));
+  return entries;
 }
 
 function selectSession(sessionId) {
@@ -1245,7 +1367,6 @@ function renderSessionSelector() {
 function renderExercises() {
   const container = document.getElementById('exerciseList');
 
-  // Auto-detect saved session for this date
   const dayKey = getSelectedDayKey();
   const savedWorkout = getStorage('workout-' + dayKey);
   if (savedWorkout && !selectedSession) {
@@ -1255,7 +1376,7 @@ function renderExercises() {
   }
 
   if (!selectedVia || selectedVia <= 0) {
-    container.innerHTML = `<div class="empty-state">
+    container.innerHTML = renderDailyWeightBar() + `<div class="empty-state">
       <div class="icon">&#128170;</div>
       <p>Selecciona una sesión para empezar</p>
     </div>`;
@@ -1263,25 +1384,34 @@ function renderExercises() {
   }
 
   const via = PROGRAM.vias.find(v => v.id === selectedVia);
-  let html = '';
+  let html = renderDailyWeightBar();
 
   via.exercises.forEach((ex, ei) => {
     const prevData = getPreviousExerciseData(via.id, ei);
     const prevWeight = prevData ? prevData.maxWeight : null;
-    const prevFeedback = prevData ? prevData.feedback : null;
     const saved = savedWorkout && savedWorkout.viaId === via.id ? savedWorkout.exercises[ei] : null;
-    const currentFb = saved ? saved.feedback : '';
+    const suggestion = getWeightSuggestion(ex, via.id, ei);
+    const prWeight = getAllTimePR(via.id, ei);
 
-    let feedbackBadge = '';
-    if (prevFeedback) {
-      const fbLabels = { subir: '↑ Subir peso', mantener: '= Mantener', bajar: '↓ Bajar peso' };
-      feedbackBadge = `<span class="prev-feedback ${prevFeedback}">${fbLabels[prevFeedback]}</span>`;
+    let suggBadge = '';
+    if (suggestion) {
+      const icons = { up: '↑', hold: '=', down: '↓', stall: '⚠', pr: '★' };
+      suggBadge = `<span class="suggestion-badge ${suggestion.status}">${icons[suggestion.status]} ${suggestion.suggested}kg</span>`;
+    }
+
+    let e1rm = '';
+    if (prevData && prevWeight > 0 && typeof ex.reps === 'number' && ex.reps <= 12) {
+      const bestSet = prevData.sets.reduce((best, s) => {
+        const w = parseFloat(s.weight) || 0; const r = parseInt(s.reps) || 0;
+        return (w * r > (best.w * best.r)) ? { w, r } : best;
+      }, { w: 0, r: 0 });
+      if (bestSet.w > 0) e1rm = `<span class="e1rm-badge">1RM≈${calculate1RM(bestSet.w, bestSet.r)}kg</span>`;
     }
 
     html += `<div class="exercise-card" id="ex-${ei}">
       <div class="exercise-header">
         <div>
-          <div class="exercise-name">${ex.name}${prevWeight ? `<span class="previous-weight">prev: ${prevWeight}kg</span>` : ''}${feedbackBadge}</div>
+          <div class="exercise-name">${ex.name}${prevWeight ? `<span class="previous-weight">prev: ${prevWeight}kg</span>` : ''}${e1rm}${suggBadge}</div>
           <div class="exercise-target">${ex.sets}×${ex.reps}${ex.note ? ' · ' + ex.note : ''}</div>
         </div>
         <div class="exercise-meta">
@@ -1293,9 +1423,10 @@ function renderExercises() {
     for (let s = 0; s < ex.sets; s++) {
       const savedSet = saved && saved.sets[s] ? saved.sets[s] : {};
       const isDone = savedSet.done || false;
+      const phWeight = suggestion ? suggestion.suggested : '';
       html += `<div class="set-row">
         <span class="set-label">${s + 1}</span>
-        <input class="set-input" type="number" inputmode="decimal" placeholder="kg"
+        <input class="set-input" type="number" inputmode="decimal" placeholder="${phWeight || 'kg'}"
           data-ex="${ei}" data-set="${s}" data-field="weight"
           value="${savedSet.weight || ''}" onchange="onSetChange(this)">
         <span class="set-unit">kg</span>
@@ -1308,13 +1439,13 @@ function renderExercises() {
       </div>`;
     }
 
-    html += `</div>
-      <div class="feedback-row">
-        <button class="feedback-btn ${currentFb === 'subir' ? 'active' : ''}" data-fb="subir" data-ex="${ei}" onclick="setFeedback(${ei},'subir',this)">↑ Subir</button>
-        <button class="feedback-btn ${currentFb === 'mantener' ? 'active' : ''}" data-fb="mantener" data-ex="${ei}" onclick="setFeedback(${ei},'mantener',this)">= Mantener</button>
-        <button class="feedback-btn ${currentFb === 'bajar' ? 'active' : ''}" data-fb="bajar" data-ex="${ei}" onclick="setFeedback(${ei},'bajar',this)">↓ Bajar</button>
-      </div>
-      <textarea class="exercise-comment" rows="1" placeholder="Notas..."
+    html += `</div>`;
+
+    if (suggestion && suggestion.status === 'stall') {
+      html += `<div class="stall-alert">⚠ ${suggestion.reason}. Prueba: baja a ${Math.max(0, suggestion.mainWeight - ex.step * 2)}kg × ${ex.reps} reps completas y vuelve a subir progresivamente.</div>`;
+    }
+
+    html += `<textarea class="exercise-comment" rows="1" placeholder="Notas..."
         data-ex="${ei}">${saved && saved.comment ? saved.comment : ''}</textarea>
     </div>`;
   });
@@ -1345,6 +1476,25 @@ function toggleCardio(btn) {
   setStorage('cardio-' + getSelectedDayKey(), btn.classList.contains('done'));
 }
 
+function renderDailyWeightBar() {
+  const dk = workoutDateKey();
+  const saved = getDailyWeight(dk);
+  return `<div class="daily-weight-bar">
+    <label>⚖️ Peso hoy</label>
+    <input class="daily-weight-input" type="number" inputmode="decimal" step="0.1" placeholder="kg"
+      value="${saved || ''}" onchange="onDailyWeightChange(this.value)">
+    <span class="set-unit">kg</span>
+    <span class="daily-weight-saved" id="dwSaved">${saved ? '✓' : ''}</span>
+  </div>`;
+}
+
+function onDailyWeightChange(val) {
+  const w = parseFloat(val) || 0;
+  saveDailyWeight(workoutDateKey(), w);
+  const el = document.getElementById('dwSaved');
+  if (el) el.textContent = w > 0 ? '✓' : '';
+}
+
 function onSetChange(input) {
   // No auto-save: only persist on explicit "Guardar"
 }
@@ -1372,9 +1522,7 @@ function collectWorkoutData() {
       });
     }
     const commentEl = document.querySelector(`textarea[data-ex="${ei}"]`);
-    const activeFb = document.querySelector(`.feedback-btn.active[data-ex="${ei}"]`);
-    const feedback = activeFb ? activeFb.dataset.fb : '';
-    return { name: ex.name, target: `${ex.sets}×${ex.reps}`, sets, comment: commentEl ? commentEl.value : '', feedback };
+    return { name: ex.name, target: `${ex.sets}×${ex.reps}`, sets, comment: commentEl ? commentEl.value : '' };
   });
 
   const cardioDone = getStorage('cardio-' + getSelectedDayKey()) || false;
@@ -1382,10 +1530,27 @@ function collectWorkoutData() {
 }
 
 function saveWorkout() {
+  const via = PROGRAM.vias.find(v => v.id === selectedVia);
+  const prsBefore = via ? via.exercises.map((ex, ei) => getAllTimePR(via.id, ei)) : [];
+
   const data = collectWorkoutData();
   if (!data) return;
   setStorage('workout-' + getSelectedDayKey(), data);
-  showToast('Entreno guardado');
+
+  const prsAfter = via ? via.exercises.map((ex, ei) => getAllTimePR(via.id, ei)) : [];
+  const newPRs = [];
+  prsAfter.forEach((pr, i) => {
+    if (pr > prsBefore[i] && pr > 0) newPRs.push(`${via.exercises[i].name}: ${pr}kg`);
+  });
+
+  if (newPRs.length > 0) {
+    showToast('★ NUEVO PR! ' + newPRs[0]);
+    document.getElementById('toast').classList.add('pr-toast');
+    setTimeout(() => document.getElementById('toast').classList.remove('pr-toast'), 2500);
+  } else {
+    showToast('Entreno guardado');
+  }
+
   renderSessionSelector();
   const btn = document.getElementById('saveBtn');
   btn.classList.add('saved');
@@ -1642,7 +1807,8 @@ function renderProgress() {
     <button class="filter-btn" id="pt-pesos" onclick="switchProgressView('pesos')">Pesos</button>
     <button class="filter-btn" id="pt-dieta" onclick="switchProgressView('dieta')">Dieta</button>
     <button class="filter-btn" id="pt-registros" onclick="switchProgressView('registros')">Registros</button>
-  </div><div id="progressContent"></div>`;
+  </div><div id="progressContent"></div>
+  <button class="share-btn" onclick="shareProgress()">📤 Compartir mi progreso</button>`;
   document.getElementById('historyInner').innerHTML = html;
   switchProgressView('resumen');
 }
@@ -1670,7 +1836,8 @@ function renderGoalCard() {
   const totalDays = Math.ceil((review - start) / 86400000);
   const timePct = Math.min(100, Math.round(((totalDays - daysLeft) / totalDays) * 100));
   const allM = getAllMedidas();
-  const latest = allM.length > 0 ? parseFloat(allM[0].peso) || null : null;
+  const weightHist = getWeightHistory();
+  const latest = weightHist.length > 0 ? weightHist[weightHist.length - 1].weight : (allM.length > 0 ? parseFloat(allM[0].peso) || null : null);
   const startM = allM.length > 1 ? allM.slice().reverse().find(m => m.date >= GOAL.fechaInicio) || allM[allM.length - 1] : (allM[0] || null);
   const startPeso = startM ? parseFloat(startM.peso) || null : null;
   let wPct = 0;
@@ -1696,10 +1863,53 @@ function renderGoalCard() {
   </div>`;
 }
 
+function shareProgress() {
+  const allM = getAllMedidas();
+  const weightHist = getWeightHistory();
+  const latestW = weightHist.length > 0 ? weightHist[weightHist.length - 1].weight : (allM.length > 0 ? parseFloat(allM[0].peso) || 0 : 0);
+  const { mon, sun } = getWeekRange(new Date());
+  let workoutsThisWeek = 0;
+  Object.keys(localStorage).filter(k => k.startsWith('workout-')).forEach(k => {
+    const d = getStorage(k);
+    if (!d || !d.date) return;
+    const dt = new Date(d.date + 'T12:00:00');
+    if (dt >= mon && dt <= sun) workoutsThisWeek++;
+  });
+  const review = new Date(GOAL.fechaRevision + 'T12:00:00');
+  const daysLeft = Math.max(0, Math.ceil((review - new Date()) / 86400000));
+
+  const topPRs = [];
+  PROGRAM.vias.forEach(via => {
+    via.exercises.forEach((ex, ei) => {
+      const pr = getAllTimePR(via.id, ei);
+      if (pr > 0) topPRs.push({ name: ex.name, weight: pr });
+    });
+  });
+  topPRs.sort((a, b) => b.weight - a.weight);
+
+  let text = `💪 Mi progreso – Ronda ${GOAL.ronda} (${GOAL.fase})\n`;
+  text += `⚖️ Peso: ${latestW ? latestW.toFixed(1) : '—'}kg → Obj: ${GOAL.pesoObjetivo}kg\n`;
+  text += `🏋️ ${workoutsThisWeek} entrenos esta semana\n`;
+  text += `📅 ${daysLeft} días para revisión\n`;
+  if (topPRs.length > 0) {
+    text += `\n★ Top PRs:\n`;
+    topPRs.slice(0, 5).forEach(p => { text += `  ${p.name}: ${p.weight}kg\n`; });
+  }
+
+  if (navigator.share) {
+    navigator.share({ title: 'Mi Progreso Fitness', text }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showToast('Copiado al portapapeles'));
+  } else {
+    showToast('Compartir no disponible');
+  }
+}
+
 function buildSummaryView() {
   let html = '';
   const allM = getAllMedidas();
-  const latestPeso = allM.length > 0 ? parseFloat(allM[0].peso) || 0 : 0;
+  const weightHist = getWeightHistory();
+  const latestW = weightHist.length > 0 ? weightHist[weightHist.length - 1].weight : (allM.length > 0 ? parseFloat(allM[0].peso) || 0 : 0);
   const { mon, sun } = getWeekRange(new Date());
   let workoutsThisWeek = 0;
   Object.keys(localStorage).filter(k => k.startsWith('workout-')).forEach(k => {
@@ -1724,13 +1934,53 @@ function buildSummaryView() {
   }
   const weekDietPct = dietDays > 0 ? Math.round((dietPctSum / dietDays) * 100) : 0;
 
+  // Body fat estimation from latest medidas
+  let bfPct = null, bfCategory = '';
+  if (allM.length > 0) {
+    const lat = allM[0];
+    const waist = parseFloat(lat.cintura) || 0;
+    const neck = parseFloat(lat.cuello) || 0;
+    const height = 178; // user height in cm
+    if (waist > 0 && neck > 0) {
+      bfPct = calculateBodyFat(waist, neck, height);
+      if (bfPct !== null) {
+        if (bfPct < 10) bfCategory = 'Esencial';
+        else if (bfPct < 14) bfCategory = 'Atlético';
+        else if (bfPct < 18) bfCategory = 'Fitness';
+        else if (bfPct < 25) bfCategory = 'Normal';
+        else bfCategory = 'Sobrepeso';
+      }
+    }
+  }
+
   html += `<div class="metrics-row">
-    <div class="metric-card"><div class="metric-value" style="color:var(--text)">${latestPeso ? latestPeso.toFixed(1) : '—'}</div><div class="metric-label">Peso (kg)</div></div>
+    <div class="metric-card"><div class="metric-value" style="color:var(--text)">${latestW ? latestW.toFixed(1) : '—'}</div><div class="metric-label">Peso (kg)</div></div>
     <div class="metric-card"><div class="metric-value" style="color:var(--accent2)">${workoutsThisWeek}/4</div><div class="metric-label">Entrenos sem.</div></div>
     <div class="metric-card"><div class="metric-value" style="color:var(--orange)">${weekDietPct}%</div><div class="metric-label">Dieta sem.</div></div>
+    ${bfPct !== null ? `<div class="metric-card"><div class="metric-value" style="color:var(--green2)">${bfPct}%</div><div class="metric-label">Grasa corp.</div></div>` : ''}
   </div>`;
 
-  if (allM.length > 1) {
+  // Daily weight chart
+  if (weightHist.length > 1) {
+    html += `<div class="section-title">⚖️ Peso diario</div>`;
+    const recent = weightHist.slice(-30);
+    const vals = recent.map(w => w.weight);
+    const maxP = Math.max(...vals);
+    const minP = Math.min(...vals);
+    const range = maxP - minP || 1;
+    html += `<div style="background:var(--bg2);border-radius:var(--radius-sm);padding:10px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.04);">
+      <div style="display:flex;align-items:flex-end;gap:2px;height:60px;">`;
+    recent.forEach((w, i) => {
+      const pct = ((w.weight - minP + 0.5) / (range + 1)) * 100;
+      const isLast = i === recent.length - 1;
+      html += `<div style="flex:1;height:${pct}%;min-height:4px;border-radius:3px 3px 0 0;background:${isLast ? 'var(--green)' : 'var(--accent)'};opacity:${isLast ? 1 : 0.5};" title="${w.date}: ${w.weight}kg"></div>`;
+    });
+    const avg7 = vals.slice(-7).reduce((a, b) => a + b, 0) / Math.min(7, vals.length);
+    html += `</div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px;">
+        <span>${vals[0].toFixed(1)}kg</span><span>x̄7d: ${avg7.toFixed(1)}kg</span><span>${vals[vals.length - 1].toFixed(1)}kg</span>
+      </div></div>`;
+  } else if (allM.length > 1) {
     html += `<div class="section-title">📉 Evolución de peso</div>`;
     const pesoData = allM.slice(0, 12).reverse().filter(m => m.peso);
     const vals = pesoData.map(m => parseFloat(m.peso));
@@ -1752,6 +2002,18 @@ function buildSummaryView() {
       </div></div>`;
   }
 
+  // Body fat card
+  if (bfPct !== null) {
+    html += `<div class="bf-card">
+      <div class="bf-value" style="color:var(--green2)">${bfPct}%</div>
+      <div class="bf-label">Grasa corporal estimada (U.S. Navy)</div>
+      <div class="bf-category" style="color:var(--accent2)">${bfCategory}</div>
+    </div>`;
+  }
+
+  // Weekly summary
+  html += buildWeeklySummary();
+
   if (allM.length >= 2) {
     const lat = allM[0];
     const fst = allM[allM.length - 1];
@@ -1767,6 +2029,54 @@ function buildSummaryView() {
     });
     html += `</tbody></table>`;
   }
+  return html;
+}
+
+function buildWeeklySummary() {
+  const { mon, sun } = getWeekRange(new Date());
+  const weekWorkouts = [];
+  let totalSets = 0, totalVolume = 0;
+  Object.keys(localStorage).filter(k => k.startsWith('workout-')).forEach(k => {
+    const d = getStorage(k);
+    if (!d || !d.date) return;
+    const dt = new Date(d.date + 'T12:00:00');
+    if (dt >= mon && dt <= sun) {
+      weekWorkouts.push(d);
+      d.exercises.forEach(ex => {
+        ex.sets.forEach(s => {
+          if (s.done) {
+            totalSets++;
+            totalVolume += (parseFloat(s.weight) || 0) * (parseInt(s.reps) || 0);
+          }
+        });
+      });
+    }
+  });
+  if (weekWorkouts.length === 0) return '';
+
+  const cardioCount = weekWorkouts.filter(w => w.cardio).length;
+  const prsThisWeek = [];
+  weekWorkouts.forEach(w => {
+    const via = PROGRAM.vias.find(v => v.id === w.viaId);
+    if (!via) return;
+    w.exercises.forEach((ex, ei) => {
+      const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
+      const hist = getExerciseAllHistory(via.id, ei);
+      const allTimePR = hist.length > 0 ? Math.max(...hist.map(h => h.weight)) : 0;
+      if (maxW > 0 && maxW >= allTimePR) prsThisWeek.push({ name: ex.name, weight: maxW });
+    });
+  });
+
+  let html = `<div class="weekly-summary-card">
+    <div class="weekly-summary-title">📊 Resumen semanal</div>
+    <div class="ws-row"><span class="ws-label">Sesiones</span><span class="ws-val">${weekWorkouts.length}</span></div>
+    <div class="ws-row"><span class="ws-label">Series completadas</span><span class="ws-val">${totalSets}</span></div>
+    <div class="ws-row"><span class="ws-label">Volumen total</span><span class="ws-val">${(totalVolume / 1000).toFixed(1)}t</span></div>
+    <div class="ws-row"><span class="ws-label">Cardio</span><span class="ws-val">${cardioCount}/${weekWorkouts.length}</span></div>`;
+  if (prsThisWeek.length > 0) {
+    html += `<div class="ws-row"><span class="ws-label">★ PRs esta semana</span><span class="ws-val" style="color:var(--green2)">${prsThisWeek.length}</span></div>`;
+  }
+  html += `</div>`;
   return html;
 }
 
@@ -1791,8 +2101,9 @@ function buildWeightView() {
   let html = '';
   PROGRAM.vias.forEach(via => {
     html += `<div class="progress-via-header">${via.name} · ${via.subtitle}</div>`;
-    via.exercises.forEach(ex => {
+    via.exercises.forEach((ex, ei) => {
       const hist = getExerciseHistory(ex.name);
+      const suggestion = getWeightSuggestion(ex, via.id, ei);
       html += `<div class="progress-ex">`;
       if (hist.length === 0) {
         html += `<div class="progress-ex-head"><span class="progress-ex-name">${ex.name}</span><span class="progress-no-data">Sin datos</span></div>`;
@@ -1801,8 +2112,16 @@ function buildWeightView() {
         const first = hist[0];
         const trend = last.weight - first.weight;
         const max = Math.max(...hist.map(h => h.weight));
+        const e1rm = ex.reps <= 12 ? calculate1RM(last.weight, ex.reps) : 0;
+
+        let statusIcon = '';
+        if (suggestion) {
+          const icons = { up: '↑', hold: '=', down: '↓', stall: '⚠', pr: '★' };
+          statusIcon = `<span class="suggestion-badge ${suggestion.status}" style="font-size:10px;margin-left:4px;">${icons[suggestion.status]}</span>`;
+        }
+
         html += `<div class="progress-ex-head">
-          <span class="progress-ex-name">${ex.name}</span>
+          <span class="progress-ex-name">${ex.name}${statusIcon}${e1rm > 0 ? `<span class="e1rm-badge">1RM≈${e1rm}kg</span>` : ''}</span>
           <span class="progress-ex-val">${last.weight}kg</span>
           ${hist.length > 1 && trend !== 0 ? `<span class="progress-trend ${trend > 0 ? 'up' : 'down'}">${trend > 0 ? '+' : ''}${trend.toFixed(1)}</span>` : ''}
         </div>
@@ -2039,6 +2358,7 @@ const MEDIDAS_FIELDS = [
   { id: 'muslo_d', label: 'Muslo dcho.', unit: 'cm', icon: '🦵' },
   { id: 'muslo_i', label: 'Muslo izq.', unit: 'cm', icon: '🦵' },
   { id: 'gemelo', label: 'Gemelo', unit: 'cm', icon: '🦵' },
+  { id: 'cuello', label: 'Cuello', unit: 'cm', icon: '📐' },
   { id: 'hombros', label: 'Hombros', unit: 'cm', icon: '📐' },
 ];
 
