@@ -5,24 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#f2f2f7">
-<link rel="manifest" href="data:application/json,{%22name%22:%22Marc%20Tracker%22,%22short_name%22:%22Tracker%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f2f2f7%22,%22theme_color%22:%22%23f2f2f7%22}">
+<meta name="theme-color" content="#f4f4f1">
+<link rel="manifest" href="data:application/json,{%22name%22:%22Marc%20Tracker%22,%22short_name%22:%22Tracker%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f4f4f1%22,%22theme_color%22:%22%23f4f4f1%22}">
 <title>Marc Tracker</title>
 <style>
 :root {
-  --bg: #f2f2f7;
+  --bg: #f4f4f1;
   --bg2: #ffffff;
-  --bg3: #f7f7fa;
-  --bg4: #e5e5ea;
-  --accent: #5856d6;
-  --accent2: #5856d6;
-  --green: #34c759;
-  --green2: #30d158;
-  --orange: #ff9500;
-  --red: #ff3b30;
-  --text: #1c1c1e;
-  --text2: #636366;
-  --text3: #aeaeb2;
+  --bg3: #fafaf8;
+  --bg4: #e2e2dd;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --green: #059669;
+  --green2: #34d399;
+  --orange: #b45309;
+  --red: #b91c1c;
+  --text: #1a1a1a;
+  --text2: #6b7280;
+  --text3: #9ca3af;
   --radius: 14px;
   --radius-sm: 10px;
   --glass: rgba(255,255,255,0.72);
@@ -47,11 +47,11 @@ body {
 
 .header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(242,242,247,0.82);
+  background: rgba(244,244,241,0.85);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   padding: 12px 20px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .header h1 {
@@ -109,8 +109,8 @@ body {
 .day-btn.active .day-label { color: #fff; }
 .day-btn.active .day-via { color: rgba(255,255,255,0.7); opacity: 1; }
 .day-btn.today { box-shadow: 0 0 0 2px var(--accent) inset; }
-.day-btn.done { background: rgba(52,199,89,0.08); color: var(--green); opacity: 0.7; pointer-events: none; }
-.day-btn.done .day-label { color: var(--green); }
+.day-btn.done { background: rgba(5,150,105,0.05); color: #065f46; opacity: 0.6; pointer-events: none; }
+.day-btn.done .day-label { color: #065f46; }
 .day-btn.done .day-label::after { content: ' ✓'; font-size: 9px; }
 
 /* Exercise Card */
@@ -133,7 +133,7 @@ body {
 .exercise-meta { display: flex; gap: 8px; align-items: center; }
 
 .rest-badge {
-  font-size: 10px; color: var(--orange); background: rgba(255,149,0,0.1);
+  font-size: 10px; color: #92400e; background: rgba(180,83,9,0.07);
   padding: 4px 10px; border-radius: 20px; font-weight: 600; white-space: nowrap;
 }
 
@@ -246,8 +246,8 @@ body {
 }
 
 .meal-kcal {
-  font-size: 11px; font-weight: 600; color: var(--orange);
-  background: rgba(255,149,0,0.1); padding: 4px 10px;
+  font-size: 11px; font-weight: 600; color: #92400e;
+  background: rgba(180,83,9,0.06); padding: 4px 10px;
   border-radius: 20px;
 }
 
@@ -337,10 +337,10 @@ body {
 
 .macro-value { font-size: 20px; font-weight: 700; }
 .macro-label { font-size: 9px; color: var(--text3); margin-top: 3px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.3px; }
-.macro-box.kcal .macro-value { color: var(--orange); }
-.macro-box.prot .macro-value { color: var(--red); }
-.macro-box.carb .macro-value { color: var(--accent2); }
-.macro-box.fat .macro-value { color: var(--green2); }
+.macro-box.kcal .macro-value { color: #92400e; }
+.macro-box.prot .macro-value { color: #9f1239; }
+.macro-box.carb .macro-value { color: #4338ca; }
+.macro-box.fat .macro-value { color: #065f46; }
 
 /* History Section */
 .history-entry {
@@ -397,10 +397,10 @@ body {
 /* Bottom Nav */
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(242,242,247,0.82);
+  background: rgba(244,244,241,0.85);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-top: 1px solid rgba(0,0,0,0.08);
+  border-top: 1px solid rgba(0,0,0,0.05);
   display: flex; padding: 4px 0 0;
   padding-bottom: max(4px, env(safe-area-inset-bottom));
 }
@@ -439,7 +439,7 @@ body {
 /* Workout complete indicator */
 .workout-done-badge {
   display: inline-block; font-size: 11px; padding: 2px 8px;
-  background: rgba(0,184,148,0.15); color: var(--green2);
+  background: rgba(5,150,105,0.08); color: #065f46;
   border-radius: 20px; font-weight: 500;
 }
 
@@ -487,8 +487,8 @@ body {
 .dialog-btn.confirm { background: var(--accent); color: #fff; }
 
 .previous-weight {
-  font-size: 10px; color: var(--green); background: rgba(52,199,89,0.1);
-  padding: 2px 8px; border-radius: 6px; font-weight: 600;
+  font-size: 10px; color: #065f46; background: rgba(5,150,105,0.06);
+  padding: 2px 8px; border-radius: 6px; font-weight: 500;
 }
 
 .start-timer-btn {
@@ -519,11 +519,11 @@ body {
 }
 
 .weekly-pill.done {
-  color: var(--green); background: rgba(52,199,89,0.1);
+  color: #065f46; background: rgba(5,150,105,0.07);
 }
 
 .weekly-pill.diet-done {
-  color: var(--orange); background: rgba(255,149,0,0.1);
+  color: #92400e; background: rgba(180,83,9,0.06);
 }
 
 /* Diet compliance */
@@ -534,7 +534,7 @@ body {
 
 .compliance-fill {
   height: 100%; border-radius: 20px; transition: width 0.3s;
-  background: linear-gradient(90deg, var(--red), var(--orange), var(--green));
+  background: linear-gradient(90deg, #b91c1c, #b45309, #059669);
 }
 
 .compliance-label {
@@ -553,9 +553,9 @@ body {
 .diet-save-btn {
   width: 100%; padding: 16px; border-radius: 14px;
   border: none; font-size: 15px; font-weight: 600; cursor: pointer;
-  background: var(--orange);
+  background: #92400e;
   color: #fff; letter-spacing: 0.3px;
-  box-shadow: 0 2px 12px rgba(255,149,0,0.25);
+  box-shadow: 0 2px 12px rgba(146,64,14,0.2);
 }
 .diet-save-btn:active { transform: scale(0.97); opacity: 0.9; }
 
@@ -664,8 +664,8 @@ body {
   font-size: 11px; font-weight: 600; min-width: 50px; text-align: right;
 }
 
-.medida-diff.up { color: var(--orange); }
-.medida-diff.down { color: var(--green); }
+.medida-diff.up { color: #92400e; }
+.medida-diff.down { color: #065f46; }
 .medida-diff.neutral { color: var(--text3); }
 
 .medidas-save-btn {
@@ -774,8 +774,8 @@ input.file-input-hidden { display: none; }
 .progress-ex-val { font-size: 14px; font-weight: 700; color: var(--text); }
 .progress-no-data { font-size: 11px; color: var(--text3); }
 .progress-trend { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 6px; }
-.progress-trend.up { color: var(--green); background: rgba(52,199,89,0.1); }
-.progress-trend.down { color: var(--red); background: rgba(255,59,48,0.08); }
+.progress-trend.up { color: #065f46; background: rgba(5,150,105,0.06); }
+.progress-trend.down { color: #991b1b; background: rgba(185,28,28,0.05); }
 .sparkline { display: flex; align-items: flex-end; gap: 2px; height: 24px; }
 .spark-bar { flex: 1; min-width: 6px; border-radius: 3px 3px 0 0; background: var(--accent); min-height: 2px; opacity: 0.35; }
 .spark-bar:last-child { background: var(--green); opacity: 1; }
@@ -792,19 +792,19 @@ input.file-input-hidden { display: none; }
 
 /* Weight suggestion */
 .suggestion-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
-.suggestion-badge.up { color: var(--green); background: rgba(52,199,89,0.1); }
-.suggestion-badge.hold { color: var(--accent); background: rgba(88,86,214,0.08); }
-.suggestion-badge.down { color: var(--orange); background: rgba(255,149,0,0.1); }
-.suggestion-badge.stall { color: var(--red); background: rgba(255,59,48,0.06); }
-.suggestion-badge.pr { color: #b45309; background: rgba(245,158,11,0.12); animation: prGlow 2s ease infinite; }
-@keyframes prGlow { 0%,100% { box-shadow: 0 0 0 transparent; } 50% { box-shadow: 0 0 8px rgba(245,158,11,0.2); } }
+.suggestion-badge.up { color: #065f46; background: rgba(5,150,105,0.07); }
+.suggestion-badge.hold { color: #4338ca; background: rgba(99,102,241,0.06); }
+.suggestion-badge.down { color: #92400e; background: rgba(180,83,9,0.06); }
+.suggestion-badge.stall { color: #991b1b; background: rgba(185,28,28,0.05); }
+.suggestion-badge.pr { color: #7c3aed; background: rgba(124,58,237,0.07); animation: prGlow 2.5s ease infinite; }
+@keyframes prGlow { 0%,100% { box-shadow: 0 0 0 transparent; } 50% { box-shadow: 0 0 6px rgba(124,58,237,0.12); } }
 .stall-alert {
-  font-size: 12px; color: #92400e; background: rgba(255,149,0,0.06);
-  border: 1px solid rgba(255,149,0,0.12); border-radius: var(--radius-sm);
+  font-size: 12px; color: #92400e; background: rgba(180,83,9,0.04);
+  border: 1px solid rgba(180,83,9,0.08); border-radius: var(--radius-sm);
   padding: 10px 12px; margin-top: 8px; line-height: 1.5;
 }
-.pr-toast { background: var(--orange) !important; color: #fff !important; font-weight: 600; }
-.e1rm-badge { font-size: 9px; color: var(--text3); background: var(--bg); padding: 2px 7px; border-radius: 6px; font-weight: 600; }
+.pr-toast { background: #7c3aed !important; color: #fff !important; font-weight: 600; }
+.e1rm-badge { font-size: 9px; color: var(--text3); background: var(--bg); padding: 2px 7px; border-radius: 6px; font-weight: 500; }
 
 /* Daily weight */
 .daily-weight-bar {
@@ -857,7 +857,7 @@ input.file-input-hidden { display: none; }
 <div class="header">
   <div class="header-row">
     <h1>Marc Tracker</h1>
-    <button onclick="exportData()" style="background:var(--bg2); border:none; color:var(--green); width:36px; height:36px; border-radius:50%; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 1px 3px rgba(0,0,0,0.08);" title="Exportar backup">&#8681;</button>
+    <button onclick="exportData()" style="background:var(--bg2); border:none; color:#065f46; width:36px; height:36px; border-radius:50%; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 1px 3px rgba(0,0,0,0.08);" title="Exportar backup">&#8681;</button>
   </div>
   <div class="tabs">
     <button class="tab active" data-tab="workout" onclick="switchTab('workout')">Entreno</button>
@@ -1491,7 +1491,7 @@ function renderExercises() {
   // Cardio post-entreno
   const cardioKey = 'cardio-' + dayKey;
   const cardioDone = getStorage(cardioKey);
-  html += `<div class="exercise-card" style="border-left: 3px solid var(--green);">
+  html += `<div class="exercise-card" style="border-left: 3px solid #059669;">
     <div class="exercise-header">
       <div>
         <div class="exercise-name">🏃 Cardio post-entreno</div>
@@ -1501,7 +1501,7 @@ function renderExercises() {
         <button class="set-check ${cardioDone ? 'done' : ''}" onclick="toggleCardio(this)" style="width:40px;height:40px;font-size:20px;">✓</button>
       </div>
     </div>
-    <button class="start-timer-btn" onclick="startTimer(1200)" style="border-color: rgba(0,184,148,0.2); background: rgba(0,184,148,0.08); color: var(--green2);">
+    <button class="start-timer-btn" onclick="startTimer(1200)" style="border-color: rgba(5,150,105,0.15); background: rgba(5,150,105,0.04); color: #065f46;">
       &#9201; Iniciar timer cardio (20:00)
     </button>
   </div>`;
@@ -1613,7 +1613,7 @@ function startTimer(seconds) {
       try {
         if ('vibrate' in navigator) navigator.vibrate([200, 100, 200, 100, 200]);
       } catch(e) {}
-      document.getElementById('timerDisplay').style.color = 'var(--green2)';
+      document.getElementById('timerDisplay').style.color = '#34d399';
       document.getElementById('timerLabel').textContent = '¡A entrenar!';
       setTimeout(() => stopTimer(), 2000);
     }
@@ -1629,7 +1629,7 @@ function updateTimerDisplay() {
   const m = Math.floor(Math.abs(timerSeconds) / 60);
   const s = Math.abs(timerSeconds) % 60;
   document.getElementById('timerDisplay').textContent = `${m}:${s.toString().padStart(2, '0')}`;
-  document.getElementById('timerDisplay').style.color = timerSeconds <= 5 && timerSeconds > 0 ? 'var(--orange)' : timerSeconds <= 0 ? 'var(--green2)' : 'var(--text)';
+  document.getElementById('timerDisplay').style.color = timerSeconds <= 5 && timerSeconds > 0 ? '#b45309' : timerSeconds <= 0 ? '#34d399' : '#fff';
 }
 
 function stopTimer() {
@@ -1895,7 +1895,7 @@ function renderGoalCard() {
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px;">
       <span>actual kg</span>
-      <span style="color:${onTrack ? 'var(--green)' : 'var(--orange)'}">${onTrack ? '✓ On track' : '⚠ Ajustar ritmo'}</span>
+      <span style="color:${onTrack ? '#065f46' : '#92400e'}">${onTrack ? '✓ On track' : '⚠ Ajustar ritmo'}</span>
       <span>objetivo kg</span>
     </div>
   </div>`;
@@ -1993,9 +1993,9 @@ function buildSummaryView() {
 
   html += `<div class="metrics-row">
     <div class="metric-card"><div class="metric-value" style="color:var(--text)">${latestW ? latestW.toFixed(1) : '—'}</div><div class="metric-label">Peso (kg)</div></div>
-    <div class="metric-card"><div class="metric-value" style="color:var(--accent)">${workoutsThisWeek}/4</div><div class="metric-label">Entrenos sem.</div></div>
-    <div class="metric-card"><div class="metric-value" style="color:var(--orange)">${weekDietPct}%</div><div class="metric-label">Dieta sem.</div></div>
-    ${bfPct !== null ? `<div class="metric-card"><div class="metric-value" style="color:var(--green)">${bfPct}%</div><div class="metric-label">Grasa corp.</div></div>` : ''}
+    <div class="metric-card"><div class="metric-value" style="color:#4338ca">${workoutsThisWeek}/4</div><div class="metric-label">Entrenos sem.</div></div>
+    <div class="metric-card"><div class="metric-value" style="color:#92400e">${weekDietPct}%</div><div class="metric-label">Dieta sem.</div></div>
+    ${bfPct !== null ? `<div class="metric-card"><div class="metric-value" style="color:#065f46">${bfPct}%</div><div class="metric-label">Grasa corp.</div></div>` : ''}
   </div>`;
 
   // Daily weight chart
@@ -2043,9 +2043,9 @@ function buildSummaryView() {
   // Body fat card
   if (bfPct !== null) {
     html += `<div class="bf-card">
-      <div class="bf-value" style="color:var(--green)">${bfPct}%</div>
+      <div class="bf-value" style="color:#065f46">${bfPct}%</div>
       <div class="bf-label">Grasa corporal estimada (U.S. Navy)</div>
-      <div class="bf-category" style="color:var(--accent)">${bfCategory}</div>
+      <div class="bf-category" style="color:#4338ca">${bfCategory}</div>
     </div>`;
   }
 
@@ -2062,7 +2062,7 @@ function buildSummaryView() {
       const v2 = parseFloat(lat[f.id]) || 0;
       if (!v1 && !v2) return;
       const diff = v2 - v1;
-      const cls = diff > 0 ? 'color:var(--orange)' : diff < 0 ? 'color:var(--green)' : 'color:var(--text3)';
+      const cls = diff > 0 ? 'color:#92400e' : diff < 0 ? 'color:#065f46' : 'color:var(--text3)';
       html += `<tr><td>${f.icon} ${f.label}</td><td>${v1 || '—'}</td><td>${v2 || '—'}</td><td style="${cls};font-weight:700">${v1 && v2 ? (diff > 0 ? '+' : '') + diff.toFixed(1) : '—'}</td></tr>`;
     });
     html += `</tbody></table>`;
@@ -2110,7 +2110,7 @@ function buildWeeklySummary() {
     <div class="ws-row"><span class="ws-label">Series completadas</span><span class="ws-val">${totalSets}</span></div>
     <div class="ws-row"><span class="ws-label">Cardio</span><span class="ws-val">${cardioCount}/${weekWorkouts.length}</span></div>`;
   if (prsThisWeek.length > 0) {
-    html += `<div class="ws-row"><span class="ws-label">★ PRs esta semana</span><span class="ws-val" style="color:var(--green)">${prsThisWeek.length}</span></div>`;
+    html += `<div class="ws-row"><span class="ws-label">★ PRs esta semana</span><span class="ws-val" style="color:#7c3aed">${prsThisWeek.length}</span></div>`;
   }
   html += `</div>`;
   return html;
@@ -2207,13 +2207,13 @@ function buildDietView() {
   const trackingRate = totalDays > 0 ? Math.round((totalTracked / totalDays) * 100) : 0;
 
   let html = `<div class="metrics-row">
-    <div class="metric-card"><div class="metric-value" style="color:var(--orange)">${overallPct}%</div><div class="metric-label">Cumplimiento</div></div>
-    <div class="metric-card"><div class="metric-value" style="color:var(--accent)">${totalTracked}/${totalDays}</div><div class="metric-label">Días registr.</div></div>
-    <div class="metric-card"><div class="metric-value" style="color:var(--green)">${trackingRate}%</div><div class="metric-label">Seguimiento</div></div>
+    <div class="metric-card"><div class="metric-value" style="color:#92400e">${overallPct}%</div><div class="metric-label">Cumplimiento</div></div>
+    <div class="metric-card"><div class="metric-value" style="color:#4338ca">${totalTracked}/${totalDays}</div><div class="metric-label">Días registr.</div></div>
+    <div class="metric-card"><div class="metric-value" style="color:#065f46">${trackingRate}%</div><div class="metric-label">Seguimiento</div></div>
   </div>`;
   html += `<div class="section-title">📊 Cumplimiento semanal</div><div class="compliance-weeks">`;
   weeks.forEach(w => {
-    const color = w.avg >= 80 ? 'var(--green)' : w.avg >= 50 ? 'var(--orange)' : 'var(--red)';
+    const color = w.avg >= 80 ? '#059669' : w.avg >= 50 ? '#b45309' : '#b91c1c';
     html += `<div class="compliance-week">
       <span class="compliance-week-label">${w.label}</span>
       <div class="compliance-week-bar"><div class="compliance-week-fill" style="width:${w.avg}%;background:${color}"></div></div>
@@ -2262,7 +2262,7 @@ function buildHistoryEntries() {
           sum + ex.sets.reduce((ss, s) => ss + (parseFloat(s.weight) || 0) * (parseInt(s.reps) || 0), 0), 0);
         html += `<div class="history-entry" data-type="workout" onclick="toggleHistoryDetail(this)">
           <div class="history-date">${formatDate(d)}</div>
-          <div class="history-via">&#9947; ${data.viaName} ${completedSets === totalSets ? '<span class="workout-done-badge">Completo</span>' : ''}${data.cardio ? ' <span class="workout-done-badge" style="background:rgba(0,184,148,0.15)">Cardio ✓</span>' : ''}</div>
+          <div class="history-via">&#9947; ${data.viaName} ${completedSets === totalSets ? '<span class="workout-done-badge">Completo</span>' : ''}${data.cardio ? ' <span class="workout-done-badge" style="background:rgba(5,150,105,0.06); color:#065f46;">Cardio ✓</span>' : ''}</div>
           <div class="history-summary">${completedSets}/${totalSets} series · ${Math.round(totalVolume)} kg vol. total</div>
           <div class="history-detail">`;
         data.exercises.forEach(ex => {
@@ -2280,7 +2280,7 @@ function buildHistoryEntries() {
         const pct = allIds.length > 0 ? Math.round((checkedCount / allIds.length) * 100) : 0;
         html += `<div class="history-entry" data-type="diet" onclick="toggleHistoryDetail(this)">
           <div class="history-date">${formatDate(d)}</div>
-          <div class="history-via">&#9749; Dieta <span class="workout-done-badge" style="background:rgba(243,156,18,0.15); color:var(--orange);">${pct}%</span></div>
+          <div class="history-via">&#9749; Dieta <span class="workout-done-badge" style="background:rgba(180,83,9,0.06); color:#92400e;">${pct}%</span></div>
           <div class="history-summary">${checkedCount}/${allIds.length} items completados${data.extras ? ' · Extras: ' + data.extras : ''}</div>
           <div class="history-detail">`;
         MEALS.forEach(meal => {
@@ -2295,7 +2295,7 @@ function buildHistoryEntries() {
             html += `<div class="history-exercise"><div class="history-exercise-name">${done ? '✓' : '✗'} ${detail}</div></div>`;
           });
         });
-        if (data.extras) html += `<div class="history-exercise"><div class="history-exercise-name" style="color:var(--orange);">🍕 ${data.extras}</div></div>`;
+        if (data.extras) html += `<div class="history-exercise"><div class="history-exercise-name" style="color:#92400e;">🍕 ${data.extras}</div></div>`;
         html += `<button class="delete-entry-btn" onclick="confirmDelete('${entry.key}', 'diet', event)">Eliminar</button></div></div>`;
       } else if (entry.type === 'medidas') {
         const data = entry.data;
