@@ -5,37 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#f4f4f1">
-<link rel="manifest" href="data:application/json,{%22name%22:%22Marc%20Tracker%22,%22short_name%22:%22Tracker%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f4f4f1%22,%22theme_color%22:%22%23f4f4f1%22}">
+<meta name="theme-color" content="#f0ede6">
+<link rel="manifest" href="data:application/json,{%22name%22:%22Marc%20Tracker%22,%22short_name%22:%22Tracker%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f0ede6%22,%22theme_color%22:%22%23f0ede6%22}">
 <title>Marc Tracker</title>
 <style>
 :root {
-  --bg: #f4f4f1;
-  --bg2: #ffffff;
-  --bg3: #fafaf8;
-  --bg4: #e2e2dd;
-  --accent: #6366f1;
-  --accent2: #818cf8;
-  --green: #059669;
-  --green2: #34d399;
-  --orange: #b45309;
-  --red: #b91c1c;
-  --text: #1a1a1a;
-  --text2: #6b7280;
-  --text3: #9ca3af;
-  --radius: 14px;
-  --radius-sm: 10px;
-  --glass: rgba(255,255,255,0.72);
+  --bg: #f0ede6;
+  --bg2: #faf8f4;
+  --bg3: #f5f3ee;
+  --bg4: #ddd9d0;
+  --accent: #5a6b50;
+  --accent2: #7a8b6f;
+  --green: #5a6b50;
+  --green2: #7a8b6f;
+  --orange: #a0845c;
+  --red: #9e5a5a;
+  --text: #2c2c2c;
+  --text2: #6b665e;
+  --text3: #a09a90;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --glass: rgba(250,248,244,0.8);
   --glass-border: rgba(0,0,0,0.04);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-  --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
-  --shadow-lg: 0 4px 16px rgba(0,0,0,0.1);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.08);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
-  font-family: -apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100dvh;
@@ -43,15 +43,16 @@ body {
   overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
 }
 
 .header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(244,244,241,0.85);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background: rgba(240,237,230,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   padding: 12px 20px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0,0,0,0.04);
 }
 
 .header h1 {
@@ -83,7 +84,7 @@ body {
   text-transform: uppercase; letter-spacing: 0.5px;
 }
 
-.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab.active { color: var(--text); border-bottom-color: var(--text); }
 
 .content { padding: 16px 16px; }
 
@@ -105,12 +106,12 @@ body {
 .day-btn .day-label { display: block; font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 .day-btn .day-via { display: block; font-size: 9px; font-weight: 500; opacity: 0.5; }
 
-.day-btn.active { background: var(--accent); color: #fff; box-shadow: 0 2px 8px rgba(88,86,214,0.3); }
-.day-btn.active .day-label { color: #fff; }
-.day-btn.active .day-via { color: rgba(255,255,255,0.7); opacity: 1; }
+.day-btn.active { background: #2c2c2c; color: #faf8f4; }
+.day-btn.active .day-label { color: #faf8f4; }
+.day-btn.active .day-via { color: rgba(250,248,244,0.6); opacity: 1; }
 .day-btn.today { box-shadow: 0 0 0 2px var(--accent) inset; }
-.day-btn.done { background: rgba(5,150,105,0.05); color: #065f46; opacity: 0.6; pointer-events: none; }
-.day-btn.done .day-label { color: #065f46; }
+.day-btn.done { background: rgba(90,107,80,0.06); color: var(--accent); opacity: 0.6; pointer-events: none; }
+.day-btn.done .day-label { color: var(--accent); }
 .day-btn.done .day-label::after { content: ' ✓'; font-size: 9px; }
 
 /* Exercise Card */
@@ -133,7 +134,7 @@ body {
 .exercise-meta { display: flex; gap: 8px; align-items: center; }
 
 .rest-badge {
-  font-size: 10px; color: #92400e; background: rgba(180,83,9,0.07);
+  font-size: 10px; color: #a0845c; background: rgba(160,132,92,0.1);
   padding: 4px 10px; border-radius: 20px; font-weight: 600; white-space: nowrap;
 }
 
@@ -224,14 +225,13 @@ body {
   width: 100%; padding: 16px; border-radius: 14px;
   border: none; font-size: 15px; font-weight: 600;
   cursor: pointer; transition: all 0.2s;
-  background: var(--accent);
-  color: #fff; letter-spacing: 0.3px;
-  box-shadow: 0 2px 12px rgba(88,86,214,0.3);
+  background: #2c2c2c;
+  color: #faf8f4; letter-spacing: 0.3px;
 }
 
 .save-btn:active { transform: scale(0.97); opacity: 0.9; }
 
-.save-btn.saved { background: var(--green); box-shadow: 0 2px 12px rgba(52,199,89,0.3); }
+.save-btn.saved { background: var(--accent); }
 
 /* Diet Section */
 .meal-card {
@@ -246,8 +246,8 @@ body {
 }
 
 .meal-kcal {
-  font-size: 11px; font-weight: 600; color: #92400e;
-  background: rgba(180,83,9,0.06); padding: 4px 10px;
+  font-size: 11px; font-weight: 600; color: #a0845c;
+  background: rgba(160,132,92,0.08); padding: 4px 10px;
   border-radius: 20px;
 }
 
@@ -337,10 +337,10 @@ body {
 
 .macro-value { font-size: 20px; font-weight: 700; }
 .macro-label { font-size: 9px; color: var(--text3); margin-top: 3px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.3px; }
-.macro-box.kcal .macro-value { color: #92400e; }
-.macro-box.prot .macro-value { color: #9f1239; }
-.macro-box.carb .macro-value { color: #4338ca; }
-.macro-box.fat .macro-value { color: #065f46; }
+.macro-box.kcal .macro-value { color: #a0845c; }
+.macro-box.prot .macro-value { color: #9e5a5a; }
+.macro-box.carb .macro-value { color: #5a6b50; }
+.macro-box.fat .macro-value { color: #6b665e; }
 
 /* History Section */
 .history-entry {
@@ -357,7 +357,7 @@ body {
 .delete-entry-btn {
   width: 100%; margin-top: 12px; padding: 10px;
   border-radius: var(--radius-sm); border: none;
-  background: rgba(255,59,48,0.06); color: var(--red);
+  background: rgba(158,90,90,0.06); color: var(--red);
   font-size: 13px; font-weight: 600; cursor: pointer;
 }
 .history-summary { font-size: 12px; color: var(--text3); margin-top: 4px; }
@@ -397,10 +397,10 @@ body {
 /* Bottom Nav */
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(244,244,241,0.85);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-top: 1px solid rgba(0,0,0,0.05);
+  background: rgba(240,237,230,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0,0,0,0.04);
   display: flex; padding: 4px 0 0;
   padding-bottom: max(4px, env(safe-area-inset-bottom));
 }
@@ -412,14 +412,14 @@ body {
   transition: color 0.2s;
 }
 
-.nav-item.active { color: var(--accent); }
+.nav-item.active { color: var(--text); }
 
 .nav-icon { font-size: 22px; line-height: 1; }
 
 /* Toast */
 .toast {
   position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-  background: #1c1c1e; color: #fff; padding: 12px 24px;
+  background: #2c2c2c; color: #faf8f4; padding: 12px 24px;
   border-radius: 12px; font-size: 14px; font-weight: 600;
   z-index: 300; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   white-space: nowrap; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
@@ -433,13 +433,13 @@ body {
 }
 
 .rest-day-msg .icon { font-size: 64px; margin-bottom: 16px; }
-.rest-day-msg h2 { font-size: 22px; margin-bottom: 8px; color: var(--green); }
+.rest-day-msg h2 { font-size: 22px; margin-bottom: 8px; color: var(--accent); }
 .rest-day-msg p { color: var(--text3); font-size: 14px; }
 
 /* Workout complete indicator */
 .workout-done-badge {
   display: inline-block; font-size: 11px; padding: 2px 8px;
-  background: rgba(5,150,105,0.08); color: #065f46;
+  background: rgba(90,107,80,0.06); color: #5a6b50;
   border-radius: 20px; font-weight: 500;
 }
 
@@ -457,7 +457,7 @@ body {
 }
 .filter-btn:active { transform: scale(0.95); }
 
-.filter-btn.active { background: var(--accent); color: #fff; }
+.filter-btn.active { background: #2c2c2c; color: #faf8f4; }
 
 /* Confirmation dialog */
 .dialog-overlay {
@@ -487,7 +487,7 @@ body {
 .dialog-btn.confirm { background: var(--accent); color: #fff; }
 
 .previous-weight {
-  font-size: 10px; color: #065f46; background: rgba(5,150,105,0.06);
+  font-size: 10px; color: var(--accent); background: rgba(90,107,80,0.08);
   padding: 2px 8px; border-radius: 6px; font-weight: 500;
 }
 
@@ -519,11 +519,11 @@ body {
 }
 
 .weekly-pill.done {
-  color: #065f46; background: rgba(5,150,105,0.07);
+  color: var(--accent); background: rgba(90,107,80,0.08);
 }
 
 .weekly-pill.diet-done {
-  color: #92400e; background: rgba(180,83,9,0.06);
+  color: #a0845c; background: rgba(160,132,92,0.08);
 }
 
 /* Diet compliance */
@@ -534,7 +534,7 @@ body {
 
 .compliance-fill {
   height: 100%; border-radius: 20px; transition: width 0.3s;
-  background: linear-gradient(90deg, #b91c1c, #b45309, #059669);
+  background: linear-gradient(90deg, #9e5a5a, #a0845c, #5a6b50);
 }
 
 .compliance-label {
@@ -553,9 +553,8 @@ body {
 .diet-save-btn {
   width: 100%; padding: 16px; border-radius: 14px;
   border: none; font-size: 15px; font-weight: 600; cursor: pointer;
-  background: #92400e;
-  color: #fff; letter-spacing: 0.3px;
-  box-shadow: 0 2px 12px rgba(146,64,14,0.2);
+  background: #2c2c2c;
+  color: #faf8f4; letter-spacing: 0.3px;
 }
 .diet-save-btn:active { transform: scale(0.97); opacity: 0.9; }
 
@@ -664,16 +663,15 @@ body {
   font-size: 11px; font-weight: 600; min-width: 50px; text-align: right;
 }
 
-.medida-diff.up { color: #92400e; }
-.medida-diff.down { color: #065f46; }
+.medida-diff.up { color: #a0845c; }
+.medida-diff.down { color: #5a6b50; }
 .medida-diff.neutral { color: var(--text3); }
 
 .medidas-save-btn {
   width: 100%; padding: 14px; border-radius: 14px;
   border: none; font-size: 15px; font-weight: 600; cursor: pointer;
-  background: var(--accent);
-  color: #fff; margin-top: 10px;
-  box-shadow: 0 2px 12px rgba(88,86,214,0.25);
+  background: #2c2c2c;
+  color: #faf8f4; margin-top: 10px;
 }
 .medidas-save-btn:active { transform: scale(0.97); opacity: 0.9; }
 
@@ -705,7 +703,7 @@ body {
 .medidas-table .date-col { text-align: left; color: var(--text); font-weight: 500; }
 
 .friday-reminder {
-  background: rgba(88,86,214,0.06); border: 1px solid rgba(88,86,214,0.12);
+  background: rgba(90,107,80,0.05); border: 1px solid rgba(90,107,80,0.1);
   border-radius: var(--radius); padding: 16px; text-align: center;
   margin-bottom: 16px;
 }
@@ -746,13 +744,13 @@ input.file-input-hidden { display: none; }
   background: var(--bg2); border: none; border-radius: var(--radius);
   padding: 16px; margin-bottom: 14px; box-shadow: var(--shadow-sm);
 }
-.goal-badge { font-size: 11px; font-weight: 600; color: #fff; background: var(--accent); padding: 3px 10px; border-radius: 20px; }
+.goal-badge { font-size: 11px; font-weight: 600; color: #faf8f4; background: #2c2c2c; padding: 3px 10px; border-radius: 20px; }
 .goal-fase { font-size: 12px; font-weight: 600; color: var(--text2); margin-left: 8px; }
 .goal-countdown { font-size: 13px; font-weight: 700; color: var(--orange); }
 .goal-weight-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
 .goal-current, .goal-target-val { font-size: 16px; font-weight: 700; min-width: 36px; }
 .goal-current { color: var(--text); }
-.goal-target-val { color: var(--green); font-size: 14px; }
+.goal-target-val { color: var(--accent); font-size: 14px; }
 .goal-track { flex: 1; height: 6px; background: var(--bg4); border-radius: 20px; position: relative; }
 .goal-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--accent), var(--green)); transition: width 0.5s; }
 .goal-marker { position: absolute; top: -4px; width: 2px; height: 14px; background: var(--orange); border-radius: 1px; }
@@ -774,8 +772,8 @@ input.file-input-hidden { display: none; }
 .progress-ex-val { font-size: 14px; font-weight: 700; color: var(--text); }
 .progress-no-data { font-size: 11px; color: var(--text3); }
 .progress-trend { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 6px; }
-.progress-trend.up { color: #065f46; background: rgba(5,150,105,0.06); }
-.progress-trend.down { color: #991b1b; background: rgba(185,28,28,0.05); }
+.progress-trend.up { color: #5a6b50; background: rgba(90,107,80,0.08); }
+.progress-trend.down { color: #9e5a5a; background: rgba(158,90,90,0.07); }
 .sparkline { display: flex; align-items: flex-end; gap: 2px; height: 24px; }
 .spark-bar { flex: 1; min-width: 6px; border-radius: 3px 3px 0 0; background: var(--accent); min-height: 2px; opacity: 0.35; }
 .spark-bar:last-child { background: var(--green); opacity: 1; }
@@ -792,18 +790,18 @@ input.file-input-hidden { display: none; }
 
 /* Weight suggestion */
 .suggestion-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
-.suggestion-badge.up { color: #065f46; background: rgba(5,150,105,0.07); }
-.suggestion-badge.hold { color: #4338ca; background: rgba(99,102,241,0.06); }
-.suggestion-badge.down { color: #92400e; background: rgba(180,83,9,0.06); }
-.suggestion-badge.stall { color: #991b1b; background: rgba(185,28,28,0.05); }
-.suggestion-badge.pr { color: #7c3aed; background: rgba(124,58,237,0.07); animation: prGlow 2.5s ease infinite; }
-@keyframes prGlow { 0%,100% { box-shadow: 0 0 0 transparent; } 50% { box-shadow: 0 0 6px rgba(124,58,237,0.12); } }
+.suggestion-badge.up { color: #5a6b50; background: rgba(90,107,80,0.08); }
+.suggestion-badge.hold { color: #6b665e; background: rgba(107,102,94,0.07); }
+.suggestion-badge.down { color: #a0845c; background: rgba(160,132,92,0.08); }
+.suggestion-badge.stall { color: #9e5a5a; background: rgba(158,90,90,0.07); }
+.suggestion-badge.pr { color: #5a6b50; background: rgba(90,107,80,0.1); animation: prGlow 2.5s ease infinite; }
+@keyframes prGlow { 0%,100% { box-shadow: 0 0 0 transparent; } 50% { box-shadow: 0 0 6px rgba(90,107,80,0.15); } }
 .stall-alert {
-  font-size: 12px; color: #92400e; background: rgba(180,83,9,0.04);
-  border: 1px solid rgba(180,83,9,0.08); border-radius: var(--radius-sm);
+  font-size: 12px; color: #a0845c; background: rgba(160,132,92,0.05);
+  border: 1px solid rgba(160,132,92,0.1); border-radius: var(--radius-sm);
   padding: 10px 12px; margin-top: 8px; line-height: 1.5;
 }
-.pr-toast { background: #7c3aed !important; color: #fff !important; font-weight: 600; }
+.pr-toast { background: #5a6b50 !important; color: #fff !important; font-weight: 600; }
 .e1rm-badge { font-size: 9px; color: var(--text3); background: var(--bg); padding: 2px 7px; border-radius: 6px; font-weight: 500; }
 
 /* Daily weight */
@@ -820,7 +818,7 @@ input.file-input-hidden { display: none; }
   -webkit-appearance: none; font-variant-numeric: tabular-nums;
 }
 .daily-weight-input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(88,86,214,0.1); }
-.daily-weight-saved { font-size: 11px; color: var(--green); font-weight: 600; }
+.daily-weight-saved { font-size: 11px; color: var(--accent); font-weight: 600; }
 
 /* Body fat */
 .bf-card {
@@ -857,7 +855,7 @@ input.file-input-hidden { display: none; }
 <div class="header">
   <div class="header-row">
     <h1>Marc Tracker</h1>
-    <button onclick="exportData()" style="background:var(--bg2); border:none; color:#065f46; width:36px; height:36px; border-radius:50%; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 1px 3px rgba(0,0,0,0.08);" title="Exportar backup">&#8681;</button>
+    <button onclick="exportData()" style="background:var(--bg2); border:none; color:var(--accent); width:36px; height:36px; border-radius:50%; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 1px 3px rgba(0,0,0,0.08);" title="Exportar backup">&#8681;</button>
   </div>
   <div class="tabs">
     <button class="tab active" data-tab="workout" onclick="switchTab('workout')">Entreno</button>
@@ -1491,7 +1489,7 @@ function renderExercises() {
   // Cardio post-entreno
   const cardioKey = 'cardio-' + dayKey;
   const cardioDone = getStorage(cardioKey);
-  html += `<div class="exercise-card" style="border-left: 3px solid #059669;">
+  html += `<div class="exercise-card" style="border-left: 3px solid var(--accent);">
     <div class="exercise-header">
       <div>
         <div class="exercise-name">🏃 Cardio post-entreno</div>
@@ -1501,7 +1499,7 @@ function renderExercises() {
         <button class="set-check ${cardioDone ? 'done' : ''}" onclick="toggleCardio(this)" style="width:40px;height:40px;font-size:20px;">✓</button>
       </div>
     </div>
-    <button class="start-timer-btn" onclick="startTimer(1200)" style="border-color: rgba(5,150,105,0.15); background: rgba(5,150,105,0.04); color: #065f46;">
+    <button class="start-timer-btn" onclick="startTimer(1200)" style="border-color: rgba(90,107,80,0.15); background: rgba(90,107,80,0.04); color: var(--accent);">
       &#9201; Iniciar timer cardio (20:00)
     </button>
   </div>`;
@@ -1613,7 +1611,7 @@ function startTimer(seconds) {
       try {
         if ('vibrate' in navigator) navigator.vibrate([200, 100, 200, 100, 200]);
       } catch(e) {}
-      document.getElementById('timerDisplay').style.color = '#34d399';
+      document.getElementById('timerDisplay').style.color = '#7a8b6f';
       document.getElementById('timerLabel').textContent = '¡A entrenar!';
       setTimeout(() => stopTimer(), 2000);
     }
@@ -1629,7 +1627,7 @@ function updateTimerDisplay() {
   const m = Math.floor(Math.abs(timerSeconds) / 60);
   const s = Math.abs(timerSeconds) % 60;
   document.getElementById('timerDisplay').textContent = `${m}:${s.toString().padStart(2, '0')}`;
-  document.getElementById('timerDisplay').style.color = timerSeconds <= 5 && timerSeconds > 0 ? '#b45309' : timerSeconds <= 0 ? '#34d399' : '#fff';
+  document.getElementById('timerDisplay').style.color = timerSeconds <= 5 && timerSeconds > 0 ? '#a0845c' : timerSeconds <= 0 ? '#7a8b6f' : '#fff';
 }
 
 function stopTimer() {
@@ -1895,7 +1893,7 @@ function renderGoalCard() {
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px;">
       <span>actual kg</span>
-      <span style="color:${onTrack ? '#065f46' : '#92400e'}">${onTrack ? '✓ On track' : '⚠ Ajustar ritmo'}</span>
+      <span style="color:${onTrack ? '#5a6b50' : '#a0845c'}">${onTrack ? '✓ On track' : '⚠ Ajustar ritmo'}</span>
       <span>objetivo kg</span>
     </div>
   </div>`;
@@ -1993,9 +1991,9 @@ function buildSummaryView() {
 
   html += `<div class="metrics-row">
     <div class="metric-card"><div class="metric-value" style="color:var(--text)">${latestW ? latestW.toFixed(1) : '—'}</div><div class="metric-label">Peso (kg)</div></div>
-    <div class="metric-card"><div class="metric-value" style="color:#4338ca">${workoutsThisWeek}/4</div><div class="metric-label">Entrenos sem.</div></div>
-    <div class="metric-card"><div class="metric-value" style="color:#92400e">${weekDietPct}%</div><div class="metric-label">Dieta sem.</div></div>
-    ${bfPct !== null ? `<div class="metric-card"><div class="metric-value" style="color:#065f46">${bfPct}%</div><div class="metric-label">Grasa corp.</div></div>` : ''}
+    <div class="metric-card"><div class="metric-value" style="color:#5a6b50">${workoutsThisWeek}/4</div><div class="metric-label">Entrenos sem.</div></div>
+    <div class="metric-card"><div class="metric-value" style="color:#a0845c">${weekDietPct}%</div><div class="metric-label">Dieta sem.</div></div>
+    ${bfPct !== null ? `<div class="metric-card"><div class="metric-value" style="color:#5a6b50">${bfPct}%</div><div class="metric-label">Grasa corp.</div></div>` : ''}
   </div>`;
 
   // Daily weight chart
@@ -2043,9 +2041,9 @@ function buildSummaryView() {
   // Body fat card
   if (bfPct !== null) {
     html += `<div class="bf-card">
-      <div class="bf-value" style="color:#065f46">${bfPct}%</div>
+      <div class="bf-value" style="color:#5a6b50">${bfPct}%</div>
       <div class="bf-label">Grasa corporal estimada (U.S. Navy)</div>
-      <div class="bf-category" style="color:#4338ca">${bfCategory}</div>
+      <div class="bf-category" style="color:#6b665e">${bfCategory}</div>
     </div>`;
   }
 
@@ -2062,7 +2060,7 @@ function buildSummaryView() {
       const v2 = parseFloat(lat[f.id]) || 0;
       if (!v1 && !v2) return;
       const diff = v2 - v1;
-      const cls = diff > 0 ? 'color:#92400e' : diff < 0 ? 'color:#065f46' : 'color:var(--text3)';
+      const cls = diff > 0 ? 'color:#a0845c' : diff < 0 ? 'color:#5a6b50' : 'color:var(--text3)';
       html += `<tr><td>${f.icon} ${f.label}</td><td>${v1 || '—'}</td><td>${v2 || '—'}</td><td style="${cls};font-weight:700">${v1 && v2 ? (diff > 0 ? '+' : '') + diff.toFixed(1) : '—'}</td></tr>`;
     });
     html += `</tbody></table>`;
@@ -2110,7 +2108,7 @@ function buildWeeklySummary() {
     <div class="ws-row"><span class="ws-label">Series completadas</span><span class="ws-val">${totalSets}</span></div>
     <div class="ws-row"><span class="ws-label">Cardio</span><span class="ws-val">${cardioCount}/${weekWorkouts.length}</span></div>`;
   if (prsThisWeek.length > 0) {
-    html += `<div class="ws-row"><span class="ws-label">★ PRs esta semana</span><span class="ws-val" style="color:#7c3aed">${prsThisWeek.length}</span></div>`;
+    html += `<div class="ws-row"><span class="ws-label">★ PRs esta semana</span><span class="ws-val" style="color:#5a6b50">${prsThisWeek.length}</span></div>`;
   }
   html += `</div>`;
   return html;
@@ -2207,13 +2205,13 @@ function buildDietView() {
   const trackingRate = totalDays > 0 ? Math.round((totalTracked / totalDays) * 100) : 0;
 
   let html = `<div class="metrics-row">
-    <div class="metric-card"><div class="metric-value" style="color:#92400e">${overallPct}%</div><div class="metric-label">Cumplimiento</div></div>
-    <div class="metric-card"><div class="metric-value" style="color:#4338ca">${totalTracked}/${totalDays}</div><div class="metric-label">Días registr.</div></div>
-    <div class="metric-card"><div class="metric-value" style="color:#065f46">${trackingRate}%</div><div class="metric-label">Seguimiento</div></div>
+    <div class="metric-card"><div class="metric-value" style="color:#a0845c">${overallPct}%</div><div class="metric-label">Cumplimiento</div></div>
+    <div class="metric-card"><div class="metric-value" style="color:#6b665e">${totalTracked}/${totalDays}</div><div class="metric-label">Días registr.</div></div>
+    <div class="metric-card"><div class="metric-value" style="color:#5a6b50">${trackingRate}%</div><div class="metric-label">Seguimiento</div></div>
   </div>`;
   html += `<div class="section-title">📊 Cumplimiento semanal</div><div class="compliance-weeks">`;
   weeks.forEach(w => {
-    const color = w.avg >= 80 ? '#059669' : w.avg >= 50 ? '#b45309' : '#b91c1c';
+    const color = w.avg >= 80 ? '#5a6b50' : w.avg >= 50 ? '#a0845c' : '#9e5a5a';
     html += `<div class="compliance-week">
       <span class="compliance-week-label">${w.label}</span>
       <div class="compliance-week-bar"><div class="compliance-week-fill" style="width:${w.avg}%;background:${color}"></div></div>
@@ -2262,7 +2260,7 @@ function buildHistoryEntries() {
           sum + ex.sets.reduce((ss, s) => ss + (parseFloat(s.weight) || 0) * (parseInt(s.reps) || 0), 0), 0);
         html += `<div class="history-entry" data-type="workout" onclick="toggleHistoryDetail(this)">
           <div class="history-date">${formatDate(d)}</div>
-          <div class="history-via">&#9947; ${data.viaName} ${completedSets === totalSets ? '<span class="workout-done-badge">Completo</span>' : ''}${data.cardio ? ' <span class="workout-done-badge" style="background:rgba(5,150,105,0.06); color:#065f46;">Cardio ✓</span>' : ''}</div>
+          <div class="history-via">&#9947; ${data.viaName} ${completedSets === totalSets ? '<span class="workout-done-badge">Completo</span>' : ''}${data.cardio ? ' <span class="workout-done-badge" style="background:rgba(90,107,80,0.06); color:#5a6b50;">Cardio ✓</span>' : ''}</div>
           <div class="history-summary">${completedSets}/${totalSets} series · ${Math.round(totalVolume)} kg vol. total</div>
           <div class="history-detail">`;
         data.exercises.forEach(ex => {
@@ -2280,7 +2278,7 @@ function buildHistoryEntries() {
         const pct = allIds.length > 0 ? Math.round((checkedCount / allIds.length) * 100) : 0;
         html += `<div class="history-entry" data-type="diet" onclick="toggleHistoryDetail(this)">
           <div class="history-date">${formatDate(d)}</div>
-          <div class="history-via">&#9749; Dieta <span class="workout-done-badge" style="background:rgba(180,83,9,0.06); color:#92400e;">${pct}%</span></div>
+          <div class="history-via">&#9749; Dieta <span class="workout-done-badge" style="background:rgba(160,132,92,0.08); color:#a0845c;">${pct}%</span></div>
           <div class="history-summary">${checkedCount}/${allIds.length} items completados${data.extras ? ' · Extras: ' + data.extras : ''}</div>
           <div class="history-detail">`;
         MEALS.forEach(meal => {
@@ -2295,7 +2293,7 @@ function buildHistoryEntries() {
             html += `<div class="history-exercise"><div class="history-exercise-name">${done ? '✓' : '✗'} ${detail}</div></div>`;
           });
         });
-        if (data.extras) html += `<div class="history-exercise"><div class="history-exercise-name" style="color:#92400e;">🍕 ${data.extras}</div></div>`;
+        if (data.extras) html += `<div class="history-exercise"><div class="history-exercise-name" style="color:#a0845c;">🍕 ${data.extras}</div></div>`;
         html += `<button class="delete-entry-btn" onclick="confirmDelete('${entry.key}', 'diet', event)">Eliminar</button></div></div>`;
       } else if (entry.type === 'medidas') {
         const data = entry.data;
