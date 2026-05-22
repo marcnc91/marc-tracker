@@ -1235,14 +1235,27 @@ function getSelectedDayKey() {
   return workoutDateKey();
 }
 
-function getPreviousExerciseData(viaId, exerciseIdx) {
+function resolveExerciseName(viaId, exerciseIdx, nameOverride) {
+  if (nameOverride) return nameOverride;
+  const via = PROGRAM.vias.find(v => v.id === viaId);
+  return via && via.exercises[exerciseIdx] ? via.exercises[exerciseIdx].name : null;
+}
+
+function findExerciseInSaved(savedExercises, name) {
+  if (!savedExercises || !name) return null;
+  return savedExercises.find(ex => ex.name === name) || null;
+}
+
+function getPreviousExerciseData(viaId, exerciseIdx, nameOverride) {
+  const exName = resolveExerciseName(viaId, exerciseIdx, nameOverride);
+  if (!exName) return null;
   const allKeys = Object.keys(localStorage).filter(k => k.startsWith('workout-')).sort().reverse();
   const currentKey = 'workout-' + getSelectedDayKey();
   for (const key of allKeys) {
     if (key === currentKey) continue;
     const data = getStorage(key);
     if (data && data.viaId === viaId) {
-      const ex = data.exercises[exerciseIdx];
+      const ex = findExerciseInSaved(data.exercises, exName);
       if (ex && ex.sets) {
         const maxWeight = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
         if (maxWeight > 0) return { maxWeight, sets: ex.sets, feedback: ex.feedback || null };
@@ -1252,22 +1265,26 @@ function getPreviousExerciseData(viaId, exerciseIdx) {
   return null;
 }
 
-function getExerciseAllHistory(viaId, exerciseIdx) {
+function getExerciseAllHistory(viaId, exerciseIdx, nameOverride) {
+  const exName = resolveExerciseName(viaId, exerciseIdx, nameOverride);
+  if (!exName) return [];
   return Object.keys(localStorage)
     .filter(k => k.startsWith('workout-')).sort()
     .reduce((acc, k) => {
       const d = getStorage(k);
-      if (d && d.viaId === viaId && d.exercises[exerciseIdx]) {
-        const ex = d.exercises[exerciseIdx];
-        const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
-        if (maxW > 0) acc.push({ date: d.date, weight: maxW, sets: ex.sets });
+      if (d && d.viaId === viaId) {
+        const ex = findExerciseInSaved(d.exercises, exName);
+        if (ex && ex.sets) {
+          const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
+          if (maxW > 0) acc.push({ date: d.date, weight: maxW, sets: ex.sets });
+        }
       }
       return acc;
     }, []);
 }
 
-function getAllTimePR(viaId, exerciseIdx) {
-  const hist = getExerciseAllHistory(viaId, exerciseIdx);
+function getAllTimePR(viaId, exerciseIdx, nameOverride) {
+  const hist = getExerciseAllHistory(viaId, exerciseIdx, nameOverride);
   return hist.length > 0 ? Math.max(...hist.map(h => h.weight)) : 0;
 }
 
@@ -2095,7 +2112,7 @@ function buildWeeklySummary() {
     if (!via) return;
     w.exercises.forEach((ex, ei) => {
       const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
-      const hist = getExerciseAllHistory(via.id, ei);
+      const hist = getExerciseAllHistory(via.id, ei, ex.name);
       const allTimePR = hist.length > 0 ? Math.max(...hist.map(h => h.weight)) : 0;
       if (maxW > 0 && maxW >= allTimePR) prsThisWeek.push({ name: ex.name, weight: maxW });
     });
