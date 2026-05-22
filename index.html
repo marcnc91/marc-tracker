@@ -1017,7 +1017,7 @@ input.file-input-hidden { display: none; }
     <div id="dietContent"></div>
   </div>
 
-  <div class="diet-save-bar" id="dietSaveBar">
+  <div class="diet-save-bar" id="dietSaveBar" style="display:none">
     <button class="diet-save-btn" onclick="showExtrasPopup()">Guardar día</button>
   </div>
 
@@ -3034,6 +3034,7 @@ document.getElementById('timerOverlay').addEventListener('touchmove', e => e.pre
 
 // Init
 render();
+switchTab('workout');
 
 // Backup reminder: check on every load
 (function backupReminder() {
