@@ -1,4 +1,4 @@
-const CACHE_NAME = 'marc-tracker-v8';
+const CACHE_NAME = 'marc-tracker-v9';
 const URLS_TO_CACHE = ['./tracker.html', './index.html', './sw.js'];
 
 self.addEventListener('install', e => {
@@ -19,16 +19,12 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      const networkFetch = fetch(e.request).then(resp => {
-        if (resp && resp.status === 200) {
-          const clone = resp.clone();
-          caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-        }
-        return resp;
-      }).catch(() => cached);
-
-      return cached || networkFetch;
-    })
+    fetch(e.request).then(resp => {
+      if (resp && resp.status === 200) {
+        const clone = resp.clone();
+        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+      }
+      return resp;
+    }).catch(() => caches.match(e.request))
   );
 });
