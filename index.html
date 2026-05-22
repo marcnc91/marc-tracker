@@ -1127,9 +1127,12 @@ function releaseWakeLock() {
   if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
 }
 
+function toLocalDateStr(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
 function dateKey(d) {
-  const dd = d || currentDate;
-  return dd.toISOString().split('T')[0];
+  return toLocalDateStr(d || currentDate);
 }
 
 function formatDate(d) {
@@ -1174,7 +1177,7 @@ function renderWeeklyDietOverview() {
   const days = [];
   const d = new Date(mon);
   while (d <= sun) {
-    const dk = d.toISOString().split('T')[0];
+    const dk = toLocalDateStr(d);
     const data = getStorage('diet-' + dk);
     if (data && data.savedAt) days.push({ date: new Date(d), data });
     d.setDate(d.getDate() + 1);
@@ -1191,7 +1194,7 @@ function renderWeeklyDietOverview() {
 
   const cursor = new Date(mon);
   for (let i = 0; i < 7; i++) {
-    const dk = cursor.toISOString().split('T')[0];
+    const dk = toLocalDateStr(cursor);
     const data = getStorage('diet-' + dk);
     const done = data && data.savedAt;
     let pct = '';
@@ -1228,7 +1231,7 @@ function setStorage(key, val) {
 }
 
 function workoutDateKey() {
-  return workoutDate.toISOString().split('T')[0];
+  return toLocalDateStr(workoutDate);
 }
 
 function getSelectedDayKey() {
@@ -1731,7 +1734,7 @@ function stopTimer() {
 
 // DIET
 function dietDateKey() {
-  return dietDate.toISOString().split('T')[0];
+  return toLocalDateStr(dietDate);
 }
 
 function changeDietDate(delta) {
@@ -2059,7 +2062,7 @@ function buildSummaryView() {
   const cursor = new Date(mon);
   const today = new Date();
   while (cursor <= sun && cursor <= today) {
-    const dk = cursor.toISOString().split('T')[0];
+    const dk = toLocalDateStr(cursor);
     const data = getStorage('diet-' + dk);
     if (data && data.savedAt) {
       dietDays++;
@@ -2288,7 +2291,7 @@ function buildDietView() {
     const d = new Date(ws);
     while (d <= we) {
       days++; totalDays++;
-      const dk = d.toISOString().split('T')[0];
+      const dk = toLocalDateStr(d);
       const data = getStorage('diet-' + dk);
       if (data && data.savedAt) {
         tracked++; totalTracked++;
@@ -2531,7 +2534,7 @@ function changeMedidasWeek(delta) {
 }
 
 function fridayKey(d) {
-  return 'medidas-' + d.toISOString().split('T')[0];
+  return 'medidas-' + toLocalDateStr(d);
 }
 
 function getAllMedidas() {
