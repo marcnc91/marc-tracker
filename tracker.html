@@ -216,9 +216,7 @@ body {
 
 /* Save Button */
 .save-bar {
-  position: fixed; bottom: 72px; left: 0; right: 0;
-  padding: 12px 16px; z-index: 90;
-  background: linear-gradient(transparent, var(--bg) 40%);
+  padding: 16px 0 24px;
 }
 
 .save-btn {
@@ -544,9 +542,7 @@ body {
 .compliance-pct { font-weight: 700; }
 
 .diet-save-bar {
-  position: fixed; bottom: 70px; left: 0; right: 0;
-  padding: 12px 16px; z-index: 90;
-  background: linear-gradient(transparent, var(--bg) 30%);
+  padding: 16px 0 24px;
   display: none;
 }
 
@@ -996,6 +992,9 @@ input.file-input-hidden { display: none; }
     </div>
     <div class="week-selector" id="sessionSelector"></div>
     <div id="exerciseList"></div>
+    <div class="save-bar" id="saveBar" style="display:none;">
+      <button class="save-btn" id="saveBtn" onclick="saveWorkout()">Guardar Entreno</button>
+    </div>
   </div>
 
   <!-- DIET SECTION -->
@@ -1015,10 +1014,9 @@ input.file-input-hidden { display: none; }
     </div>
     <div id="dietCompliance"></div>
     <div id="dietContent"></div>
-  </div>
-
-  <div class="diet-save-bar" id="dietSaveBar" style="display:none">
-    <button class="diet-save-btn" onclick="showExtrasPopup()">Guardar día</button>
+    <div class="diet-save-bar" id="dietSaveBar" style="display:none">
+      <button class="diet-save-btn" onclick="showExtrasPopup()">Guardar día</button>
+    </div>
   </div>
 
   <div class="extras-overlay" id="extrasOverlay">
@@ -1067,9 +1065,6 @@ input.file-input-hidden { display: none; }
   </div>
 </div>
 
-<div class="save-bar" id="saveBar" style="display:none;">
-  <button class="save-btn" id="saveBtn" onclick="saveWorkout()">Guardar Entreno</button>
-</div>
 
 <div class="timer-overlay" id="timerOverlay">
   <div class="timer-display" id="timerDisplay">0:00</div>
@@ -1384,8 +1379,8 @@ function switchTab(tab) {
   document.querySelectorAll('.nav-item').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('sec-' + tab).classList.add('active');
-  document.getElementById('saveBar').style.display = (tab === 'workout' && selectedVia) ? '' : 'none';
-  document.getElementById('dietSaveBar').style.display = (tab === 'diet') ? 'block' : 'none';
+  document.getElementById('saveBar').style.display = selectedVia ? '' : 'none';
+  document.getElementById('dietSaveBar').style.display = (tab === 'diet') ? '' : 'none';
   document.getElementById('aiChatFab').classList.toggle('visible', tab === 'diet');
   if (tab === 'history') renderProgress();
   if (tab === 'medidas') renderMedidas();
