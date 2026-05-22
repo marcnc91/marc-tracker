@@ -923,6 +923,7 @@ input.file-input-hidden { display: none; }
       <span id="dietDateDisplay" style="min-width:140px;"></span>
       <button onclick="changeDietDate(1)">&#8250;</button>
     </div>
+    <div id="dietWeightBar"></div>
     <div class="macro-summary">
       <div class="macro-box kcal"><div class="macro-value" id="dailyKcalValue">~2500</div><div class="macro-label">Kcal</div></div>
       <div class="macro-box prot"><div class="macro-value">140g</div><div class="macro-label">Proteína</div></div>
@@ -1566,7 +1567,7 @@ function renderExercises() {
   }
 
   if (!selectedVia || selectedVia <= 0) {
-    container.innerHTML = renderDailyWeightBar() + `<div class="empty-state">
+    container.innerHTML = `<div class="empty-state">
       <div class="icon">&#128170;</div>
       <p>Selecciona una sesión para empezar</p>
     </div>`;
@@ -1574,7 +1575,7 @@ function renderExercises() {
   }
 
   const via = PROGRAM.vias.find(v => v.id === selectedVia);
-  let html = renderDailyWeightBar();
+  let html = '';
 
   via.exercises.forEach((ex, ei) => {
     const prevData = getPreviousExerciseData(via.id, ei);
@@ -1667,10 +1668,10 @@ function toggleCardio(btn) {
 }
 
 function renderDailyWeightBar() {
-  const dk = workoutDateKey();
+  const dk = dietDateKey();
   const saved = getDailyWeight(dk);
   return `<div class="daily-weight-bar">
-    <label>⚖️ Peso hoy</label>
+    <label>⚖️ Peso</label>
     <input class="daily-weight-input" type="number" inputmode="decimal" step="0.1" placeholder="kg"
       value="${saved || ''}" onchange="onDailyWeightChange(this.value)">
     <span class="set-unit">kg</span>
@@ -1680,7 +1681,7 @@ function renderDailyWeightBar() {
 
 function onDailyWeightChange(val) {
   const w = parseFloat(val) || 0;
-  saveDailyWeight(workoutDateKey(), w);
+  saveDailyWeight(dietDateKey(), w);
   const el = document.getElementById('dwSaved');
   if (el) el.textContent = w > 0 ? '✓' : '';
 }
@@ -1852,6 +1853,9 @@ function renderDiet() {
   const isTodayDiet = dietDate.getDate() === t.getDate() && dietDate.getMonth() === t.getMonth() && dietDate.getFullYear() === t.getFullYear();
   const display = document.getElementById('dietDateDisplay');
   if (display) display.textContent = isTodayDiet ? 'Hoy · ' + formatDate(dietDate) : formatDate(dietDate);
+
+  const weightBarEl = document.getElementById('dietWeightBar');
+  if (weightBarEl) weightBarEl.innerHTML = renderDailyWeightBar();
 
   let html = '';
   const allCheckIds = [];
@@ -2942,7 +2946,7 @@ function exportData() {
   const data = {};
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key.startsWith('workout-') || key.startsWith('diet-') || key.startsWith('medidas-') || key.startsWith('cardio-')) {
+    if (key.startsWith('workout-') || key.startsWith('diet-') || key.startsWith('medidas-') || key.startsWith('cardio-') || key.startsWith('weight-')) {
       data[key] = getStorage(key);
     }
   }
@@ -2971,7 +2975,7 @@ function importData(event) {
       if (keys.length === 0) { showToast('Fichero vacío'); return; }
       let count = 0;
       keys.forEach(key => {
-        if (key.startsWith('workout-') || key.startsWith('diet-') || key.startsWith('medidas-') || key.startsWith('cardio-')) {
+        if (key.startsWith('workout-') || key.startsWith('diet-') || key.startsWith('medidas-') || key.startsWith('cardio-') || key.startsWith('weight-')) {
           setStorage(key, data[key]);
           count++;
         }
