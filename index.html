@@ -3175,6 +3175,13 @@ async function sendAiMsg() {
     });
 
     const data = await res.json();
+
+    if (data.error) {
+      removeAiMsg(typingId);
+      appendAiMsg('bot', `Error API: ${data.error.message || data.error.status || 'desconocido'}`);
+      return;
+    }
+
     const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No pude generar respuesta.';
 
     removeAiMsg(typingId);
@@ -3182,7 +3189,7 @@ async function sendAiMsg() {
     aiChatHistory.push({ role: 'model', parts: [{ text: reply }] });
   } catch (err) {
     removeAiMsg(typingId);
-    appendAiMsg('bot', 'Error de conexión. Revisa tu internet o API key.');
+    appendAiMsg('bot', 'Error: ' + (err.message || 'Revisa tu internet o API key.'));
   }
 }
 
