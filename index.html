@@ -1091,8 +1091,8 @@ const MEALS = [
   {
     name: 'Merienda', icon: '🥜',
     items: [
-      { id: 'merienda-snack', label: 'Opción 1 · Snack', desc: 'Café con leche de avena + 1 fruta + sándwich (2 rebanadas pan con 60g pavo/40g jamón/lomo/lata atún)', kcal: 350 },
-      { id: 'merienda-batido', label: 'Opción 2 · Batido', desc: '60g crema de arroz + 40g proteína en polvo + 15g almendras + agua/café/infusión + 1 fruta', kcal: 500 },
+      { id: 'merienda-snack', label: 'Opción 1 · Snack', desc: 'Café con leche de avena + 1 fruta + sándwich (2 rebanadas pan con 60g pavo/40g jamón/lomo/lata atún)', kcal: 350, group: 'merienda' },
+      { id: 'merienda-batido', label: 'Opción 2 · Batido', desc: '60g crema de arroz + 40g proteína en polvo + 15g almendras + agua/café/infusión + 1 fruta', kcal: 500, group: 'merienda' },
     ]
   },
   {
@@ -1196,7 +1196,7 @@ function renderWeeklyDietOverview() {
     const done = data && data.savedAt;
     let pct = '';
     if (done) {
-      const checked = allIds.filter(id => isDietDone(data, id)).length;
+      const checked = countDietCompleted(data, allIds);
       pct = ' ' + Math.round((checked / allIds.length) * 100) + '%';
     }
     html += `<span class="weekly-pill ${done ? 'diet-done' : ''}">${dayNames[cursor.getDay()]}${pct}</span>`;
@@ -1763,9 +1763,16 @@ function renderDiet() {
 
   MEALS.forEach(meal => {
     let mealKcal = 0;
+    const groupCounted = new Set();
     meal.items.forEach(item => {
       const val = saved[item.id];
-      if (item.choices) {
+      if (item.group) {
+        if (groupCounted.has(item.group)) return;
+        const checkedItem = meal.items.find(i => i.group === item.group && isDietDone(saved, i.id));
+        const chosen = checkedItem || item;
+        groupCounted.add(item.group);
+        mealKcal += chosen.kcal || 0;
+      } else if (item.choices) {
         const ci = (val && typeof val === 'object' && val.choice !== undefined) ? val.choice : 0;
         const c = item.choices[ci];
         const q = (val && typeof val === 'object' && val.qty !== undefined) ? val.qty : c.qty;
@@ -1839,8 +1846,9 @@ function renderDiet() {
   const kcalEl = document.getElementById('dailyKcalValue');
   if (kcalEl) kcalEl.textContent = '~' + Math.round(dailyKcal);
 
-  const checkedCount = allCheckIds.filter(id => isDietDone(saved, id)).length;
-  const total = allCheckIds.length;
+  const dietSlots = getAllDietCheckIds();
+  const checkedCount = countDietCompleted(saved, dietSlots);
+  const total = dietSlots.length;
   const pct = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
   document.getElementById('dietCompliance').innerHTML = `
     <div class="compliance-label"><span class="compliance-pct">${pct}%</span> cumplimiento</div>
@@ -2055,7 +2063,7 @@ function buildSummaryView() {
     const data = getStorage('diet-' + dk);
     if (data && data.savedAt) {
       dietDays++;
-      const checked = allIds.filter(id => isDietDone(data, id)).length;
+      const checked = countDietCompleted(data, allIds);
       dietPctSum += allIds.length > 0 ? checked / allIds.length : 0;
     }
     cursor.setDate(cursor.getDate() + 1);
@@ -2284,7 +2292,7 @@ function buildDietView() {
       const data = getStorage('diet-' + dk);
       if (data && data.savedAt) {
         tracked++; totalTracked++;
-        const checked = allIds.filter(id => isDietDone(data, id)).length;
+        const checked = countDietCompleted(data, allIds);
         const pct = allIds.length > 0 ? checked / allIds.length : 0;
         pctSum += pct; totalPctSum += pct;
       }
@@ -2367,7 +2375,7 @@ function buildHistoryEntries() {
       } else if (entry.type === 'diet') {
         const data = entry.data;
         const allIds = getAllDietCheckIds();
-        const checkedCount = allIds.filter(id => isDietDone(data, id)).length;
+        const checkedCount = countDietCompleted(data, allIds);
         const pct = allIds.length > 0 ? Math.round((checkedCount / allIds.length) * 100) : 0;
         html += `<div class="history-entry" data-type="diet" onclick="toggleHistoryDetail(this)">
           <div class="history-date">${formatDate(d)}</div>
@@ -2415,10 +2423,28 @@ function buildHistoryEntries() {
 
 function getAllDietCheckIds() {
   const ids = [];
+  const seenGroups = new Set();
   MEALS.forEach(meal => {
-    meal.items.forEach(i => ids.push(i.id));
+    meal.items.forEach(i => {
+      if (i.group) {
+        if (!seenGroups.has(i.group)) {
+          seenGroups.add(i.group);
+          ids.push({ type: 'group', group: i.group, itemIds: [] });
+        }
+        ids.find(x => x.type === 'group' && x.group === i.group).itemIds.push(i.id);
+      } else {
+        ids.push({ type: 'single', id: i.id });
+      }
+    });
   });
   return ids;
+}
+
+function countDietCompleted(data, slots) {
+  return slots.filter(slot => {
+    if (slot.type === 'single') return isDietDone(data, slot.id);
+    return slot.itemIds.some(id => isDietDone(data, id));
+  }).length;
 }
 
 function toggleHistoryDetail(el) {
