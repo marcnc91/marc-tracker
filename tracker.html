@@ -969,6 +969,7 @@ input.file-input-hidden { display: none; }
 const GOAL = {
   ronda: 9, fase: 'Definición', pesoObjetivo: 70.0,
   fechaInicio: '2026-05-18', fechaRevision: '2026-07-01',
+  kcalTarget: 2500,
 };
 
 const PROGRAM = {
@@ -1199,8 +1200,7 @@ function renderWeeklyDietOverview() {
     const done = data && data.savedAt;
     let pct = '';
     if (done) {
-      const checked = countDietCompleted(data, allIds);
-      pct = ' ' + Math.round((checked / allIds.length) * 100) + '%';
+      pct = ' ' + getDietKcalPct(data) + '%';
     }
     html += `<span class="weekly-pill ${done ? 'diet-done' : ''}">${dayNames[cursor.getDay()]}${pct}</span>`;
     cursor.setDate(cursor.getDate() + 1);
@@ -1750,6 +1750,37 @@ function isDietDone(saved, id) {
   return false;
 }
 
+function getConsumedKcal(saved) {
+  let total = 0;
+  const groupCounted = new Set();
+  MEALS.forEach(meal => {
+    meal.items.forEach(item => {
+      if (item.group) {
+        if (groupCounted.has(item.group)) return;
+        groupCounted.add(item.group);
+        const checkedItem = meal.items.find(i => i.group === item.group && isDietDone(saved, i.id));
+        if (checkedItem) total += checkedItem.kcal || 0;
+      } else if (isDietDone(saved, item.id)) {
+        if (item.choices) {
+          const val = saved[item.id];
+          const ci = (val && typeof val === 'object' && val.choice !== undefined) ? val.choice : 0;
+          const c = item.choices[ci];
+          const q = (val && typeof val === 'object' && val.qty !== undefined) ? val.qty : c.qty;
+          total += (q / c.qty) * c.kcal;
+        } else {
+          total += item.kcal || 0;
+        }
+      }
+    });
+  });
+  return total;
+}
+
+function getDietKcalPct(saved) {
+  const consumed = getConsumedKcal(saved);
+  return GOAL.kcalTarget > 0 ? Math.round((consumed / GOAL.kcalTarget) * 100) : 0;
+}
+
 function renderDiet() {
   const dk = dietDateKey();
   const key = 'diet-' + dk;
@@ -1849,13 +1880,12 @@ function renderDiet() {
   const kcalEl = document.getElementById('dailyKcalValue');
   if (kcalEl) kcalEl.textContent = '~' + Math.round(dailyKcal);
 
-  const dietSlots = getAllDietCheckIds();
-  const checkedCount = countDietCompleted(saved, dietSlots);
-  const total = dietSlots.length;
-  const pct = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
+  const consumed = getConsumedKcal(saved);
+  const pct = getDietKcalPct(saved);
+  const barWidth = Math.min(pct, 100);
   document.getElementById('dietCompliance').innerHTML = `
-    <div class="compliance-label"><span class="compliance-pct">${pct}%</span> cumplimiento</div>
-    <div class="compliance-bar"><div class="compliance-fill" style="width:${pct}%"></div></div>`;
+    <div class="compliance-label"><span class="compliance-pct">${Math.round(consumed)} / ${GOAL.kcalTarget} kcal</span> ${pct}%</div>
+    <div class="compliance-bar"><div class="compliance-fill" style="width:${barWidth}%"></div></div>`;
 }
 
 function toggleDiet(id, btn) {
@@ -2057,7 +2087,6 @@ function buildSummaryView() {
     const dt = new Date(d.date + 'T12:00:00');
     if (dt >= mon && dt <= sun) workoutsThisWeek++;
   });
-  const allIds = getAllDietCheckIds();
   let dietDays = 0, dietPctSum = 0;
   const cursor = new Date(mon);
   const today = new Date();
@@ -2066,12 +2095,11 @@ function buildSummaryView() {
     const data = getStorage('diet-' + dk);
     if (data && data.savedAt) {
       dietDays++;
-      const checked = countDietCompleted(data, allIds);
-      dietPctSum += allIds.length > 0 ? checked / allIds.length : 0;
+      dietPctSum += getDietKcalPct(data);
     }
     cursor.setDate(cursor.getDate() + 1);
   }
-  const weekDietPct = dietDays > 0 ? Math.round((dietPctSum / dietDays) * 100) : 0;
+  const weekDietPct = dietDays > 0 ? Math.round(dietPctSum / dietDays) : 0;
 
   // Body fat estimation from latest medidas
   let bfPct = null, bfCategory = '';
@@ -2278,7 +2306,6 @@ function buildWeightView() {
 }
 
 function buildDietView() {
-  const allIds = getAllDietCheckIds();
   const start = new Date(GOAL.fechaInicio + 'T00:00:00');
   const today = new Date();
   let totalTracked = 0, totalPctSum = 0, totalDays = 0;
@@ -2295,8 +2322,7 @@ function buildDietView() {
       const data = getStorage('diet-' + dk);
       if (data && data.savedAt) {
         tracked++; totalTracked++;
-        const checked = countDietCompleted(data, allIds);
-        const pct = allIds.length > 0 ? checked / allIds.length : 0;
+        const pct = getDietKcalPct(data) / 100;
         pctSum += pct; totalPctSum += pct;
       }
       d.setDate(d.getDate() + 1);
@@ -2377,13 +2403,12 @@ function buildHistoryEntries() {
         html += `<button class="delete-entry-btn" onclick="confirmDelete('${entry.key}', 'workout', event)">Eliminar</button></div></div>`;
       } else if (entry.type === 'diet') {
         const data = entry.data;
-        const allIds = getAllDietCheckIds();
-        const checkedCount = countDietCompleted(data, allIds);
-        const pct = allIds.length > 0 ? Math.round((checkedCount / allIds.length) * 100) : 0;
+        const consumed = getConsumedKcal(data);
+        const pct = getDietKcalPct(data);
         html += `<div class="history-entry" data-type="diet" onclick="toggleHistoryDetail(this)">
           <div class="history-date">${formatDate(d)}</div>
           <div class="history-via">&#9749; Dieta <span class="workout-done-badge" style="background:rgba(160,132,92,0.08); color:#a0845c;">${pct}%</span></div>
-          <div class="history-summary">${checkedCount}/${allIds.length} items completados${data.extras ? ' · Extras: ' + data.extras : ''}</div>
+          <div class="history-summary">${Math.round(consumed)} / ${GOAL.kcalTarget} kcal${data.extras ? ' · Extras: ' + data.extras : ''}</div>
           <div class="history-detail">`;
         MEALS.forEach(meal => {
           meal.items.forEach(item => {
