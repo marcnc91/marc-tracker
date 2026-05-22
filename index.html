@@ -777,14 +777,20 @@ body {
 
 input.file-input-hidden { display: none; }
 
-.ai-key-row { display: flex; align-items: center; gap: 8px; }
+.ai-key-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .ai-key-input {
   flex: 1; padding: 10px 12px; border-radius: var(--radius-sm);
   border: 1px solid var(--bg4); background: var(--bg);
   color: var(--text); font-size: 13px; font-family: inherit;
 }
 .ai-key-input:focus { border-color: var(--accent); outline: none; }
-.ai-key-help { font-size: 11px; color: var(--accent); white-space: nowrap; text-decoration: none; font-weight: 600; }
+.ai-key-save {
+  padding: 10px 14px; border-radius: var(--radius-sm); border: none;
+  background: #2c2c2c; color: #faf8f4; font-size: 13px;
+  font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.ai-key-save:active { opacity: 0.8; }
+.ai-key-help { font-size: 11px; color: var(--accent); text-decoration: none; font-weight: 500; }
 
 /* AI Chat */
 .ai-chat-fab {
@@ -1052,9 +1058,10 @@ input.file-input-hidden { display: none; }
       <div class="ai-key-row">
         <input type="password" id="geminiKeyInput" class="ai-key-input"
           placeholder="Pega tu API key de Google AI Studio"
-          value="" onchange="saveGeminiKey(this.value)">
-        <a href="https://aistudio.google.com/apikey" target="_blank" class="ai-key-help">Obtener key</a>
+          value="">
+        <button class="ai-key-save" onclick="saveGeminiKey(document.getElementById('geminiKeyInput').value)">Guardar</button>
       </div>
+      <a href="https://aistudio.google.com/apikey" target="_blank" class="ai-key-help">↗ Obtener key gratis en Google AI Studio</a>
     </div>
   </div>
 </div>
