@@ -110,7 +110,7 @@ body {
 .day-btn.active .day-label { color: #faf8f4; }
 .day-btn.active .day-via { color: rgba(250,248,244,0.6); opacity: 1; }
 .day-btn.today { box-shadow: 0 0 0 2px var(--accent) inset; }
-.day-btn.done { background: rgba(90,107,80,0.06); color: var(--accent); opacity: 0.6; pointer-events: none; }
+.day-btn.done { background: rgba(90,107,80,0.06); color: var(--accent); opacity: 0.7; }
 .day-btn.done .day-label { color: var(--accent); }
 .day-btn.done .day-label::after { content: ' ✓'; font-size: 9px; }
 
@@ -1087,11 +1087,11 @@ const PROGRAM = {
     }
   ],
   sessions: [
-    { id: 1, label: 'LUN', viaId: 1 },
-    { id: 2, label: 'MAR', viaId: 2 },
-    { id: 3, label: 'MIÉ', viaId: 3 },
-    { id: 4, label: 'JUE', viaId: 4 },
-    { id: 5, label: 'SÁB', viaId: 5 },
+    { id: 1, label: 'VIA 1', viaId: 1 },
+    { id: 2, label: 'VIA 2', viaId: 2 },
+    { id: 3, label: 'VIA 3', viaId: 3 },
+    { id: 4, label: 'VIA 4', viaId: 4 },
+    { id: 5, label: 'BONUS', viaId: 5 },
   ]
 };
 
@@ -1546,8 +1546,7 @@ function renderSessionSelector() {
     let cls = 'day-btn';
     if (isDone && !isSelected) cls += ' done';
     if (isSelected) cls += ' active';
-    const disabled = isDone && !isSelected ? 'disabled' : '';
-    html += `<button class="${cls}" ${disabled} onclick="selectSession(${session.id})">
+    html += `<button class="${cls}" onclick="selectSession(${session.id})">
       <span class="day-label">${session.label}</span>
       <span class="day-via">${via.subtitle}</span>
     </button>`;
