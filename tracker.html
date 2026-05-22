@@ -797,11 +797,12 @@ input.file-input-hidden { display: none; }
   position: fixed; bottom: 90px; right: 20px; z-index: 200;
   width: 48px; height: 48px; border-radius: 50%;
   background: #2c2c2c; color: #faf8f4; border: none;
-  font-size: 20px; cursor: pointer; display: flex;
+  font-size: 20px; cursor: pointer; display: none;
   align-items: center; justify-content: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transition: transform 0.2s;
 }
+.ai-chat-fab.visible { display: flex; }
 .ai-chat-fab:active { transform: scale(0.92); }
 
 .ai-chat-panel {
@@ -1385,6 +1386,7 @@ function switchTab(tab) {
   document.getElementById('sec-' + tab).classList.add('active');
   document.getElementById('saveBar').style.display = (tab === 'workout' && selectedVia) ? '' : 'none';
   document.getElementById('dietSaveBar').style.display = (tab === 'diet') ? 'block' : 'none';
+  document.getElementById('aiChatFab').classList.toggle('visible', tab === 'diet');
   if (tab === 'history') renderProgress();
   if (tab === 'medidas') renderMedidas();
   if (tab === 'diet') renderDiet();
