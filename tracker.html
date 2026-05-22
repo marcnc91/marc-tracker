@@ -573,16 +573,54 @@ body {
 
 .extras-dialog h3 { font-size: 17px; margin-bottom: 12px; }
 
-.extras-textarea {
-  width: 100%; padding: 12px; border-radius: var(--radius-sm);
-  border: 1px solid var(--bg4); background: var(--bg);
-  color: var(--text); font-size: 14px; font-family: inherit;
-  resize: none; min-height: 80px;
+.extras-chips {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
+  max-height: 180px; overflow-y: auto;
 }
 
-.extras-textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(88,86,214,0.1); }
+.extras-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 12px; border-radius: 20px; font-size: 12px;
+  font-weight: 500; cursor: pointer; transition: all 0.15s;
+  border: 1px solid var(--bg4); background: var(--bg);
+  color: var(--text2);
+}
 
-.extras-buttons { display: flex; gap: 10px; margin-top: 16px; }
+.extras-chip.selected {
+  background: rgba(90,107,80,0.1); border-color: var(--accent);
+  color: var(--accent); font-weight: 600;
+}
+
+.extras-chip .chip-kcal { font-size: 10px; opacity: 0.7; }
+
+.extras-custom-row {
+  display: flex; gap: 6px; margin-bottom: 12px;
+}
+
+.extras-custom-input {
+  flex: 1; padding: 8px 10px; border-radius: var(--radius-sm);
+  border: 1px solid var(--bg4); background: var(--bg);
+  color: var(--text); font-size: 13px; font-family: inherit;
+}
+
+.extras-custom-kcal {
+  width: 60px; padding: 8px; border-radius: var(--radius-sm);
+  border: 1px solid var(--bg4); background: var(--bg);
+  color: var(--text); font-size: 13px; text-align: center;
+}
+
+.extras-custom-add {
+  width: 34px; border-radius: var(--radius-sm); border: none;
+  background: var(--accent); color: #fff; font-size: 18px;
+  font-weight: 600; cursor: pointer;
+}
+
+.extras-total {
+  font-size: 12px; color: var(--text2); text-align: right;
+  padding: 4px 0; font-weight: 500;
+}
+
+.extras-buttons { display: flex; gap: 10px; margin-top: 12px; }
 
 .extras-btn {
   flex: 1; padding: 12px; border-radius: var(--radius-sm);
@@ -590,7 +628,7 @@ body {
 }
 
 .extras-btn.skip { background: var(--bg4); color: var(--text2); }
-.extras-btn.save { background: var(--green); color: #fff; }
+.extras-btn.save { background: #2c2c2c; color: #faf8f4; }
 
 /* Photo upload */
 .photo-upload-area {
@@ -901,11 +939,17 @@ input.file-input-hidden { display: none; }
 
   <div class="extras-overlay" id="extrasOverlay">
     <div class="extras-dialog">
-      <h3>Algo extra hoy?</h3>
-      <textarea class="extras-textarea" id="extrasText" placeholder="Cerveza, postre, snack, picoteo..."></textarea>
+      <h3>Extras del día</h3>
+      <div class="extras-chips" id="extrasChips"></div>
+      <div class="extras-custom-row">
+        <input type="text" class="extras-custom-input" id="extrasCustomName" placeholder="Otro extra...">
+        <input type="number" class="extras-custom-kcal" id="extrasCustomKcal" placeholder="kcal" inputmode="numeric">
+        <button class="extras-custom-add" onclick="addCustomExtra()">+</button>
+      </div>
+      <div class="extras-total" id="extrasTotal"></div>
       <div class="extras-buttons">
-        <button class="extras-btn skip" onclick="saveDietDay('')">Sin extras</button>
-        <button class="extras-btn save" onclick="saveDietDay(document.getElementById('extrasText').value)">Guardar</button>
+        <button class="extras-btn skip" onclick="saveDietDay()">Sin extras</button>
+        <button class="extras-btn save" onclick="saveDietDayWithExtras()">Guardar</button>
       </div>
     </div>
   </div>
@@ -1105,6 +1149,21 @@ const MEALS = [
       { id: 'cena-verduras', label: 'Ensalada + Verduras', desc: 'Cantidad libre, cualquier tipo', kcal: 30 },
     ]
   }
+];
+
+const EXTRAS_LIST = [
+  { id: 'hummus', name: 'Hummus (ración)', kcal: 80 },
+  { id: 'chocolate-85', name: 'Chocolate 85% (1 onza)', kcal: 50 },
+  { id: 'gelatina-proteica', name: 'Gelatina proteica', kcal: 70 },
+  { id: 'cerveza', name: 'Cerveza', kcal: 150 },
+  { id: 'copa-vino', name: 'Copa de vino', kcal: 120 },
+  { id: 'frutos-secos', name: 'Frutos secos (puñado)', kcal: 160 },
+  { id: 'tostada-extra', name: 'Tostada extra', kcal: 130 },
+  { id: 'yogur-extra', name: 'Yogur extra', kcal: 80 },
+  { id: 'fruta-extra', name: 'Fruta extra', kcal: 60 },
+  { id: 'galletas', name: 'Galletas (2-3 uds)', kcal: 120 },
+  { id: 'helado', name: 'Helado (bola)', kcal: 180 },
+  { id: 'queso', name: 'Queso (porción)', kcal: 110 },
 ];
 
 let currentDate = new Date();
@@ -1773,6 +1832,9 @@ function getConsumedKcal(saved) {
       }
     });
   });
+  if (saved.extrasList && Array.isArray(saved.extrasList)) {
+    total += saved.extrasList.reduce((sum, ex) => sum + (ex.kcal || 0), 0);
+  }
   return total;
 }
 
@@ -1868,10 +1930,18 @@ function renderDiet() {
   });
 
 
-  if (saved.extras) {
-    html += `<div class="supplement-card">
+  if (saved.extrasList && saved.extrasList.length > 0) {
+    const extrasKcal = saved.extrasList.reduce((s, e) => s + (e.kcal || 0), 0);
+    html += `<div class="meal-card">
+      <div class="meal-header"><span class="meal-name">🍕 Extras</span><span class="meal-kcal">+${extrasKcal} kcal</span></div>`;
+    saved.extrasList.forEach(ex => {
+      html += `<div class="meal-check-row"><span class="meal-option" style="font-size:13px;">${ex.name} <span style="color:var(--text3)">(${ex.kcal} kcal)</span></span></div>`;
+    });
+    html += '</div>';
+  } else if (saved.extras) {
+    html += `<div class="meal-card">
       <div class="meal-header"><span class="meal-name">🍕 Extras</span></div>
-      <p style="font-size:13px; color:var(--text2); padding: 4px 0;">${saved.extras}</p>
+      <div class="meal-check-row"><span class="meal-option" style="font-size:13px; color:var(--text2);">${saved.extras}</span></div>
     </div>`;
   }
 
@@ -1950,19 +2020,90 @@ function onDietQtyChange(id, input) {
   setStorage(key, saved);
 }
 
+let selectedExtras = [];
+
 function showExtrasPopup() {
-  document.getElementById('extrasText').value = '';
+  selectedExtras = [];
+  const key = 'diet-' + dietDateKey();
+  const saved = getStorage(key) || {};
+  if (saved.extrasList && Array.isArray(saved.extrasList)) {
+    selectedExtras = [...saved.extrasList];
+  }
+  renderExtrasChips();
+  updateExtrasTotal();
   document.getElementById('extrasOverlay').classList.add('active');
 }
 
-function saveDietDay(extras) {
+function renderExtrasChips() {
+  let html = '';
+  EXTRAS_LIST.forEach(ex => {
+    const sel = selectedExtras.some(s => s.id === ex.id);
+    html += `<span class="extras-chip ${sel ? 'selected' : ''}" onclick="toggleExtra('${ex.id}')">${ex.name} <span class="chip-kcal">${ex.kcal}</span></span>`;
+  });
+  selectedExtras.filter(s => s.custom).forEach(s => {
+    html += `<span class="extras-chip selected" onclick="removeCustomExtra('${s.id}')">${s.name} <span class="chip-kcal">${s.kcal}</span> ✕</span>`;
+  });
+  document.getElementById('extrasChips').innerHTML = html;
+}
+
+function toggleExtra(id) {
+  const idx = selectedExtras.findIndex(s => s.id === id);
+  if (idx >= 0) {
+    selectedExtras.splice(idx, 1);
+  } else {
+    const ex = EXTRAS_LIST.find(e => e.id === id);
+    if (ex) selectedExtras.push({ id: ex.id, name: ex.name, kcal: ex.kcal });
+  }
+  renderExtrasChips();
+  updateExtrasTotal();
+}
+
+function addCustomExtra() {
+  const nameEl = document.getElementById('extrasCustomName');
+  const kcalEl = document.getElementById('extrasCustomKcal');
+  const name = nameEl.value.trim();
+  const kcal = parseInt(kcalEl.value) || 0;
+  if (!name) return;
+  selectedExtras.push({ id: 'custom-' + Date.now(), name, kcal, custom: true });
+  nameEl.value = '';
+  kcalEl.value = '';
+  renderExtrasChips();
+  updateExtrasTotal();
+}
+
+function removeCustomExtra(id) {
+  selectedExtras = selectedExtras.filter(s => s.id !== id);
+  renderExtrasChips();
+  updateExtrasTotal();
+}
+
+function updateExtrasTotal() {
+  const total = selectedExtras.reduce((sum, s) => sum + (s.kcal || 0), 0);
+  document.getElementById('extrasTotal').textContent = total > 0 ? `+${total} kcal en extras` : '';
+}
+
+function saveDietDay() {
   document.getElementById('extrasOverlay').classList.remove('active');
   const key = 'diet-' + dietDateKey();
   const saved = getStorage(key) || {};
-  if (extras) saved.extras = extras;
+  saved.extrasList = [];
+  saved.extras = '';
   saved.savedAt = new Date().toISOString();
   setStorage(key, saved);
   showToast('Dieta del día guardada');
+  renderDiet();
+  renderWeeklyDietOverview();
+}
+
+function saveDietDayWithExtras() {
+  document.getElementById('extrasOverlay').classList.remove('active');
+  const key = 'diet-' + dietDateKey();
+  const saved = getStorage(key) || {};
+  saved.extrasList = selectedExtras;
+  saved.extras = selectedExtras.map(s => s.name).join(', ');
+  saved.savedAt = new Date().toISOString();
+  setStorage(key, saved);
+  showToast('Dieta guardada' + (selectedExtras.length > 0 ? ` (+${selectedExtras.reduce((s, e) => s + e.kcal, 0)} kcal extras)` : ''));
   renderDiet();
   renderWeeklyDietOverview();
 }
