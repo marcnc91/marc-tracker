@@ -777,6 +777,82 @@ body {
 
 input.file-input-hidden { display: none; }
 
+.ai-key-row { display: flex; align-items: center; gap: 8px; }
+.ai-key-input {
+  flex: 1; padding: 10px 12px; border-radius: var(--radius-sm);
+  border: 1px solid var(--bg4); background: var(--bg);
+  color: var(--text); font-size: 13px; font-family: inherit;
+}
+.ai-key-input:focus { border-color: var(--accent); outline: none; }
+.ai-key-help { font-size: 11px; color: var(--accent); white-space: nowrap; text-decoration: none; font-weight: 600; }
+
+/* AI Chat */
+.ai-chat-fab {
+  position: fixed; bottom: 90px; right: 20px; z-index: 200;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: #2c2c2c; color: #faf8f4; border: none;
+  font-size: 20px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.2s;
+}
+.ai-chat-fab:active { transform: scale(0.92); }
+
+.ai-chat-panel {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0;
+  z-index: 300; background: var(--bg2); border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+  max-height: 70vh; flex-direction: column;
+}
+.ai-chat-panel.open { display: flex; }
+
+.ai-chat-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px 12px; border-bottom: 1px solid var(--bg4);
+}
+.ai-chat-header h3 { font-size: 15px; margin: 0; color: var(--text); }
+.ai-chat-close {
+  background: none; border: none; font-size: 22px; color: var(--text3);
+  cursor: pointer; padding: 4px;
+}
+
+.ai-chat-messages {
+  flex: 1; overflow-y: auto; padding: 16px 20px;
+  display: flex; flex-direction: column; gap: 12px;
+  min-height: 120px; max-height: 50vh;
+}
+
+.ai-msg {
+  max-width: 85%; padding: 10px 14px; border-radius: 14px;
+  font-size: 13px; line-height: 1.5; word-wrap: break-word;
+}
+.ai-msg.user {
+  align-self: flex-end; background: #2c2c2c; color: #faf8f4;
+  border-bottom-right-radius: 4px;
+}
+.ai-msg.bot {
+  align-self: flex-start; background: var(--bg3); color: var(--text);
+  border-bottom-left-radius: 4px;
+}
+.ai-msg.typing { opacity: 0.6; font-style: italic; }
+
+.ai-chat-input-row {
+  display: flex; gap: 8px; padding: 12px 20px 24px;
+  border-top: 1px solid var(--bg4);
+}
+.ai-chat-input {
+  flex: 1; padding: 10px 14px; border-radius: 20px;
+  border: 1px solid var(--bg4); background: var(--bg);
+  color: var(--text); font-size: 14px; font-family: inherit;
+}
+.ai-chat-input:focus { border-color: var(--accent); outline: none; }
+.ai-chat-send {
+  width: 38px; height: 38px; border-radius: 50%; border: none;
+  background: #2c2c2c; color: #faf8f4; font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.ai-chat-send:active { opacity: 0.8; }
+
 /* Progress dashboard */
 .goal-card {
   background: var(--bg2); border: none; border-radius: var(--radius);
@@ -971,6 +1047,15 @@ input.file-input-hidden { display: none; }
         <input type="file" id="importFile" class="file-input-hidden" accept=".json" onchange="importData(event)">
       </div>
     </div>
+    <div class="backup-section">
+      <div class="backup-title">AI Nutrición (Gemini)</div>
+      <div class="ai-key-row">
+        <input type="password" id="geminiKeyInput" class="ai-key-input"
+          placeholder="Pega tu API key de Google AI Studio"
+          value="" onchange="saveGeminiKey(this.value)">
+        <a href="https://aistudio.google.com/apikey" target="_blank" class="ai-key-help">Obtener key</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1008,6 +1093,22 @@ input.file-input-hidden { display: none; }
   <button class="nav-item" data-tab="history" onclick="switchTab('history')">
     <span class="nav-icon">&#9776;</span>Progreso
   </button>
+</div>
+
+<button class="ai-chat-fab" id="aiChatFab" onclick="toggleAiChat()">🤖</button>
+
+<div class="ai-chat-panel" id="aiChatPanel">
+  <div class="ai-chat-header">
+    <h3>AI Nutrición</h3>
+    <button class="ai-chat-close" onclick="toggleAiChat()">✕</button>
+  </div>
+  <div class="ai-chat-messages" id="aiChatMessages">
+    <div class="ai-msg bot">Hola! Pregúntame sobre calorías, sustituciones, o qué comer. Tengo tu plan y lo de hoy en cuenta.</div>
+  </div>
+  <div class="ai-chat-input-row">
+    <input class="ai-chat-input" id="aiChatInput" placeholder="Cuántas kcal tiene...?" onkeydown="if(event.key==='Enter')sendAiMsg()">
+    <button class="ai-chat-send" onclick="sendAiMsg()">➤</button>
+  </div>
 </div>
 
 <script>
@@ -2989,6 +3090,117 @@ function importData(event) {
   reader.readAsText(file);
   event.target.value = '';
 }
+
+// --- AI Chat (Gemini) ---
+let aiChatHistory = [];
+
+function getGeminiKey() { return localStorage.getItem('gemini-api-key') || ''; }
+function saveGeminiKey(val) {
+  localStorage.setItem('gemini-api-key', val.trim());
+  showToast(val.trim() ? 'API key guardada' : 'API key eliminada');
+}
+
+function toggleAiChat() {
+  const panel = document.getElementById('aiChatPanel');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) {
+    document.getElementById('aiChatInput').focus();
+  }
+}
+
+function buildAiContext() {
+  const dk = dietDateKey();
+  const saved = getStorage('diet-' + dk) || {};
+  const consumed = getConsumedKcal(saved);
+  const remaining = GOAL.kcalTarget - consumed;
+
+  let checkedItems = [];
+  MEALS.forEach(meal => {
+    meal.items.forEach(item => {
+      if (isDietDone(saved, item.id)) checkedItems.push(item.label || item.name);
+    });
+  });
+  if (saved.extrasList && saved.extrasList.length > 0) {
+    saved.extrasList.forEach(e => checkedItems.push(e.name + ' (' + e.kcal + ' kcal)'));
+  }
+
+  const extrasRef = EXTRAS_LIST.map(e => `${e.name}: ${e.kcal} kcal`).join(', ');
+
+  return `Eres un asistente de nutrición conciso. Responde en español, máximo 2-3 frases.
+Contexto del usuario:
+- Plan: ${GOAL.kcalTarget} kcal/día (${GOAL.fase}). Macros: 140g proteína, 300g carbos, 75g grasa.
+- Objetivo: llegar a ${GOAL.pesoObjetivo}kg limpio de grasa para ${GOAL.fechaRevision}.
+- Hoy lleva consumidas ~${Math.round(consumed)} kcal. Quedan ~${Math.round(remaining)} kcal.
+- Comidas hechas hoy: ${checkedItems.length > 0 ? checkedItems.join(', ') : 'ninguna aún'}.
+- Extras habituales disponibles: ${extrasRef}.
+Cuando te pregunten calorías, da estimaciones realistas. Si sugieren sustituciones, indica el impacto calórico.`;
+}
+
+async function sendAiMsg() {
+  const input = document.getElementById('aiChatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const key = getGeminiKey();
+  if (!key) {
+    showToast('Configura tu API key en Progreso → AI Nutrición');
+    return;
+  }
+
+  input.value = '';
+  appendAiMsg('user', text);
+  aiChatHistory.push({ role: 'user', parts: [{ text }] });
+
+  const typingId = appendAiMsg('bot typing', '...');
+
+  try {
+    const systemPrompt = buildAiContext();
+    const contents = [
+      { role: 'user', parts: [{ text: systemPrompt + '\n\n(Responde solo a la pregunta del usuario, no repitas este contexto.)' }] },
+      { role: 'model', parts: [{ text: 'Entendido. Estoy listo para ayudarte con tu nutrición.' }] },
+      ...aiChatHistory.slice(-6)
+    ];
+
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents })
+    });
+
+    const data = await res.json();
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No pude generar respuesta.';
+
+    removeAiMsg(typingId);
+    appendAiMsg('bot', reply);
+    aiChatHistory.push({ role: 'model', parts: [{ text: reply }] });
+  } catch (err) {
+    removeAiMsg(typingId);
+    appendAiMsg('bot', 'Error de conexión. Revisa tu internet o API key.');
+  }
+}
+
+function appendAiMsg(cls, text) {
+  const container = document.getElementById('aiChatMessages');
+  const div = document.createElement('div');
+  div.className = 'ai-msg ' + cls;
+  div.textContent = text;
+  const id = 'ai-' + Date.now() + Math.random();
+  div.id = id;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return id;
+}
+
+function removeAiMsg(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+// Load API key into settings input on page load
+(function initAiKey() {
+  const el = document.getElementById('geminiKeyInput');
+  if (el) el.value = getGeminiKey();
+})();
 
 // PWA: register proper Service Worker file for reliable offline support
 if ('serviceWorker' in navigator) {
