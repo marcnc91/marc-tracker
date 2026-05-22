@@ -3164,34 +3164,41 @@ async function sendAiMsg() {
 
   try {
     const systemPrompt = buildAiContext();
-    const contents = [
-      { role: 'user', parts: [{ text: systemPrompt + '\n\n(Responde solo a la pregunta del usuario, no repitas este contexto.)' }] },
-      { role: 'model', parts: [{ text: 'Entendido. Estoy listo para ayudarte con tu nutrición.' }] },
-      ...aiChatHistory.slice(-6)
-    ];
+    const contents = aiChatHistory.slice(-6);
+
+    const body = {
+      system_instruction: { parts: [{ text: systemPrompt }] },
+      contents: contents
+    };
 
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents })
+      body: JSON.stringify(body)
     });
 
     const data = await res.json();
 
     if (data.error) {
       removeAiMsg(typingId);
-      appendAiMsg('bot', `Error API: ${data.error.message || data.error.status || 'desconocido'}`);
+      appendAiMsg('bot', `Error: ${data.error.message || JSON.stringify(data.error)}`);
       return;
     }
 
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No pude generar respuesta.';
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!reply) {
+      removeAiMsg(typingId);
+      const reason = data?.candidates?.[0]?.finishReason || 'sin respuesta';
+      appendAiMsg('bot', `No pude responder (${reason}). Intenta reformular.`);
+      return;
+    }
 
     removeAiMsg(typingId);
     appendAiMsg('bot', reply);
     aiChatHistory.push({ role: 'model', parts: [{ text: reply }] });
   } catch (err) {
     removeAiMsg(typingId);
-    appendAiMsg('bot', 'Error: ' + (err.message || 'Revisa tu internet o API key.'));
+    appendAiMsg('bot', 'Error conexión: ' + (err.message || 'Revisa internet/API key.'));
   }
 }
 
