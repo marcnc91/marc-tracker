@@ -1380,7 +1380,7 @@ function switchTab(tab) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('sec-' + tab).classList.add('active');
   document.getElementById('saveBar').style.display = selectedVia ? '' : 'none';
-  document.getElementById('dietSaveBar').style.display = (tab === 'diet') ? '' : 'none';
+  document.getElementById('dietSaveBar').style.display = (tab === 'diet') ? 'block' : 'none';
   document.getElementById('aiChatFab').classList.toggle('visible', tab === 'diet');
   if (tab === 'history') renderProgress();
   if (tab === 'medidas') renderMedidas();
