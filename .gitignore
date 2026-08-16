@@ -2,3 +2,5 @@
 *.zip
 nominas/
 RSU/
+*NOMINAS*
+*.pdf
