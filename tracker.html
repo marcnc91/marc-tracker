@@ -1007,9 +1007,9 @@ input.file-input-hidden { display: none; }
     </div>
     <div id="dietWeightBar"></div>
     <div class="macro-summary">
-      <div class="macro-box kcal"><div class="macro-value" id="dailyKcalValue">~2500</div><div class="macro-label">Kcal</div></div>
-      <div class="macro-box prot"><div class="macro-value">140g</div><div class="macro-label">Proteína</div></div>
-      <div class="macro-box carb"><div class="macro-value">300g</div><div class="macro-label">Carbos</div></div>
+      <div class="macro-box kcal"><div class="macro-value" id="dailyKcalValue">~2700</div><div class="macro-label">Kcal</div></div>
+      <div class="macro-box prot"><div class="macro-value">160g</div><div class="macro-label">Proteína</div></div>
+      <div class="macro-box carb"><div class="macro-value">330g</div><div class="macro-label">Carbos</div></div>
       <div class="macro-box fat"><div class="macro-value">75g</div><div class="macro-label">Grasa</div></div>
     </div>
     <div id="dietCompliance"></div>
@@ -1116,77 +1116,65 @@ input.file-input-hidden { display: none; }
 
 <script>
 const GOAL = {
-  ronda: 9, fase: 'Definición', pesoObjetivo: 70.0,
-  fechaInicio: '2026-05-18', fechaRevision: '2026-07-01',
-  kcalTarget: 2500,
+  ronda: 10, fase: 'Recomposición', pesoObjetivo: 70.0,
+  fechaInicio: '2026-08-17', fechaRevision: '2026-10-12',
+  kcalTarget: 2700,
 };
+
+const MACROS = { prot: 160, carb: 330, fat: 75 };
 
 const PROGRAM = {
   vias: [
     {
       id: 1, name: 'VIA 1', subtitle: 'Pull',
       exercises: [
-        { name: 'Extensiones en banco romano', trackId: 'lumbar', sets: 2, reps: 15, rest: 60, step: 0, note: 'Calentamiento · RIR 2' },
-        { name: 'Remo con mancuerna en banco', trackId: 'remo-1brazo', sets: 2, reps: 12, rest: 150, step: 2.5, note: 'x brazo · RIR 1' },
-        { name: 'Remo sentado máquina codos altos', trackId: 'remo-alto', sets: 2, reps: 10, rest: 120, step: 2.5, note: 'Agarre abierto' },
-        { name: 'Jalón cerrado en polea', trackId: 'jalon', sets: 2, reps: 10, rest: 120, step: 2.5 },
-        { name: 'Pájaros en máquina', trackId: 'rear-delt', sets: 2, reps: 12, rest: 90, step: 1.25 },
-        { name: 'Encogimientos pesas', trackId: 'trapecio', sets: 2, reps: 10, rest: 75, step: 2.5 },
-        { name: 'Curl polea baja', trackId: 'curl-polea', sets: 3, reps: 8, rest: 75, step: 1.25 },
+        { name: 'Dominadas cerradas', trackId: 'dominadas', sets: 3, reps: 6, rest: 150, step: 1.25, note: 'Calentar primero · RIR 1' },
+        { name: 'Jalón al pecho', trackId: 'jalon', sets: 2, reps: 8, rest: 120, step: 2.5, note: 'RIR 1' },
+        { name: 'Remo polea baja cerrado', trackId: 'remo-polea-cerrado', sets: 2, reps: 6, rest: 120, step: 2.5 },
+        { name: 'Remo polea baja abierto', trackId: 'remo-polea-abierto', sets: 2, reps: 8, rest: 120, step: 2.5 },
+        { name: 'Encogimientos con pesas', trackId: 'trapecio', sets: 2, reps: 10, rest: 90, step: 2.5 },
+        { name: 'Curl con barra Z', trackId: 'curl-barra', sets: 2, reps: 8, rest: 90, step: 1.25 },
+        { name: 'Curl polea baja', trackId: 'curl-polea', sets: 2, reps: 10, rest: 75, step: 1.25 },
         { name: 'Elevaciones de piernas', trackId: 'abs-piernas', sets: 3, reps: 15, rest: 60, step: 0 },
       ]
     },
     {
       id: 2, name: 'VIA 2', subtitle: 'Push',
       exercises: [
-        { name: 'Press inclinado barra guiada', trackId: 'press-inclinado', sets: 2, reps: 6, rest: 150, step: 2.5, note: 'RIR 1' },
-        { name: 'Press sentado en máquina', trackId: 'press-maquina', sets: 2, reps: 8, rest: 120, step: 2.5, note: 'RIR 1' },
-        { name: 'Contractora', trackId: 'pec-fly', sets: 2, reps: 10, rest: 90, step: 1.25 },
-        { name: 'Cruces de poleas hacia abajo', trackId: 'cruces', sets: 2, reps: 10, rest: 75, step: 1.25 },
-        { name: 'Elev. laterales pesas de pie', trackId: 'lateral-mancuerna', sets: 3, reps: 12, rest: 90, step: 1.25 },
-        { name: 'Tríceps en polea agarre prono', trackId: 'triceps-pushdown', sets: 3, reps: 10, rest: 90, step: 1.25 },
-        { name: 'Press francés en polea', trackId: 'french-polea', sets: 2, reps: 12, rest: 75, step: 1.25 },
+        { name: 'Press sentado en máquina', trackId: 'press-maquina', sets: 2, reps: 6, rest: 150, step: 2.5, note: 'Calentar primero · RIR 1' },
+        { name: 'Press inclinado barra guiada', trackId: 'press-inclinado', sets: 2, reps: 8, rest: 120, step: 2.5, note: 'RIR 1' },
+        { name: 'Aperturas inclinadas con mancuernas', trackId: 'aperturas-inclinadas', sets: 2, reps: 10, rest: 90, step: 1.25 },
+        { name: 'Flexiones sobre banco', trackId: 'flexiones-banco', sets: 2, reps: 12, rest: 75, step: 0 },
+        { name: 'Elev. laterales sentado mancuernas', trackId: 'lateral-mancuerna', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Última serie descendente' },
+        { name: 'Tríceps en polea agarre prono', trackId: 'triceps-pushdown', sets: 3, reps: 8, rest: 90, step: 1.25 },
+        { name: 'Patada tríceps polea', trackId: 'patada-triceps', sets: 2, reps: 10, rest: 75, step: 1.25, note: 'x brazo' },
         { name: 'Crunch en polea de pie', trackId: 'abs-crunch', sets: 3, reps: 15, rest: 60, step: 1.25 },
       ]
     },
     {
       id: 3, name: 'VIA 3', subtitle: 'Legs',
       exercises: [
-        { name: 'Abductores en máquina', trackId: 'abductores', sets: 3, reps: 15, rest: 60, step: 2.5 },
-        { name: 'Gemelos en prensa', trackId: 'gemelos', sets: 3, reps: 15, rest: 90, step: 5 },
-        { name: 'Isquios sentado en máquina', trackId: 'isquios', sets: 2, reps: 12, rest: 120, step: 2.5, note: 'RIR 1' },
-        { name: 'Isquios sentado en máquina', trackId: 'isquios', sets: 2, reps: 10, rest: 120, step: 2.5 },
-        { name: 'Cuádriceps en máquina', trackId: 'quad-extension', sets: 2, reps: 12, rest: 120, step: 2.5 },
-        { name: 'Sentadilla cinturón/máquina/hack', trackId: 'sentadilla', sets: 2, reps: 10, rest: 120, step: 2.5, note: 'RIR 1' },
-        { name: 'Prensa inclinada', trackId: 'prensa', sets: 2, reps: 15, rest: 120, step: 5, note: 'RIR 1' },
-        { name: 'Aductores en máquina', trackId: 'aductores', sets: 3, reps: 15, rest: 60, step: 2.5 },
+        { name: 'Hip thrust', trackId: 'hip-thrust', sets: 2, reps: 6, rest: 150, step: 2.5, note: 'Calentar primero · RIR 1' },
+        { name: 'Prensa inclinada', trackId: 'prensa', sets: 2, reps: 8, rest: 120, step: 5, note: 'RIR 1' },
+        { name: 'Sentadilla con cinturón', trackId: 'sentadilla', sets: 2, reps: 10, rest: 120, step: 2.5 },
+        { name: 'Cuádriceps en máquina', trackId: 'quad-extension', sets: 2, reps: 12, rest: 90, step: 2.5 },
+        { name: 'Isquios sentado en máquina', trackId: 'isquios', sets: 3, reps: 12, rest: 90, step: 2.5 },
+        { name: 'Gemelos en prensa horizontal', trackId: 'gemelos', sets: 3, reps: 15, rest: 60, step: 5 },
+        { name: 'Máquina aductores', trackId: 'aductores', sets: 3, reps: 15, rest: 60, step: 2.5 },
+        { name: 'Máquina abductores', trackId: 'abductores', sets: 3, reps: 15, rest: 60, step: 2.5 },
       ]
     },
     {
       id: 4, name: 'VIA 4', subtitle: 'Full Body',
       exercises: [
-        { name: 'Dominadas con lastre', trackId: 'dominadas', sets: 3, reps: 8, rest: 120, step: 1.25, note: 'RIR 1' },
-        { name: 'Remo bajo en máquina', trackId: 'remo-maquina', sets: 3, reps: 10, rest: 90, step: 2.5 },
-        { name: 'Press sentado en máquina', trackId: 'press-maquina', sets: 3, reps: 8, rest: 120, step: 2.5, note: 'RIR 1' },
-        { name: 'Fondos en máquina', trackId: 'fondos', sets: 3, reps: 10, rest: 90, step: 2.5, note: 'Inclínate adelante' },
-        { name: 'Elev. laterales en máquina', trackId: 'lateral-maquina', sets: 3, reps: 12, rest: 90, step: 1.25 },
-        { name: 'Curl barra Z de pie', trackId: 'curl-barra', sets: 3, reps: 12, rest: 75, step: 1.25, note: 'Alternas con Press francés' },
-        { name: 'Press francés barra Z', trackId: 'french-barra', sets: 3, reps: 12, rest: 75, step: 1.25, note: 'Alternas con Curl Z' },
-        { name: 'Ab wheel de rodillas', trackId: 'abs-wheel', sets: 3, reps: 15, rest: 60, step: 0 },
-      ]
-    },
-    {
-      id: 5, name: 'VIA 5', subtitle: 'Brazos (opcional)',
-      exercises: [
-        { name: 'Curl barra recta de pie', trackId: 'curl-recta', sets: 2, reps: 6, rest: 120, step: 1.25, note: 'Calentar' },
-        { name: 'Curl mancuernas banco inclinado', trackId: 'curl-inclinado', sets: 2, reps: 8, rest: 90, step: 1.25 },
-        { name: 'Curl concentrado mancuerna', trackId: 'curl-concentrado', sets: 2, reps: 10, rest: 90, step: 1.25, note: 'x brazo' },
-        { name: 'Curl 2 poleas', trackId: 'curl-2poleas', sets: 2, reps: 15, rest: 75, step: 1.25 },
-        { name: 'Extensiones polea agarre prono', trackId: 'triceps-pushdown', sets: 2, reps: 8, rest: 120, step: 1.25, note: 'Calentar' },
-        { name: 'Press francés + Press cerrado barra Z', trackId: 'french-combo', sets: 2, reps: 10, rest: 120, step: 1.25, note: 'Superseries · +10 press cerrado' },
-        { name: 'Fondos tríceps peso propio', trackId: 'fondos-bw', sets: 2, reps: 12, rest: 90, step: 0 },
-        { name: 'Extensiones polea 1 mano supino', trackId: 'triceps-1mano', sets: 2, reps: 12, rest: 90, step: 1.25, note: 'x brazo' },
-        { name: 'Curl antebrazo barra', trackId: 'antebrazo', sets: 2, reps: 15, rest: 75, step: 1.25 },
+        { name: 'Remo bajo en máquina', trackId: 'remo-maquina', sets: 3, reps: 10, rest: 90, step: 2.5, note: 'RIR 1' },
+        { name: 'Remo alto en máquina', trackId: 'remo-alto', sets: 3, reps: 12, rest: 75, step: 2.5 },
+        { name: 'Press plano con barra libre o guiada', trackId: 'press-plano', sets: 3, reps: 10, rest: 90, step: 2.5, note: 'RIR 1' },
+        { name: 'Press vertical en máquina', trackId: 'press-maquina', sets: 3, reps: 10, rest: 90, step: 2.5 },
+        { name: 'Elevaciones laterales en polea', trackId: 'lateral-polea', sets: 3, reps: 12, rest: 75, step: 1.25, note: 'x brazo' },
+        { name: 'Curl simultáneo mancuernas', trackId: 'curl-simultaneo', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Series alternas con Press francés' },
+        { name: 'Press francés mancuernas', trackId: 'french-mancuernas', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Series alternas con Curl simultáneo' },
+        { name: 'Ab wheel de rodillas', trackId: 'abs-wheel', sets: 3, reps: 15, rest: 60, step: 0, note: '15 pasadas' },
       ]
     }
   ],
@@ -1195,7 +1183,6 @@ const PROGRAM = {
     { id: 2, label: 'VIA 2', viaId: 2 },
     { id: 3, label: 'VIA 3', viaId: 3 },
     { id: 4, label: 'VIA 4', viaId: 4 },
-    { id: 5, label: 'BONUS', viaId: 5 },
   ]
 };
 
@@ -1218,15 +1205,10 @@ const CARB_CHOICES = [
 
 const MEALS = [
   {
-    name: 'Al levantar', icon: '💪',
-    items: [
-      { id: 'al-levantar', label: 'Proteína + Creatina', desc: 'Café con leche + 20g proteína (medio cazo) + 7g creatina', kcal: 100 },
-    ]
-  },
-  {
     name: 'Desayuno', icon: '☀️',
     items: [
-      { id: 'desayuno', label: 'Desayuno', desc: 'Café con leche de avena + 1 fruta + 2 yogures + 40g cereales', kcal: 410 },
+      { id: 'desayuno', label: 'Desayuno', desc: 'Café con leche de avena + 2 frutas + 2 yogures + 50g cereales + sándwich de pavo', kcal: 720 },
+      { id: 'desayuno-almendras', label: 'Almendras', desc: '15g almendras', kcal: 95 },
     ]
   },
   {
@@ -1241,8 +1223,7 @@ const MEALS = [
   {
     name: 'Merienda', icon: '🥜',
     items: [
-      { id: 'merienda-snack', label: 'Opción 1 · Snack', desc: 'Café con leche de avena + 1 fruta + sándwich (2 rebanadas pan con 60g pavo/40g jamón/lomo/lata atún)', kcal: 350, group: 'merienda' },
-      { id: 'merienda-batido', label: 'Opción 2 · Batido', desc: '60g crema de arroz + 40g proteína en polvo + 15g almendras + agua/café/infusión + 1 fruta', kcal: 500, group: 'merienda' },
+      { id: 'merienda-batido', label: 'Batido + Creatina', desc: '40g crema de arroz + 40g proteína en polvo + 7g creatina', kcal: 300 },
     ]
   },
   {
@@ -3133,8 +3114,8 @@ function buildAiContext() {
 
   return `Eres un asistente de nutrición conciso. Responde en español, máximo 2-3 frases.
 Contexto del usuario:
-- Plan: ${GOAL.kcalTarget} kcal/día (${GOAL.fase}). Macros: 140g proteína, 300g carbos, 75g grasa.
-- Objetivo: llegar a ${GOAL.pesoObjetivo}kg limpio de grasa para ${GOAL.fechaRevision}.
+- Plan: ${GOAL.kcalTarget} kcal/día (${GOAL.fase}). Macros: ${MACROS.prot}g proteína, ${MACROS.carb}g carbos, ${MACROS.fat}g grasa.
+- Objetivo: peso objetivo ${GOAL.pesoObjetivo}kg para revisión el ${GOAL.fechaRevision}.
 - Hoy lleva consumidas ~${Math.round(consumed)} kcal. Quedan ~${Math.round(remaining)} kcal.
 - Comidas hechas hoy: ${checkedItems.length > 0 ? checkedItems.join(', ') : 'ninguna aún'}.
 - Extras habituales disponibles: ${extrasRef}.
