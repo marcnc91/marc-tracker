@@ -603,6 +603,67 @@ input.file-input-hidden { display: none; }
 }
 .ai-chat-send:active { opacity: 0.8; }
 
+/* 1RM calculator (per exercise) */
+.calc-badge {
+  width: 28px; height: 28px; border-radius: 50%; border: none;
+  background: var(--bg3); color: var(--text2); font-size: 13px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.calc-badge:active { transform: scale(0.92); }
+
+.rm-calc-overlay {
+  display: none; position: fixed; inset: 0; z-index: 260;
+  background: rgba(0,0,0,0.7); align-items: flex-end; justify-content: center;
+}
+.rm-calc-overlay.active { display: flex; animation: fadeUp 0.2s ease; }
+
+.rm-calc-modal {
+  background: var(--bg2); border-radius: 20px 20px 0 0; padding: 20px;
+  max-width: 480px; width: 100%; max-height: 85vh; overflow-y: auto;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+}
+
+.rm-calc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.rm-calc-header h3 { font-size: 16px; margin: 0; color: var(--text); }
+.rm-calc-close { background: none; border: none; font-size: 22px; color: var(--text3); cursor: pointer; padding: 4px; }
+.rm-calc-sub { font-size: 12px; color: var(--text3); margin-bottom: 16px; line-height: 1.4; }
+
+.rm-calc-inputs { display: flex; gap: 10px; margin-bottom: 16px; }
+.rm-calc-field { flex: 1; }
+.rm-calc-field label { display: block; font-size: 11px; color: var(--text3); margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.rm-calc-field input {
+  width: 100%; padding: 10px 12px; border-radius: 8px;
+  border: 1px solid var(--bg4); background: var(--bg); color: var(--text);
+  font-size: 16px; font-weight: 600; text-align: center; font-variant-numeric: tabular-nums;
+}
+.rm-calc-field input:focus { border-color: var(--accent); outline: none; }
+
+.rm-calc-tabs { display: flex; border-bottom: 1px solid var(--bg4); margin-bottom: 4px; }
+.rm-calc-tab {
+  flex: 1; padding: 10px 0; text-align: center; font-size: 12px; font-weight: 600;
+  color: var(--text3); background: none; border: none; border-bottom: 2px solid transparent;
+  cursor: pointer; text-transform: uppercase; letter-spacing: 0.3px;
+}
+.rm-calc-tab.active { color: var(--text); border-bottom-color: var(--text); }
+
+.rm-calc-rm-row {
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(90,107,80,0.06); border-radius: 8px; padding: 12px 14px; margin: 10px 0;
+}
+.rm-calc-rm-row .rm-calc-row-label { font-weight: 700; color: var(--accent); font-size: 13px; }
+.rm-calc-rm-row .rm-calc-row-val { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+.rm-calc-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 4px; border-bottom: 1px solid rgba(0,0,0,0.04); font-size: 14px;
+}
+.rm-calc-row:last-child { border-bottom: none; }
+.rm-calc-row .rm-calc-row-label { color: var(--text2); }
+.rm-calc-row .rm-calc-row-sub { font-size: 11px; color: var(--text3); margin-left: 4px; }
+.rm-calc-row .rm-calc-row-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.rm-calc-empty { text-align: center; padding: 28px 12px; color: var(--text3); font-size: 13px; font-style: italic; line-height: 1.5; }
+
 /* Progress dashboard */
 .goal-card {
   background: var(--bg2); border: none; border-radius: var(--radius);
@@ -793,6 +854,31 @@ input.file-input-hidden { display: none; }
   <div class="ai-chat-input-row">
     <input class="ai-chat-input" id="aiChatInput" placeholder="Cuántas kcal tiene...?" onkeydown="if(event.key==='Enter')sendAiMsg()">
     <button class="ai-chat-send" onclick="sendAiMsg()">➤</button>
+  </div>
+</div>
+
+<div class="rm-calc-overlay" id="rmCalcOverlay" onclick="if(event.target===this) closeRmCalc()">
+  <div class="rm-calc-modal">
+    <div class="rm-calc-header">
+      <h3 id="rmCalcTitle">🧮 Calculadora 1RM</h3>
+      <button class="rm-calc-close" onclick="closeRmCalc()">✕</button>
+    </div>
+    <div class="rm-calc-sub">Calcula el peso máximo estimado que puedes levantar por repetición (fórmula de Epley, la misma que usa el resto de la app).</div>
+    <div class="rm-calc-inputs">
+      <div class="rm-calc-field">
+        <label>Peso (kg)</label>
+        <input type="number" inputmode="decimal" id="rmCalcWeight" oninput="renderRmCalcResults()">
+      </div>
+      <div class="rm-calc-field">
+        <label>Reps</label>
+        <input type="number" inputmode="numeric" id="rmCalcReps" oninput="renderRmCalcResults()">
+      </div>
+    </div>
+    <div class="rm-calc-tabs">
+      <button class="rm-calc-tab active" id="rmCalcTabPct" onclick="switchRmCalcView('pct')">Porcentajes</button>
+      <button class="rm-calc-tab" id="rmCalcTabReps" onclick="switchRmCalcView('reps')">Repeticiones</button>
+    </div>
+    <div id="rmCalcResults"></div>
   </div>
 </div>
 
@@ -1255,6 +1341,74 @@ function calculate1RM(weight, reps) {
   return Math.round(weight * (1 + reps / 30) * 10) / 10;
 }
 
+// Inverse of calculate1RM: peso estimado que se puede mover N veces dado un 1RM.
+// Usa la misma fórmula de Epley (1RM = peso*(1+reps/30)) despejando el peso, así que
+// es consistente con las insignias "1RM≈" que ya se muestran en el registro y en Progreso.
+function weightForReps(rm, reps) {
+  if (!rm || rm <= 0 || !reps || reps <= 0) return 0;
+  if (reps === 1) return Math.round(rm * 10) / 10;
+  return Math.round((rm / (1 + reps / 30)) * 10) / 10;
+}
+
+let rmCalcExIdx = null;
+let rmCalcView = 'pct';
+
+function openRmCalc(ei) {
+  const via = PROGRAM.vias.find(v => v.id === selectedVia);
+  const ex = via && via.exercises[ei];
+  if (!ex) return;
+  rmCalcExIdx = ei;
+  rmCalcView = 'pct';
+  document.getElementById('rmCalcTitle').textContent = '🧮 ' + ex.name;
+  document.getElementById('rmCalcTabPct').classList.add('active');
+  document.getElementById('rmCalcTabReps').classList.remove('active');
+
+  const wInput = document.querySelector(`[data-ex="${ei}"][data-set="0"][data-field="weight"]`);
+  const rInput = document.querySelector(`[data-ex="${ei}"][data-set="0"][data-field="reps"]`);
+  document.getElementById('rmCalcWeight').value = wInput && wInput.value ? wInput.value : '';
+  document.getElementById('rmCalcReps').value = rInput && rInput.value ? rInput.value : (typeof ex.reps === 'number' ? ex.reps : '');
+
+  document.getElementById('rmCalcOverlay').classList.add('active');
+  renderRmCalcResults();
+}
+
+function closeRmCalc() {
+  document.getElementById('rmCalcOverlay').classList.remove('active');
+}
+
+function switchRmCalcView(view) {
+  rmCalcView = view;
+  document.getElementById('rmCalcTabPct').classList.toggle('active', view === 'pct');
+  document.getElementById('rmCalcTabReps').classList.toggle('active', view === 'reps');
+  renderRmCalcResults();
+}
+
+function renderRmCalcResults() {
+  const container = document.getElementById('rmCalcResults');
+  const w = parseFloat(document.getElementById('rmCalcWeight').value);
+  const r = parseInt(document.getElementById('rmCalcReps').value);
+
+  if (!w || w <= 0 || !r || r <= 0) {
+    container.innerHTML = `<div class="rm-calc-empty">¡Añade el peso y las repeticiones<br>para calcular tu 1RM!</div>`;
+    return;
+  }
+
+  const rm = calculate1RM(w, r);
+  let rowsHtml = '';
+  if (rmCalcView === 'pct') {
+    for (let pct = 100; pct >= 50; pct -= 5) {
+      const val = Math.round(rm * pct / 100 * 10) / 10;
+      rowsHtml += `<div class="rm-calc-row"><span class="rm-calc-row-label">${pct}%<span class="rm-calc-row-sub">RM</span></span><span class="rm-calc-row-val">${val}kg</span></div>`;
+    }
+  } else {
+    for (let n = 1; n <= 10; n++) {
+      rowsHtml += `<div class="rm-calc-row"><span class="rm-calc-row-label">${n} repetici${n === 1 ? 'ón' : 'ones'}</span><span class="rm-calc-row-val">${weightForReps(rm, n)}kg</span></div>`;
+    }
+  }
+
+  container.innerHTML = `<div class="rm-calc-rm-row"><span class="rm-calc-row-label">1RM estimado</span><span class="rm-calc-row-val">${rm}kg</span></div>${rowsHtml}`;
+}
+
 function getDailyWeight(dateStr) {
   return getStorage('weight-' + dateStr);
 }
@@ -1431,6 +1585,7 @@ function renderExercises() {
           <div class="exercise-target">${ex.sets}×${ex.reps}${ex.note ? ' · ' + ex.note : ''}</div>
         </div>
         <div class="exercise-meta">
+          <button class="calc-badge" onclick="openRmCalc(${ei})" title="Calculadora 1RM">🧮</button>
           <span class="rest-badge">${ex.rest}s</span>
         </div>
       </div>
