@@ -1091,9 +1091,18 @@ function renderWorkoutWeightBar() {
   if (el) el.innerHTML = renderDailyWeightBar();
 }
 
+// Nº de semana de la ronda (1 = semana que contiene GOAL.fechaInicio) para la semana de refDate.
+function getRoundWeekNumber(refDate) {
+  const start = getWeekRange(new Date(GOAL.fechaInicio + 'T00:00:00')).mon;
+  const cur = getWeekRange(refDate).mon;
+  const weeks = Math.round((cur - start) / (7 * 86400000)) + 1;
+  return weeks >= 1 ? weeks : null;
+}
+
 function renderWeekOverview() {
   const el = document.getElementById('weekOverview');
   if (!el) return;
+  const weekNum = getRoundWeekNumber(workoutDate);
   const done = getWeekCompletedSessions();
   const mainSessions = PROGRAM.sessions.filter(s => !s.bonus);
   const doneMain = mainSessions.filter(s => done.has(s.id)).length;
@@ -1104,7 +1113,7 @@ function renderWeekOverview() {
     return `<span class="week-pip ${isDone ? 'done' : ''}" title="${s.label}">${isDone ? '✓' : s.id}</span>`;
   }).join('');
   el.innerHTML = `<div class="week-overview-bar ${complete ? 'complete' : ''}">
-    <span class="week-overview-label">${complete ? '✓' : '📅'} Semana</span>
+    <span class="week-overview-label">${complete ? '✓' : '📅'} Semana${weekNum ? ' ' + weekNum : ''}</span>
     <span class="week-pips">${pips}${bonusDone ? '<span class="week-pip bonus" title="Brazos">★</span>' : ''}</span>
   </div>`;
 }
