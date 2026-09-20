@@ -148,6 +148,20 @@ body {
 .rec-line.up { color: var(--accent); }
 .rec-line.stall { color: var(--orange); }
 .rec-line.down { color: var(--red); }
+.ss-block { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.06); }
+.ss-block-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text3); margin-bottom: 6px; }
+.ss-more { font-size: 12px; line-height: 1.5; color: var(--text2); }
+.ss-more div { padding: 2px 0; }
+.ss-ex { padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 12px; line-height: 1.45; }
+.ss-ex:last-child { border-bottom: none; }
+.ss-ex-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-weight: 600; color: var(--text); }
+.ss-ex-weights { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text2); white-space: nowrap; font-size: 11px; }
+.ss-ex-msg { color: var(--text2); margin-top: 2px; }
+.ss-ex-msg.good { color: var(--accent); }
+.ss-ex-msg.warn { color: var(--orange); }
+.ss-ex-msg.bad { color: var(--red); }
+.ss-ex-next { margin-top: 3px; color: var(--accent); font-weight: 600; }
+.ss-ex-next .why { color: var(--text3); font-weight: 400; font-size: 11px; }
 
 /* Diet reference view */
 .diet-ref-choices { font-size: 11px; color: var(--text3); padding: 4px 0 8px; }
@@ -1251,12 +1265,13 @@ function getPreviousExerciseData(viaId, exerciseIdx, trackIdOverride) {
   return null;
 }
 
-function getExerciseAllHistory(viaId, exerciseIdx, trackIdOverride) {
+// excludeKey (opcional, p.ej. 'workout-2026-09-20'): ignora esa sesión, para saber qué tocaba ANTES de ella.
+function getExerciseAllHistory(viaId, exerciseIdx, trackIdOverride, excludeKey) {
   const trackId = trackIdOverride || resolveTrackId(viaId, exerciseIdx);
   if (!trackId) return [];
   const occIdx = trackIdOverride ? 0 : getOccurrenceIndex(viaId, exerciseIdx);
   return Object.keys(localStorage)
-    .filter(k => k.startsWith('workout-')).sort()
+    .filter(k => k.startsWith('workout-') && k !== excludeKey).sort()
     .reduce((acc, k) => {
       const d = getStorage(k);
       if (!d) return acc;
@@ -1289,9 +1304,9 @@ function getAllTimePR(viaId, exerciseIdx, trackIdOverride) {
     }, 0);
 }
 
-function getWeightSuggestion(ex, viaId, exerciseIdx) {
+function getWeightSuggestion(ex, viaId, exerciseIdx, excludeKey) {
   if (!ex.step || ex.step === 0) return null;
-  const hist = getExerciseAllHistory(viaId, exerciseIdx);
+  const hist = getExerciseAllHistory(viaId, exerciseIdx, undefined, excludeKey);
   if (hist.length === 0) return null;
   const last = hist[hist.length - 1];
   const targetReps = typeof ex.reps === 'number' ? ex.reps : parseInt(ex.reps) || 10;
@@ -1663,47 +1678,146 @@ function onRirClick(btn) {
   document.querySelectorAll(`.rir-btn[data-ex="${ei}"]`).forEach(b => b.classList.toggle('active', b === btn));
 }
 
+const fmtKg = n => Math.round(n * 100) / 100;
+
+// Evalúa un ejercicio guardado frente a lo que tocaba: el peso sugerido con el historial
+// previo (sin contar la sesión de hoy) y lo que sale de sumar hoy para la próxima vez.
+function evaluateExercise(ex, via, ei, saved, dayKey) {
+  const targetReps = typeof ex.reps === 'number' ? ex.reps : parseInt(ex.reps) || 10;
+  const logged = (saved && saved.sets ? saved.sets : []).filter(s => parseFloat(s.weight) > 0 || parseInt(s.reps) > 0);
+  if (logged.length === 0) return { skipped: true, name: ex.name };
+
+  const weighted = logged.filter(s => parseFloat(s.weight) > 0);
+  const usesWeight = ex.step > 0;
+  const used = weighted.length ? parseFloat(weighted[0].weight) : 0;
+  const topToday = weighted.length ? Math.max(...weighted.map(s => parseFloat(s.weight))) : 0;
+  const hits = logged.filter(s => (parseInt(s.reps) || 0) >= targetReps).length;
+  const allHit = hits === ex.sets;
+  const missingSets = ex.sets - logged.length;
+  const rir = saved.rir != null && saved.rir !== '' ? Number(saved.rir) : null;
+  const tooEasy = rir !== null && rir >= 3;
+
+  const target = usesWeight ? getWeightSuggestion(ex, via.id, ei, 'workout-' + dayKey) : null;
+  const next = usesWeight ? getWeightSuggestion(ex, via.id, ei) : null;
+  const prevHist = usesWeight ? getExerciseAllHistory(via.id, ei, undefined, 'workout-' + dayKey) : [];
+  const prevBest = prevHist.length ? Math.max(...prevHist.map(h => h.weight)) : 0;
+  const isPR = usesWeight && prevBest > 0 && topToday > prevBest;
+
+  let cmp = null;
+  if (usesWeight && used > 0) {
+    if (!target) cmp = 'first';
+    else {
+      const diff = used - target.suggested;
+      cmp = Math.abs(diff) < 0.1 ? 'on' : diff > 0 ? 'over' : 'under';
+    }
+  }
+
+  const tgt = target ? fmtKg(target.suggested) : null;
+  let tone = 'good', text;
+  if (!usesWeight) {
+    if (allHit && !tooEasy) text = 'Objetivo de reps cumplido.';
+    else if (allHit) { tone = 'good'; text = 'Reps cumplidas con margen: prueba a añadir reps o dificultad.'; }
+    else { tone = 'warn'; text = `${hits}/${ex.sets} series a objetivo.`; }
+  } else if (cmp === 'first') {
+    text = `Primera referencia con ${fmtKg(used)}kg. La próxima vez ya se compara.`;
+  } else if (cmp === 'on') {
+    if (allHit && !tooEasy) text = 'En el clavo: el peso que tocaba y todas las series a objetivo.';
+    else if (allHit) { tone = 'warn'; text = `Peso que tocaba, pero con RIR ${rir} te sobró: el peso se queda corto.`; }
+    else { tone = 'warn'; text = `Peso que tocaba, pero solo ${hits}/${ex.sets} series a objetivo.`; }
+  } else if (cmp === 'over') {
+    if (allHit) text = `Subiste más de lo que tocaba (${fmtKg(used)} vs ${tgt}kg) y salió bien.`;
+    else { tone = 'warn'; text = `Más pesado de lo que tocaba (${fmtKg(used)} vs ${tgt}kg) y ${hits}/${ex.sets} series a objetivo.`; }
+  } else if (cmp === 'under') {
+    if (allHit && tooEasy) { tone = 'warn'; text = `Menos de lo que tocaba (${fmtKg(used)} vs ${tgt}kg) y te sobró margen: no hacía falta bajar.`; }
+    else if (allHit) { tone = 'warn'; text = `Menos de lo que tocaba (${fmtKg(used)} vs ${tgt}kg): cumpliste, pero hoy no sumaste progresión.`; }
+    else { tone = 'bad'; text = `Menos de lo que tocaba (${fmtKg(used)} vs ${tgt}kg) y ${hits}/${ex.sets} series a objetivo.`; }
+  } else {
+    tone = 'warn'; text = 'Sin peso registrado, no puedo compararlo con lo que tocaba.';
+  }
+  if (missingSets > 0) { tone = tone === 'good' ? 'warn' : tone; text += ` Faltaron ${missingSets} serie${missingSets > 1 ? 's' : ''}.`; }
+
+  return { name: ex.name, usesWeight, used, target, next, cmp, hits, allHit, tooEasy, rir, isPR, missingSets, tone, text };
+}
+
 function buildSessionSummaryCard(via, savedWorkout) {
+  const dayKey = savedWorkout.date;
   let totalSets = 0, doneSets = 0, rirVals = [];
-  const recs = { up: [], pr: [], hold: [], stall: [], down: [] };
   via.exercises.forEach((ex, ei) => {
     const saved = savedWorkout.exercises[ei];
     if (saved && saved.sets) {
       saved.sets.forEach(s => { totalSets++; if (s.done) doneSets++; });
       if (saved.rir != null && saved.rir !== '') rirVals.push(Number(saved.rir));
     }
-    const suggestion = getWeightSuggestion(ex, via.id, ei);
-    if (suggestion) {
-      const bucket = recs[suggestion.status] || recs.hold;
-      bucket.push({ name: ex.name, suggested: suggestion.suggested, reason: suggestion.reason });
-    }
   });
-
-  const avgRir = rirVals.length > 0 ? (rirVals.reduce((a, b) => a + b, 0) / rirVals.length).toFixed(1) : null;
+  const avgRir = rirVals.length > 0 ? rirVals.reduce((a, b) => a + b, 0) / rirVals.length : null;
   const completion = totalSets > 0 ? Math.round((doneSets / totalSets) * 100) : 0;
 
+  const evals = via.exercises.map((ex, ei) => evaluateExercise(ex, via, ei, savedWorkout.exercises[ei], dayKey));
+  const trained = evals.filter(e => !e.skipped);
+  const comparable = trained.filter(e => e.cmp && e.cmp !== 'first');
+  const onCount = comparable.filter(e => e.cmp === 'on').length;
+  const prs = trained.filter(e => e.isPR);
+  const missed = trained.filter(e => !e.allHit);
+  const easy = trained.filter(e => e.allHit && e.tooEasy);
+  const stalled = trained.filter(e => e.next && e.next.status === 'stall');
+  const names = list => list.map(e => e.name).join(', ');
+
   let valoracion;
-  if (recs.pr.length > 0) valoracion = `💪 ¡Gran sesión! ${recs.pr.length} PR${recs.pr.length > 1 ? 's' : ''} nuevo${recs.pr.length > 1 ? 's' : ''}.`;
-  else if (recs.stall.length >= 2) valoracion = `⚠ Varios ejercicios estancados (${recs.stall.length}). Valora una semana de descarga o revisar descanso/técnica.`;
+  if (prs.length > 0) valoracion = `💪 ¡Gran sesión! ${prs.length} PR${prs.length > 1 ? 's' : ''} nuevo${prs.length > 1 ? 's' : ''}: ${names(prs)}.`;
   else if (completion < 70) valoracion = `😌 Sesión incompleta (${completion}% de series). Revisa qué pasó con el tiempo o la energía.`;
-  else if (recs.up.length >= via.exercises.length / 2) valoracion = `👍 Buena sesión, progresando en la mayoría de ejercicios.`;
-  else valoracion = `😐 Sesión correcta, sin grandes cambios. Mantén la constancia.`;
+  else if (comparable.length > 0 && onCount === comparable.length && missed.length === 0) valoracion = `🎯 ¡Sesión clavada! Todos los pesos eran los que tocaban y cumpliste las reps en todos los ejercicios.`;
+  else if (stalled.length >= 2) valoracion = `⚠ Varios ejercicios estancados (${stalled.length}). Valora una semana de descarga o revisar descanso/técnica.`;
+  else if (trained.length > 0 && missed.length >= trained.length / 2) valoracion = `⚠ Sesión dura: en ${missed.length} de ${trained.length} ejercicios no llegaste a las reps objetivo. Revisa los pesos marcados abajo.`;
+  else if (easy.length > 0) valoracion = `👍 Buena sesión, pero te sobró margen en ${easy.length} ejercicio${easy.length > 1 ? 's' : ''}: puedes cargar más.`;
+  else valoracion = `👍 Buena sesión, todo bajo control. Sigue con la progresión que se indica abajo.`;
+
+  const more = [];
+  if (doneSets < totalSets) more.push(`Te faltaron ${totalSets - doneSets} serie${totalSets - doneSets > 1 ? 's' : ''} por marcar.`);
+  if (easy.length > 0) more.push(`Te sobró margen (RIR 3+) en ${names(easy)}: hoy podías haber cargado más.`);
+  if (avgRir !== null) {
+    const r = avgRir.toFixed(1);
+    if (avgRir < 0.5) more.push(`RIR medio ${r}: fuiste muy al límite. No hacía falta más, cuida la fatiga.`);
+    else if (avgRir >= 2.5) more.push(`RIR medio ${r}: hay margen, la próxima puedes apretar más.`);
+    else more.push(`RIR medio ${r}: intensidad ajustada, no hacía falta más.`);
+  } else {
+    more.push('Marca el RIR de cada ejercicio y te diré si te quedó margen.');
+  }
+  if (!getStorage('cardio-' + dayKey)) more.push('Falta el cardio de 20 min.');
 
   let html = `<div class="session-summary-card">
     <div class="weekly-summary-title">📋 Resumen de la sesión</div>
     <div class="ws-row"><span class="ws-label">Series completadas</span><span class="ws-val">${doneSets}/${totalSets} (${completion}%)</span></div>
-    ${avgRir !== null ? `<div class="ws-row"><span class="ws-label">RIR medio</span><span class="ws-val">${avgRir}</span></div>` : ''}
-    <div class="session-summary-verdict">${valoracion}</div>`;
+    ${avgRir !== null ? `<div class="ws-row"><span class="ws-label">RIR medio</span><span class="ws-val">${avgRir.toFixed(1)}</span></div>` : ''}
+    ${comparable.length > 0 ? `<div class="ws-row"><span class="ws-label">Pesos que tocaban</span><span class="ws-val">${onCount}/${comparable.length}</span></div>` : ''}
+    <div class="session-summary-verdict">${valoracion}</div>
+    <div class="ss-block">
+      <div class="ss-block-title">¿Debería haber hecho más?</div>
+      <div class="ss-more">${more.map(m => `<div>${m}</div>`).join('')}</div>
+    </div>
+    <div class="ss-block">
+      <div class="ss-block-title">Por ejercicio y próximo peso</div>`;
 
-  const allRecs = [...recs.up, ...recs.pr, ...recs.stall, ...recs.down];
-  if (allRecs.length > 0) {
-    html += `<div class="session-summary-recs">`;
-    [...recs.pr, ...recs.up].forEach(r => html += `<div class="rec-line up">↑ ${r.name}: sube a ${r.suggested}kg</div>`);
-    recs.stall.forEach(r => html += `<div class="rec-line stall">⚠ ${r.name}: ${r.reason}</div>`);
-    recs.down.forEach(r => html += `<div class="rec-line down">↓ ${r.name}: baja a ${r.suggested}kg</div>`);
-    html += `</div>`;
-  }
-  html += `</div>`;
+  evals.forEach(e => {
+    if (e.skipped) {
+      html += `<div class="ss-ex"><div class="ss-ex-head"><span>${e.name}</span></div><div class="ss-ex-msg">Sin registrar.</div></div>`;
+      return;
+    }
+    const weights = e.usesWeight && e.used > 0
+      ? `${fmtKg(e.used)}kg${e.target ? ` · tocaba ${fmtKg(e.target.suggested)}kg` : ''}`
+      : 'peso corporal';
+    let nextHtml = '';
+    if (e.next) {
+      const tag = { up: 'sube', pr: 'sube', hold: 'repite', stall: 'estancado', down: 'baja' }[e.next.status] || '';
+      const why = e.next.status === 'pr' ? 'Todas las reps OK: sube y sería tu mejor peso hasta ahora.' : e.next.reason;
+      nextHtml = `<div class="ss-ex-next">→ Próximo entreno: ${fmtKg(e.next.suggested)}kg${tag ? ` (${tag})` : ''}<div class="why">${why}</div></div>`;
+    }
+    html += `<div class="ss-ex">
+      <div class="ss-ex-head"><span>${e.isPR ? '★ ' : ''}${e.name}</span><span class="ss-ex-weights">${weights}</span></div>
+      <div class="ss-ex-msg ${e.tone}">${e.text}</div>${nextHtml}
+    </div>`;
+  });
+
+  html += `</div></div>`;
   return html;
 }
 
