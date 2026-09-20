@@ -952,7 +952,7 @@ const PROGRAM = {
         { name: 'Remo bajo en máquina', trackId: 'remo-maquina', sets: 3, reps: 10, rest: 90, step: 2.5, note: 'RIR 1' },
         { name: 'Remo alto en máquina', trackId: 'remo-alto', sets: 3, reps: 12, rest: 75, step: 2.5 },
         { name: 'Press plano con barra libre o guiada', trackId: 'press-plano', sets: 3, reps: 10, rest: 90, step: 2.5, note: 'RIR 1' },
-        { name: 'Press vertical en máquina', trackId: 'press-maquina', sets: 3, reps: 10, rest: 90, step: 2.5 },
+        { name: 'Press vertical en máquina', trackId: 'press-vertical', sets: 3, reps: 10, rest: 90, step: 2.5 },
         { name: 'Elevaciones laterales en polea', trackId: 'lateral-polea', sets: 3, reps: 12, rest: 75, step: 1.25, note: 'x brazo' },
         { name: 'Curl simultáneo mancuernas', trackId: 'curl-simultaneo', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Series alternas con Press francés' },
         { name: 'Press francés mancuernas', trackId: 'french-mancuernas', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Series alternas con Curl simultáneo' },
@@ -1225,6 +1225,8 @@ function resolveTrackId(viaId, exerciseIdx) {
 }
 
 function getSavedTrackId(savedEx) {
+  // El press vertical (hombro) se guardó antes con el id del press sentado (pecho): se separa al leer.
+  if (savedEx.name === 'Press vertical en máquina') return 'press-vertical';
   if (savedEx.trackId) return savedEx.trackId;
   return LEGACY_NAME_TO_TRACK[savedEx.name] || savedEx.name;
 }
