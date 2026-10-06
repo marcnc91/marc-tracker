@@ -1,4 +1,4 @@
-const CACHE_NAME = 'marc-tracker-v11';
+const CACHE_NAME = 'marc-tracker-v12';
 const URLS_TO_CACHE = ['./tracker.html', './index.html', './sw.js'];
 
 self.addEventListener('install', e => {
