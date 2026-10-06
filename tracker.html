@@ -770,6 +770,27 @@ input.file-input-hidden { display: none; }
 
 .rm-calc-empty { text-align: center; padding: 28px 12px; color: var(--text3); font-size: 15px; line-height: 1.45; }
 
+/* Per-exercise history sheet */
+.eh-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.eh-stat { background: var(--fill); border-radius: var(--radius-sm); padding: 10px 6px; text-align: center; }
+.eh-stat-val { font-family: var(--font-rounded); font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.eh-stat-label { font-size: 11px; color: var(--text2); margin-top: 2px; font-weight: 500; }
+.eh-chart { display: flex; align-items: flex-end; gap: 3px; height: 64px; margin-bottom: 4px; }
+.eh-chart div { flex: 1; min-height: 3px; border-radius: 3px 3px 0 0; background: var(--accent); opacity: 0.35; }
+.eh-chart div.last { opacity: 1; }
+.eh-chart-legend { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-bottom: 14px; font-variant-numeric: tabular-nums; }
+.eh-entry { padding: 12px 4px; border-bottom: 0.5px solid var(--separator); }
+.eh-entry:last-child { border-bottom: none; }
+.eh-entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.eh-date { font-size: 15px; font-weight: 600; }
+.eh-date .eh-today { font-size: 12px; font-weight: 600; color: var(--tint); margin-left: 6px; }
+.eh-top { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.eh-top .eh-delta { font-size: 12px; font-weight: 600; margin-left: 4px; }
+.eh-delta.up { color: var(--accent); } .eh-delta.down { color: var(--red); } .eh-delta.same { color: var(--text3); }
+.eh-sets { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.eh-set { font-size: 13px; padding: 3px 8px; border-radius: 6px; background: var(--fill); color: var(--text); font-variant-numeric: tabular-nums; }
+.eh-meta { font-size: 13px; color: var(--text2); margin-top: 6px; line-height: 1.4; user-select: text; -webkit-user-select: text; }
+
 /* ─── Progress dashboard ────────────────────────────── */
 .goal-card {
   background: var(--bg2); border: none; border-radius: var(--radius);
@@ -969,6 +990,20 @@ input.file-input-hidden { display: none; }
   <div class="ai-chat-input-row">
     <input class="ai-chat-input" id="aiChatInput" enterkeyhint="send" placeholder="Cuántas kcal tiene...?" onkeydown="if(event.key==='Enter')sendAiMsg()">
     <button class="ai-chat-send" onclick="sendAiMsg()" aria-label="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+  </div>
+</div>
+
+<div class="rm-calc-overlay" id="exHistOverlay" onclick="if(event.target===this) closeExHistory()">
+  <div class="rm-calc-modal">
+    <div class="rm-calc-drag" data-sheet-handle>
+      <div class="sheet-grabber"></div>
+      <div class="rm-calc-header">
+        <h3 id="exHistTitle">Historial</h3>
+        <button class="rm-calc-close" onclick="closeExHistory()" aria-label="Cerrar">✕</button>
+      </div>
+    </div>
+    <div class="rm-calc-sub" id="exHistSub"></div>
+    <div id="exHistContent"></div>
   </div>
 </div>
 
@@ -1502,6 +1537,99 @@ function openRmCalc(ei) {
   renderRmCalcResults();
 }
 
+// Historial de un ejercicio (todas las sesiones guardadas, la más reciente primero)
+function getExerciseSessions(viaId, exerciseIdx) {
+  const trackId = resolveTrackId(viaId, exerciseIdx);
+  if (!trackId) return [];
+  const occIdx = getOccurrenceIndex(viaId, exerciseIdx);
+  return Object.keys(localStorage)
+    .filter(k => k.startsWith('workout-')).sort().reverse()
+    .reduce((acc, k) => {
+      const d = getStorage(k);
+      if (!d || !d.exercises) return acc;
+      const matches = findMatchingExercises(d.exercises, trackId);
+      const ex = matches[occIdx] || matches[0];
+      if (!ex || !ex.sets) return acc;
+      const sets = ex.sets.filter(s => parseFloat(s.weight) > 0 || parseInt(s.reps) > 0);
+      if (sets.length === 0) return acc;
+      const top = Math.max(...sets.map(s => parseFloat(s.weight) || 0));
+      acc.push({ date: d.date, top, sets, rir: ex.rir != null && ex.rir !== '' ? ex.rir : null, comment: ex.comment || '' });
+      return acc;
+    }, []);
+}
+
+function openExHistory(ei) {
+  const via = PROGRAM.vias.find(v => v.id === selectedVia);
+  const ex = via && via.exercises[ei];
+  if (!ex) return;
+  const sessions = getExerciseSessions(via.id, ei);
+  document.getElementById('exHistTitle').textContent = ex.name;
+  document.getElementById('exHistSub').textContent = `Objetivo ${ex.sets}×${ex.reps}` + (sessions.length ? ` · ${sessions.length} ${sessions.length === 1 ? 'sesión' : 'sesiones'}` : '');
+
+  let html = '';
+  if (sessions.length === 0) {
+    html = `<div class="rm-calc-empty">Todavía no hay registros de este ejercicio.<br>Guarda un entreno y aparecerá aquí.</div>`;
+  } else {
+    const weighted = sessions.filter(s => s.top > 0);
+    if (weighted.length) {
+      const pr = Math.max(...weighted.map(s => s.top));
+      const last = weighted[0];
+      const bestE1rm = Math.max(...weighted.map(s => Math.max(...s.sets.map(x => calculate1RM(parseFloat(x.weight) || 0, parseInt(x.reps) || 0)))));
+      html += `<div class="eh-stats">
+        <div class="eh-stat"><div class="eh-stat-val">${last.top}</div><div class="eh-stat-label">Último (kg)</div></div>
+        <div class="eh-stat"><div class="eh-stat-val" style="color:var(--accent)">${pr}</div><div class="eh-stat-label">Récord (kg)</div></div>
+        <div class="eh-stat"><div class="eh-stat-val">${bestE1rm || '—'}</div><div class="eh-stat-label">Mejor 1RM≈</div></div>
+      </div>`;
+      if (weighted.length > 1) {
+        const chart = weighted.slice(0, 16).reverse();
+        const max = Math.max(...chart.map(s => s.top));
+        const min = Math.min(...chart.map(s => s.top));
+        const range = max - min || 1;
+        html += `<div class="eh-chart">${chart.map((s, i) => `<div class="${i === chart.length - 1 ? 'last' : ''}" style="height:${20 + (s.top - min) / range * 80}%" title="${s.date}: ${s.top}kg"></div>`).join('')}</div>
+          <div class="eh-chart-legend"><span>${formatSessionDate(chart[0].date)}</span><span>${min}–${max} kg</span><span>${formatSessionDate(chart[chart.length - 1].date)}</span></div>`;
+      }
+    }
+    const todayKey = toLocalDateStr(new Date());
+    sessions.forEach((s, i) => {
+      const prev = sessions[i + 1];
+      let delta = '';
+      if (prev && s.top > 0 && prev.top > 0) {
+        const diff = Math.round((s.top - prev.top) * 100) / 100;
+        delta = diff > 0 ? `<span class="eh-delta up">+${diff}</span>` : diff < 0 ? `<span class="eh-delta down">${diff}</span>` : `<span class="eh-delta same">=</span>`;
+      }
+      const sets = s.sets.map(x => `<span class="eh-set">${parseFloat(x.weight) > 0 ? x.weight + '×' : ''}${x.reps || '–'}</span>`).join('');
+      const meta = [s.rir != null ? `RIR ${Number(s.rir) >= 3 ? '3+' : s.rir}` : '', s.comment ? escapeHtml(s.comment) : ''].filter(Boolean).join(' · ');
+      html += `<div class="eh-entry">
+        <div class="eh-entry-head">
+          <span class="eh-date">${formatSessionDate(s.date)}${s.date === todayKey ? '<span class="eh-today">Hoy</span>' : ''}</span>
+          <span class="eh-top">${s.top > 0 ? s.top + ' kg' : ''}${delta}</span>
+        </div>
+        <div class="eh-sets">${sets}</div>
+        ${meta ? `<div class="eh-meta">${meta}</div>` : ''}
+      </div>`;
+    });
+  }
+  const content = document.getElementById('exHistContent');
+  content.innerHTML = html;
+  content.parentElement.scrollTop = 0;
+  presentLayer(document.getElementById('exHistOverlay'));
+}
+
+function closeExHistory() {
+  dismissLayer(document.getElementById('exHistOverlay'));
+}
+
+function formatSessionDate(str) {
+  const [y, m, d] = str.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  const label = formatDate(date);
+  return y === new Date().getFullYear() ? label : `${label} ${y}`;
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 function closeRmCalc() {
   dismissLayer(document.getElementById('rmCalcOverlay'));
 }
@@ -1715,6 +1843,7 @@ function renderExercises() {
           <div class="exercise-target">${ex.sets}×${ex.reps}${ex.note ? ' · ' + ex.note : ''}</div>
         </div>
         <div class="exercise-meta">
+          <button class="calc-badge" onclick="openExHistory(${ei})" title="Historial de pesos" aria-label="Historial de pesos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 4v4h4"/><path d="M12 7.5V12l3 2"/></svg></button>
           <button class="calc-badge" onclick="openRmCalc(${ei})" title="Calculadora 1RM" aria-label="Calculadora 1RM"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7h7M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg></button>
           <span class="rest-badge">${ex.rest}s</span>
         </div>
@@ -2505,7 +2634,8 @@ function enableSheetDrag(root, surface, onDismiss) {
 }
 
 enableSheetDrag(document.getElementById('aiChatPanel'), document.getElementById('aiChatPanel'), () => toggleAiChat());
-enableSheetDrag(document.getElementById('rmCalcOverlay'), document.querySelector('.rm-calc-modal'), () => closeRmCalc());
+enableSheetDrag(document.getElementById('rmCalcOverlay'), document.querySelector('#rmCalcOverlay .rm-calc-modal'), () => closeRmCalc());
+enableSheetDrag(document.getElementById('exHistOverlay'), document.querySelector('#exHistOverlay .rm-calc-modal'), () => closeExHistory());
 
 // Hairline under the nav bar only when content scrolls beneath it
 const appHeader = document.getElementById('appHeader');
