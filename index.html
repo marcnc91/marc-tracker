@@ -831,7 +831,7 @@ input.file-input-hidden { display: none; }
 
 .chart-card { background: var(--bg2); border-radius: var(--radius); padding: 12px; margin-bottom: 14px; }
 
-/* ─── Catálogo de ejercicios: variantes, patrones y auditoría ── */
+/* ─── Catálogo de ejercicios: variantes y patrones ── */
 .exercise-variant { font-size: 12px; color: var(--tint); margin-top: 3px; font-weight: 500; }
 .progress-ex-unit { font-size: 12px; font-weight: 500; color: var(--text2); }
 .progress-ex-sub { font-size: 12px; color: var(--text2); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
@@ -855,22 +855,6 @@ input.file-input-hidden { display: none; }
 .viz-table table { width: 100%; border-collapse: collapse; margin-top: 4px; font-variant-numeric: tabular-nums; }
 .viz-table th { text-align: left; color: var(--text2); font-weight: 500; padding: 4px 4px; border-bottom: 0.5px solid var(--separator); }
 .viz-table td { padding: 4px 4px; border-bottom: 0.5px solid var(--separator); color: var(--text); }
-.data-actions { display: flex; gap: 8px; margin-top: 12px; }
-.data-actions .backup-btn { flex: 1; }
-.data-actions .backup-btn:disabled { opacity: 0.4; }
-.audit-row { background: var(--bg2); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 6px; }
-.audit-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.audit-name { font-size: 15px; font-weight: 600; }
-.audit-chip { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
-.audit-chip.ok { color: var(--accent); background: var(--accent-bg); }
-.audit-chip.warn { color: var(--orange); background: var(--orange-bg); }
-.audit-chip.bad { color: var(--red); background: var(--red-bg); }
-.audit-meta { font-size: 12px; color: var(--text2); margin-top: 4px; line-height: 1.4; font-variant-numeric: tabular-nums; }
-.audit-ids { font-size: 13px; margin-top: 6px; line-height: 1.5; }
-.audit-ids code, .audit-meta code { font-size: 12px; background: var(--fill); padding: 1px 5px; border-radius: 4px; }
-.audit-missing { color: var(--red); }
-.audit-jumps { font-size: 12px; color: var(--orange); margin-top: 6px; }
-.audit-notes { font-size: 12px; color: var(--text2); margin-top: 6px; line-height: 1.4; border-left: 2px solid var(--separator); padding-left: 8px; user-select: text; -webkit-user-select: text; }
 .history-canon { display: block; font-size: 11px; color: var(--text3); font-weight: 400; }
 
 /* ─── Weight suggestions ────────────────────────────── */
@@ -2382,7 +2366,6 @@ function renderProgress() {
     <button class="filter-btn" id="pt-ejercicios" onclick="switchProgressView('ejercicios')">Ejercicios</button>
     <button class="filter-btn" id="pt-patrones" onclick="switchProgressView('patrones')">Patrones</button>
     <button class="filter-btn" id="pt-registros" onclick="switchProgressView('registros')">Registros</button>
-    <button class="filter-btn" id="pt-datos" onclick="switchProgressView('datos')">Datos</button>
   </div><div id="progressContent"></div>
   <button class="share-btn" onclick="shareProgress()">📤 Compartir mi progreso</button>`;
   document.getElementById('historyInner').innerHTML = html;
@@ -2390,7 +2373,7 @@ function renderProgress() {
 }
 
 function switchProgressView(view) {
-  ['resumen','ejercicios','patrones','registros','datos'].forEach(v => {
+  ['resumen','ejercicios','patrones','registros'].forEach(v => {
     const b = document.getElementById('pt-' + v);
     if (b) b.classList.toggle('active', v === view);
   });
@@ -2401,7 +2384,6 @@ function switchProgressView(view) {
     case 'ejercicios': c.innerHTML = buildExerciseView(); break;
     case 'patrones': c.innerHTML = buildPatternView(); break;
     case 'registros': c.innerHTML = buildHistoryEntries(); break;
-    case 'datos': c.innerHTML = buildDataView(); break;
   }
 }
 
@@ -2680,127 +2662,38 @@ function patternChartSvg(series) {
   return svg + `</svg>`;
 }
 
-// ─── Datos: auditoría de nombres y migración ─────────────────────────
-let auditFilter = 'todos';
-
-function getWorkoutStore() {
-  const s = {};
-  Object.keys(localStorage).filter(k => k.startsWith('workout-')).forEach(k => { s[k] = getStorage(k); });
-  return s;
-}
-
-function buildDataView() {
-  const store = getWorkoutStore();
-  const rows = XL.audit(store);
-  const stats = XL.countStats(store);
-  const plan = XL.migrate(store);
-  const backup = getStorage('exercise-migration-backup');
-  const pending = plan.changes.length;
-  const counts = {
-    dudoso: rows.filter(r => r.confidence === 'dudoso').length,
-    sin: rows.filter(r => r.confidence === 'sin asignar').length,
-    saltos: rows.filter(r => r.jumps.length).length,
-  };
-
-  let html = `<div class="weekly-summary-card">
-    <div class="weekly-summary-title">🗂 Ejercicios canónicos</div>
-    <div class="ws-row"><span class="ws-label">Sesiones · ejercicios · series</span><span class="ws-val">${stats.sessions} · ${stats.exercises} · ${stats.sets}</span></div>
-    <div class="ws-row"><span class="ws-label">Ejercicios con id guardado</span><span class="ws-val">${stats.withId}/${stats.exercises}</span></div>
-    <div class="ws-row"><span class="ws-label">Pendientes de migrar</span><span class="ws-val">${pending}</span></div>
-    <div class="ws-row"><span class="ws-label">Sin asignar</span><span class="ws-val" style="color:${plan.unmapped.length ? 'var(--red)' : 'var(--accent)'}">${plan.unmapped.length}</span></div>
-    <div class="data-actions">
-      <button class="backup-btn" onclick="runMigration(true)">Simular</button>
-      <button class="backup-btn export" onclick="runMigration(false)" ${pending ? '' : 'disabled'}>Migrar</button>
-      <button class="backup-btn" onclick="undoMigration()" ${backup ? '' : 'disabled'}>Deshacer</button>
-    </div>
-    <div id="migrationReport"></div>
-  </div>`;
-
-  html += `<div class="section-title">Auditoría de nombres</div>
-    <div class="viz-note">Una fila por nombre + trackId tal como se guardó. "Dudoso" = la asignación es una suposición razonable que conviene confirmar. Los saltos de carga ≥25 % suelen indicar otra máquina o variante.</div>
-    <div class="segmented">
-      ${[['todos', `Todos ${rows.length}`], ['dudoso', `Dudosos ${counts.dudoso}`], ['sin', `Sin id ${counts.sin}`], ['saltos', `Saltos ${counts.saltos}`]].map(([k, l]) => `<button class="filter-btn ${auditFilter === k ? 'active' : ''}" onclick="setAuditFilter('${k}')">${l}</button>`).join('')}
-    </div>`;
-
-  const shown = rows.filter(r => auditFilter === 'todos' || (auditFilter === 'dudoso' && r.confidence === 'dudoso') || (auditFilter === 'sin' && r.confidence === 'sin asignar') || (auditFilter === 'saltos' && r.jumps.length));
-  if (!shown.length) html += `<div class="empty-state"><p>Nada que mostrar con este filtro.</p></div>`;
-  shown.forEach(r => {
-    const chip = { seguro: 'ok', app: 'ok', dudoso: 'warn', 'sin asignar': 'bad' }[r.confidence];
-    const range = r.minW != null ? (r.minW === r.maxW ? `${r.minW} kg` : `${r.minW}–${r.maxW} kg`) : 'sin peso';
-    const reps = r.minR != null ? (r.minR === r.maxR ? `${r.minR} reps` : `${r.minR}–${r.maxR} reps`) : '';
-    html += `<div class="audit-row">
-      <div class="audit-head"><span class="audit-name">${escapeHtml(r.name)}</span><span class="audit-chip ${chip}">${r.confidence}</span></div>
-      <div class="audit-meta">${r.trackId ? `trackId <code>${escapeHtml(r.trackId)}</code> · ` : 'sin trackId · '}${formatSessionDate(r.first)}${r.first !== r.last ? ' → ' + formatSessionDate(r.last) : ''} · ${r.sessions} ses. · ${r.sets} series · ${range}${reps ? ' · ' + reps : ''}</div>
-      <div class="audit-ids">→ ${r.ids.map(id => id === '—' ? '<b class="audit-missing">sin asignar</b>' : `<code>${escapeHtml(id)}</code> ${exDef(id) ? escapeHtml(exDef(id).name) : ''}`).join('<br>→ ')}</div>
-      ${r.jumps.length ? `<div class="audit-jumps">⚠ Salto de carga: ${r.jumps.map(j => `${formatSessionDate(j.date)} ${j.from}→${j.to} kg`).join(' · ')}</div>` : ''}
-      ${r.notes.length ? `<div class="audit-notes">${r.notes.map(escapeHtml).join('<br>')}</div>` : ''}
-    </div>`;
-  });
-  html += `<div class="data-actions"><button class="backup-btn export" onclick="downloadAuditCsv()">Descargar auditoría (CSV)</button></div>`;
-  return html;
-}
-
-function setAuditFilter(f) {
-  auditFilter = f;
-  const c = document.getElementById('progressContent');
-  if (c) c.innerHTML = buildDataView();
-}
-
-function downloadFile(name, text, type) {
-  const blob = new Blob([text], { type });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = name;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-function downloadAuditCsv() {
-  downloadFile(`marc-tracker-auditoria-${dateKey()}.csv`, '﻿' + XL.auditToCsv(XL.audit(getWorkoutStore())), 'text/csv');
-}
-
-function renderMigrationReport(title, result, validation) {
-  const el = document.getElementById('migrationReport');
-  if (!el) return;
-  const byConf = c => result.changes.filter(x => x.confidence === c).length;
-  let html = `<div class="ss-block"><div class="ss-block-title">${title}</div>
-    <div class="ss-more"><div>${result.changes.length} ejercicios reciben id (${byConf('seguro')} seguros, ${byConf('dudoso')} dudosos).</div>
-    <div>${result.unmapped.length ? `⚠ ${result.unmapped.length} sin asignar: ${[...new Set(result.unmapped.map(u => u.name))].map(escapeHtml).join(', ')}` : '0 sin asignar.'}</div></div>`;
-  if (validation) html += `<div class="ss-more">${validation.checks.map(c => `<div>${c.ok ? '✓' : '✗'} ${c.label}: ${c.detail}</div>`).join('')}</div>`;
-  el.innerHTML = html + `</div>`;
-}
-
-function runMigration(dry) {
-  const before = getWorkoutStore();
-  const result = XL.migrate(before);
-  const after = {};
-  Object.keys(before).forEach(k => { after[k] = result.store[k]; });
-  const validation = XL.validateMigration(before, after);
-  if (dry) { renderMigrationReport('Simulación (no se ha escrito nada)', result, validation); return; }
-  if (!confirm(`Se van a asignar ${result.changes.length} ids de ejercicio. Antes se descarga una copia de seguridad completa.\n\n¿Migrar?`)) return;
-  const allData = {};
-  for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (isBackupKey(k)) allData[k] = getStorage(k); }
-  downloadFile(`marc-tracker-premigracion-${dateKey()}.json`, JSON.stringify(allData, null, 2), 'application/json');
-  let inAppBackup = true;
-  try { setStorage('exercise-migration-backup', { createdAt: new Date().toISOString(), store: before }); }
-  catch (e) { inAppBackup = false; }
-  Object.keys(after).forEach(k => setStorage(k, after[k]));
-  setStorage('exercise-migration-meta', Object.assign({ migratedAt: new Date().toISOString() }, result.store['exercise-migration-meta']));
-  const check = XL.validateMigration(before, getWorkoutStore());
-  switchProgressView('datos');
-  renderMigrationReport('Migración hecha' + (inAppBackup ? '' : ' (sin copia interna: usa el fichero descargado para deshacer)'), result, check);
-  showToast(check.ok ? 'Migración completada' : 'Migración con avisos: revisa el informe');
-}
-
-function undoMigration() {
-  const backup = getStorage('exercise-migration-backup');
-  if (!backup) return;
-  if (!confirm(`¿Restaurar los entrenos como estaban el ${new Date(backup.createdAt).toLocaleString('es-ES')}?`)) return;
-  Object.keys(backup.store).forEach(k => setStorage(k, backup.store[k]));
-  localStorage.removeItem('exercise-migration-backup');
-  localStorage.removeItem('exercise-migration-meta');
-  switchProgressView('datos');
-  showToast('Migración deshecha');
+// ─── Migración de ejercicios: se ejecuta sola al arrancar, una vez por versión del catálogo ───
+// Sin interfaz. Añade exerciseId + originalName a los entrenos antiguos; no borra ni cambia
+// ningún dato bruto. Solo escribe si sesiones, ejercicios, series y nombres cuadran antes/después.
+// Copia previa en 'exercise-migration-backup' (si cabe en el almacenamiento).
+function autoMigrateExercises() {
+  try {
+    const meta = getStorage('exercise-migration-meta');
+    if (meta && meta.catalogVersion >= XL.CATALOG_VERSION) return;
+    const before = {};
+    Object.keys(localStorage).filter(k => k.startsWith('workout-')).forEach(k => { before[k] = getStorage(k); });
+    const result = XL.migrate(before);
+    const after = {};
+    Object.keys(before).forEach(k => { after[k] = result.store[k]; });
+    const v = XL.validateMigration(before, after);
+    if (!['sessions', 'exercises', 'sets', 'names'].every(key => v.checks.find(c => c.key === key).ok)) {
+      console.warn('Migración de ejercicios cancelada: los totales no cuadran', v.checks);
+      return;
+    }
+    if (result.changes.length && !getStorage('exercise-migration-backup')) {
+      try { setStorage('exercise-migration-backup', { createdAt: new Date().toISOString(), store: before }); }
+      catch (e) { console.warn('Sin espacio para la copia interna; se migra igualmente (solo añade campos).'); }
+    }
+    Object.keys(after).forEach(k => { if (JSON.stringify(after[k]) !== JSON.stringify(before[k])) setStorage(k, after[k]); });
+    setStorage('exercise-migration-meta', {
+      catalogVersion: XL.CATALOG_VERSION,
+      migratedAt: new Date().toISOString(),
+      changed: result.changes.length,
+      unmapped: result.unmapped.map(u => ({ date: u.date, name: u.name, trackId: u.trackId })),
+    });
+  } catch (e) {
+    console.warn('Migración de ejercicios fallida; la app sigue resolviendo los nombres al leer.', e);
+  }
 }
 
 function buildHistoryEntries() {
@@ -2842,7 +2735,7 @@ function buildHistoryEntries() {
         if (setsStr) {
           const cid = getSavedExerciseId(ex, data.date);
           const cdef = cid ? exDef(cid) : null;
-          const canon = cdef && XL.norm(cdef.name) !== XL.norm(ex.name) ? `<span class="history-canon">→ ${escapeHtml(cdef.name)}</span>` : (cid ? '' : '<span class="history-canon audit-missing">sin id</span>');
+          const canon = cdef && XL.norm(cdef.name) !== XL.norm(ex.name) ? `<span class="history-canon">→ ${escapeHtml(cdef.name)}</span>` : (cid ? '' : '<span class="history-canon" style="color:var(--red)">sin id</span>');
           html += `<div class="history-exercise"><div class="history-exercise-name">${escapeHtml(ex.name)}${canon}</div><div class="history-sets">${setsStr}${rirStr}${ex.comment ? ' · ' + ex.comment : ''}</div></div>`;
         }
       });
@@ -2988,6 +2881,7 @@ document.addEventListener('keydown', (e) => {
 document.getElementById('timerOverlay').addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 
 // Init
+autoMigrateExercises();
 render();
 switchTab('workout');
 
@@ -3008,7 +2902,7 @@ switchTab('workout');
 
 // BACKUP: Export / Import
 function isBackupKey(key) {
-  if (key === 'exercise-migration-backup') return false; // copia interna, ya va en el fichero de backup
+  if (key === 'exercise-migration-backup') return false; // copia interna previa a la migración
   return ['workout-', 'diet-', 'medidas-', 'cardio-', 'weight-', 'exercise-'].some(p => key.startsWith(p));
 }
 

@@ -146,3 +146,19 @@ test('auditoría: una fila por nombre+trackId y saltos de carga ≥25 %', () => 
   assert.ok(csv.startsWith('nombre,trackId,id_asignado'));
   assert.equal(csv.split('\n').length, rows.length + 1);
 });
+
+test('validación: cada comprobación tiene clave estable (la usa la migración automática)', () => {
+  const v = L.validateMigration(fixture(), L.migrate(fixture()).store);
+  assert.deepEqual(v.checks.map(c => c.key), ['sessions', 'exercises', 'sets', 'names', 'ids']);
+});
+
+test('script de auditoría sobre un export: sale sin errores y genera CSV y JSON migrado', () => {
+  const { execFileSync } = require('child_process');
+  const os = require('os');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'audit-'));
+  const out = execFileSync(process.execPath, [path.join(__dirname, '..', 'scripts', 'audit-export.js'), path.join(__dirname, 'fixtures', 'sample-workouts.json'), '--csv', path.join(dir, 'a.csv'), '--out', path.join(dir, 'm.json')], { encoding: 'utf8' });
+  assert.match(out, /0 sin asignar/);
+  const migrated = JSON.parse(fs.readFileSync(path.join(dir, 'm.json'), 'utf8'));
+  assert.equal(L.countStats(migrated).withId, L.countStats(migrated).exercises);
+  assert.ok(fs.readFileSync(path.join(dir, 'a.csv'), 'utf8').includes('id_asignado'));
+});

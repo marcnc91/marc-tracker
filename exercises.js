@@ -377,11 +377,11 @@
       });
     });
     const checks = [
-      { label: 'Sesiones iguales', ok: a.sessions === b.sessions, detail: `${a.sessions} → ${b.sessions}` },
-      { label: 'Ejercicios iguales', ok: a.exercises === b.exercises, detail: `${a.exercises} → ${b.exercises}` },
-      { label: 'Series iguales', ok: a.sets === b.sets && a.filledSets === b.filledSets, detail: `${a.sets} → ${b.sets} (con datos: ${a.filledSets} → ${b.filledSets})` },
-      { label: 'Ningún nombre original perdido', ok: lostOriginal.length === 0, detail: lostOriginal.length ? `${lostOriginal.length} cambiados` : 'OK' },
-      { label: 'Ejercicios sin id', ok: b.exercises === b.withId, detail: `${b.exercises - b.withId} sin asignar` },
+      { key: 'sessions', label: 'Sesiones iguales', ok: a.sessions === b.sessions, detail: `${a.sessions} → ${b.sessions}` },
+      { key: 'exercises', label: 'Ejercicios iguales', ok: a.exercises === b.exercises, detail: `${a.exercises} → ${b.exercises}` },
+      { key: 'sets', label: 'Series iguales', ok: a.sets === b.sets && a.filledSets === b.filledSets, detail: `${a.sets} → ${b.sets} (con datos: ${a.filledSets} → ${b.filledSets})` },
+      { key: 'names', label: 'Ningún nombre original perdido', ok: lostOriginal.length === 0, detail: lostOriginal.length ? `${lostOriginal.length} cambiados` : 'OK' },
+      { key: 'ids', label: 'Ejercicios sin id', ok: b.exercises === b.withId, detail: `${b.exercises - b.withId} sin asignar` },
     ];
     return { before: a, after: b, checks, ok: checks.every(c => c.ok) };
   }
