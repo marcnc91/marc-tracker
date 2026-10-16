@@ -1,0 +1,2079 @@
+{
+ "workout-2026-04-03": {
+  "date": "2026-04-03",
+  "viaId": 3,
+  "viaName": "VIA 3 Pierna",
+  "exercises": [
+   {
+    "name": "Curl femoral sentado/tumbado",
+    "target": "",
+    "sets": [
+     {
+      "weight": "47",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "55",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "55",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Gemelos en prensa",
+    "target": "",
+    "sets": [
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Prensa inclinada",
+    "target": "",
+    "sets": [
+     {
+      "weight": "160",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "160",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Sentadilla máquina/hack/guiada",
+    "target": "",
+    "sets": [
+     {
+      "weight": "55",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "55",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Extensiones de rodillas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "60",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "65",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Máquina aductores",
+    "target": "",
+    "sets": [
+     {
+      "weight": "40",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "40",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "40",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Máquina abductores",
+    "target": "",
+    "sets": [
+     {
+      "weight": "50",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "55",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "60",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-04-07": {
+  "date": "2026-04-07",
+  "viaId": 1,
+  "viaName": "VIA 1 Tracción",
+  "exercises": [
+   {
+    "name": "Dominadas cerradas con lastre",
+    "target": "",
+    "sets": [
+     {
+      "weight": "1",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "1",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "1",
+      "reps": "6",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Jalón abierto",
+    "target": "",
+    "sets": [
+     {
+      "weight": "88",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "88",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Remo cerrado en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "38",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "38",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "38",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Remo abierto en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "70",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "70",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Encogimientos con mancuernas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "28",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "28",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Curl en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "30",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "30",
+      "reps": "6",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Curl en polea baja",
+    "target": "",
+    "sets": [
+     {
+      "weight": "12",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "12",
+      "reps": "9",
+      "done": true
+     }
+    ],
+    "comment": "Con macuernas en banco sentado"
+   },
+   {
+    "name": "Lumbares en banco",
+    "target": "",
+    "sets": [
+     {
+      "weight": "51",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "51",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": ""
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-04-27": {
+  "date": "2026-04-27",
+  "viaId": 2,
+  "viaName": "VIA 2 Empuje",
+  "exercises": [
+   {
+    "name": "Press inclinado barra",
+    "target": "",
+    "sets": [
+     {
+      "weight": "28",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "26",
+      "reps": "6",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Press plano en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "28",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "28",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Fondos con lastre",
+    "target": "",
+    "sets": [
+     {
+      "weight": "95",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "95",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Contractora",
+    "target": "",
+    "sets": [
+     {
+      "weight": "28",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "28",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Elevaciones laterales mancuernas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "9",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "9",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "9",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Press francés polea",
+    "target": "",
+    "sets": [
+     {
+      "weight": "22",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "22",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Patada tríceps polea",
+    "target": "",
+    "sets": [
+     {
+      "weight": "5.5",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "5.5",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Crunch en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "38",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "38",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "38",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": ""
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-05-19": {
+  "date": "2026-05-19",
+  "viaId": 2,
+  "viaName": "VIA 2 Pecho",
+  "exercises": [
+   {
+    "name": "Press inclinado barra guiada",
+    "target": "",
+    "sets": [
+     {
+      "weight": "28",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "28",
+      "reps": "6",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Press sentado en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "50",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "55",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Contractora",
+    "target": "",
+    "sets": [
+     {
+      "weight": "32",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "32",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Cruces de poleas hacia abajo",
+    "target": "",
+    "sets": [
+     {
+      "weight": "11.2",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "12.2",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Elev. laterales pesas de pie",
+    "target": "",
+    "sets": [
+     {
+      "weight": "10",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "12",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "12",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Tríceps en polea agarre prono",
+    "target": "",
+    "sets": [
+     {
+      "weight": "20",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "20",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "20",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Press francés en polea",
+    "target": "",
+    "sets": [
+     {
+      "weight": "15",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "12",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Crunch en polea de pie",
+    "target": "",
+    "sets": [
+     {
+      "weight": "36",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "36",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "36",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": ""
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-05-21": {
+  "date": "2026-05-21",
+  "viaId": 3,
+  "viaName": "VIA 3 Piernas",
+  "exercises": [
+   {
+    "name": "Abductores en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "51",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "55",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "58",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Gemelos en prensa",
+    "target": "",
+    "sets": [
+     {
+      "weight": "140",
+      "reps": "16",
+      "done": true
+     },
+     {
+      "weight": "150",
+      "reps": "16",
+      "done": true
+     },
+     {
+      "weight": "150",
+      "reps": "16",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Isquios sentado en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "48",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "48",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Isquios tumbado en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "50",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "50",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Cuádriceps en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "56",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "60",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Sentadilla cinturón/máquina/hack",
+    "target": "",
+    "sets": [
+     {
+      "weight": "60",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "60",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Prensa inclinada",
+    "target": "",
+    "sets": [
+     {
+      "weight": "190",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "190",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": ""
+   },
+   {
+    "name": "Aductores en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "39",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "42",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "42",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": ""
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-05-23": {
+  "date": "2026-05-23",
+  "viaId": 4,
+  "viaName": "VIA 4 Full Body",
+  "exercises": [
+   {
+    "name": "Dominadas con lastre",
+    "target": "",
+    "sets": [
+     {
+      "weight": "0",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "5",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "5",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "dominadas"
+   },
+   {
+    "name": "Remo bajo en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "70",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "70",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "70",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "remo-maquina"
+   },
+   {
+    "name": "Press sentado en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "26",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "24",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "24",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "press-maquina"
+   },
+   {
+    "name": "Fondos en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "80",
+      "reps": "11",
+      "done": true
+     },
+     {
+      "weight": "95",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "90",
+      "reps": "20",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "fondos"
+   },
+   {
+    "name": "Elev. laterales en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "10",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "10",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "10",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "lateral-maquina"
+   },
+   {
+    "name": "Curl barra Z de pie",
+    "target": "",
+    "sets": [
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "curl-barra"
+   },
+   {
+    "name": "Press francés barra Z",
+    "target": "",
+    "sets": [
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "french-barra"
+   },
+   {
+    "name": "Ab wheel de rodillas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "abs-wheel"
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-05-27": {
+  "date": "2026-05-27",
+  "viaId": 1,
+  "viaName": "VIA 1 Pull",
+  "exercises": [
+   {
+    "name": "Extensiones en banco romano",
+    "target": "",
+    "sets": [
+     {
+      "weight": "60",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "60",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "lumbar"
+   },
+   {
+    "name": "Remo con mancuerna en banco",
+    "target": "",
+    "sets": [
+     {
+      "weight": "28",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "28",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "remo-1brazo"
+   },
+   {
+    "name": "Remo sentado máquina codos altos",
+    "target": "",
+    "sets": [
+     {
+      "weight": "70",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "70",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "remo-alto"
+   },
+   {
+    "name": "Jalón cerrado en polea",
+    "target": "",
+    "sets": [
+     {
+      "weight": "0",
+      "reps": "7",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "5",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "jalon"
+   },
+   {
+    "name": "Pájaros en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "12",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "12",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "rear-delt"
+   },
+   {
+    "name": "Encogimientos pesas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "30",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "30",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "trapecio"
+   },
+   {
+    "name": "Curl polea baja",
+    "target": "",
+    "sets": [
+     {
+      "weight": "28",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "28",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "28",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "curl-polea"
+   },
+   {
+    "name": "Elevaciones de piernas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "abs-piernas"
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-06-23": {
+  "date": "2026-06-23",
+  "viaId": 1,
+  "viaName": "VIA 1 Pull",
+  "exercises": [
+   {
+    "name": "Extensiones en banco romano",
+    "target": "",
+    "sets": [
+     {
+      "weight": "60",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "60",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "lumbar"
+   },
+   {
+    "name": "Remo con mancuerna en banco",
+    "target": "",
+    "sets": [
+     {
+      "weight": "26",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "24",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "remo-1brazo"
+   },
+   {
+    "name": "Remo sentado máquina codos altos",
+    "target": "",
+    "sets": [
+     {
+      "weight": "45",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "45",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "remo-alto"
+   },
+   {
+    "name": "Pájaros en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "10",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "10",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "rear-delt"
+   },
+   {
+    "name": "Encogimientos pesas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "28",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "28",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "trapecio"
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-09-04": {
+  "date": "2026-09-04",
+  "viaId": 2,
+  "viaName": "VIA 2 Push",
+  "exercises": [
+   {
+    "name": "Press sentado en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "57",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "57",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "press-maquina"
+   },
+   {
+    "name": "Press inclinado barra guiada",
+    "target": "",
+    "sets": [
+     {
+      "weight": "24",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "24",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "press-inclinado"
+   },
+   {
+    "name": "Aperturas inclinadas con mancuernas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "12",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "14",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "aperturas-inclinadas"
+   },
+   {
+    "name": "Flexiones sobre banco",
+    "target": "",
+    "sets": [
+     {
+      "weight": "0",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "flexiones-banco"
+   },
+   {
+    "name": "Elev. laterales sentado mancuernas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "10",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "10",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "10",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "lateral-mancuerna"
+   },
+   {
+    "name": "Tríceps en polea agarre prono",
+    "target": "",
+    "sets": [
+     {
+      "weight": "9",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "12",
+      "reps": "4",
+      "done": true
+     },
+     {
+      "weight": "11",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "Keiser ",
+    "trackId": "triceps-pushdown"
+   },
+   {
+    "name": "Patada tríceps polea",
+    "target": "",
+    "sets": [
+     {
+      "weight": "5",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "5",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "patada-triceps"
+   },
+   {
+    "name": "Crunch en polea de pie",
+    "target": "",
+    "sets": [
+     {
+      "weight": "30",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "30",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "",
+      "reps": "",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "abs-crunch"
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-09-09": {
+  "date": "2026-09-09",
+  "viaId": 2,
+  "viaName": "VIA 2 Push",
+  "exercises": [
+   {
+    "name": "Press sentado en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "50",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "33",
+      "reps": "16",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "press-maquina"
+   },
+   {
+    "name": "Press inclinado barra guiada",
+    "target": "",
+    "sets": [
+     {
+      "weight": "26",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "22",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "press-inclinado"
+   },
+   {
+    "name": "Tríceps en polea agarre prono",
+    "target": "",
+    "sets": [
+     {
+      "weight": "15",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "19",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "21",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "triceps-pushdown"
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-09-17": {
+  "date": "2026-09-17",
+  "viaId": 3,
+  "viaName": "VIA 3 Legs",
+  "exercises": [
+   {
+    "name": "Hip thrust",
+    "target": "",
+    "sets": [
+     {
+      "weight": "98",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "98",
+      "reps": "6",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "hip-thrust"
+   },
+   {
+    "name": "Prensa inclinada",
+    "target": "",
+    "sets": [
+     {
+      "weight": "160",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "160",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "prensa"
+   },
+   {
+    "name": "Sentadilla con cinturón",
+    "target": "",
+    "sets": [
+     {
+      "weight": "65",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "65",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "Excéntrico! ",
+    "trackId": "sentadilla"
+   },
+   {
+    "name": "Cuádriceps en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "71",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "71",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "quad-extension"
+   },
+   {
+    "name": "Isquios sentado en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "53",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "53",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "53",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "isquios"
+   },
+   {
+    "name": "Gemelos en prensa horizontal",
+    "target": "",
+    "sets": [
+     {
+      "weight": "155",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "155",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "155",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "gemelos"
+   },
+   {
+    "name": "Máquina aductores",
+    "target": "",
+    "sets": [
+     {
+      "weight": "46",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "46",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "46",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "aductores"
+   },
+   {
+    "name": "Máquina abductores",
+    "target": "",
+    "sets": [
+     {
+      "weight": "61",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "61",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "61",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "abductores"
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-09-21": {
+  "date": "2026-09-21",
+  "viaId": 1,
+  "viaName": "VIA 1 Pull",
+  "exercises": [
+   {
+    "name": "Dominadas cerradas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "0",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "6",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "dominadas"
+   },
+   {
+    "name": "Jalón al pecho",
+    "target": "",
+    "sets": [
+     {
+      "weight": "92",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "92",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "jalon"
+   },
+   {
+    "name": "Remo polea baja cerrado",
+    "target": "",
+    "sets": [
+     {
+      "weight": "42",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "42",
+      "reps": "6",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "remo-polea-cerrado"
+   },
+   {
+    "name": "Remo polea baja abierto",
+    "target": "",
+    "sets": [
+     {
+      "weight": "47",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "47",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "remo-polea-abierto"
+   },
+   {
+    "name": "Encogimientos con pesas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "32",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "32",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "trapecio"
+   },
+   {
+    "name": "Curl con barra Z",
+    "target": "",
+    "sets": [
+     {
+      "weight": "33",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "33",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "curl-barra"
+   },
+   {
+    "name": "Curl polea baja",
+    "target": "",
+    "sets": [
+     {
+      "weight": "10",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "8",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "Cambio de máquina A KEISER",
+    "trackId": "curl-polea"
+   },
+   {
+    "name": "Elevaciones de piernas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "0",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "abs-piernas"
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-10-06": {
+  "date": "2026-10-06",
+  "viaId": 1,
+  "viaName": "VIA 1 Pull",
+  "exercises": [
+   {
+    "name": "Dominadas cerradas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "0",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "6",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "dominadas"
+   },
+   {
+    "name": "Jalón al pecho",
+    "target": "",
+    "sets": [
+     {
+      "weight": "98",
+      "reps": "7",
+      "done": true
+     },
+     {
+      "weight": "93",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "jalon"
+   },
+   {
+    "name": "Curl polea baja",
+    "target": "",
+    "sets": [
+     {
+      "weight": "10",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "10",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "curl-polea"
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-10-10": {
+  "date": "2026-10-10",
+  "viaId": 5,
+  "viaName": "VIA 5 Brazos",
+  "exercises": [
+   {
+    "name": "Curl barra de pie (barra recta)",
+    "target": "",
+    "sets": [
+     {
+      "weight": "13.8",
+      "reps": "6",
+      "done": true
+     },
+     {
+      "weight": "13.8",
+      "reps": "6",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "curl-recta"
+   },
+   {
+    "name": "Extensiones en polea agarre prono",
+    "target": "",
+    "sets": [
+     {
+      "weight": "11",
+      "reps": "8",
+      "done": true
+     },
+     {
+      "weight": "11",
+      "reps": "8",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "triceps-pushdown"
+   },
+   {
+    "name": "Fondos para tríceps con propio peso",
+    "target": "",
+    "sets": [
+     {
+      "weight": "0",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "0",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "fondos-bw"
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-10-11": {
+  "date": "2026-10-11",
+  "viaId": 4,
+  "viaName": "VIA 4 Full Body",
+  "exercises": [
+   {
+    "name": "Remo bajo en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "76",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "76",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "76",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "remo-maquina"
+   },
+   {
+    "name": "Remo alto en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "48",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "48",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "48",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "remo-alto"
+   },
+   {
+    "name": "Press plano con barra libre o guiada",
+    "target": "",
+    "sets": [
+     {
+      "weight": "45",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "47.5",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "47.5",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "press-plano"
+   },
+   {
+    "name": "Press vertical en máquina",
+    "target": "",
+    "sets": [
+     {
+      "weight": "52",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "52",
+      "reps": "10",
+      "done": true
+     },
+     {
+      "weight": "52",
+      "reps": "10",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "press-vertical"
+   },
+   {
+    "name": "Elevaciones laterales en polea",
+    "target": "",
+    "sets": [
+     {
+      "weight": "4.5",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "4.5",
+      "reps": "12",
+      "done": true
+     },
+     {
+      "weight": "4.5",
+      "reps": "12",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "lateral-polea"
+   },
+   {
+    "name": "Ab wheel de rodillas",
+    "target": "",
+    "sets": [
+     {
+      "weight": "35",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "35",
+      "reps": "15",
+      "done": true
+     },
+     {
+      "weight": "35",
+      "reps": "15",
+      "done": true
+     }
+    ],
+    "comment": "",
+    "trackId": "abs-wheel"
+   }
+  ],
+  "cardio": true
+ },
+ "workout-2026-10-04": {
+  "date": "2026-10-04",
+  "rest": true,
+  "sessionId": "rest"
+ },
+ "weight-2026-05-20": 71.6,
+ "weight-2026-09-20": 71.6,
+ "weight-2026-10-05": 72.3,
+ "weight-2026-10-11": 72.7
+}
