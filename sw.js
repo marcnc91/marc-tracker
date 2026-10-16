@@ -1,5 +1,5 @@
-const CACHE_NAME = 'marc-tracker-v12';
-const URLS_TO_CACHE = ['./tracker.html', './index.html', './sw.js'];
+const CACHE_NAME = 'marc-tracker-v13';
+const URLS_TO_CACHE = ['./tracker.html', './index.html', './exercises.js', './sw.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(

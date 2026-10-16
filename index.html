@@ -41,6 +41,10 @@
 
   --tint-bg: color-mix(in srgb, var(--tint) 12%, transparent);
   --accent-bg: color-mix(in srgb, var(--accent) 12%, transparent);
+
+  /* Series de gráficas: orden fijo, validado (CVD) contra la tarjeta blanca */
+  --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100;
+  --series-5: #e87ba4; --series-6: #008300; --series-7: #6250d6; --series-8: #e34948;
   --orange-bg: color-mix(in srgb, var(--orange) 12%, transparent);
   --red-bg: color-mix(in srgb, var(--red) 10%, transparent);
 
@@ -88,6 +92,9 @@
     --scrim: rgba(0,0,0,0.5);
     --shadow-md: none;
     --shadow-lg: 0 10px 40px rgba(0,0,0,0.5);
+
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
+    --series-5: #d55181; --series-6: #008300; --series-7: #9085e9; --series-8: #e66767;
   }
 }
 
@@ -522,7 +529,10 @@ input, textarea, select { font-size: 16px; font-family: inherit; }
 .history-filters, .segmented {
   display: flex; gap: 2px; padding: 2px; margin-bottom: 16px;
   background: var(--fill); border-radius: 9px;
+  overflow-x: auto; scrollbar-width: none;
 }
+.segmented::-webkit-scrollbar { display: none; }
+.segmented .filter-btn { padding: 7px 4px; min-width: 0; }
 
 .filter-btn {
   flex: 1; padding: 7px 10px; border-radius: 7px; border: none;
@@ -821,6 +831,48 @@ input.file-input-hidden { display: none; }
 
 .chart-card { background: var(--bg2); border-radius: var(--radius); padding: 12px; margin-bottom: 14px; }
 
+/* ─── Catálogo de ejercicios: variantes, patrones y auditoría ── */
+.exercise-variant { font-size: 12px; color: var(--tint); margin-top: 3px; font-weight: 500; }
+.progress-ex-unit { font-size: 12px; font-weight: 500; color: var(--text2); }
+.progress-ex-sub { font-size: 12px; color: var(--text2); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.viz-note { font-size: 13px; color: var(--text2); line-height: 1.4; margin: 0 4px 12px; }
+.pattern-title { font-size: 15px; font-weight: 600; margin: 2px 2px 6px; }
+.pattern-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.viz-grid { stroke: var(--separator); stroke-width: 1; }
+.viz-axis { fill: var(--text3); font-size: 10px; font-variant-numeric: tabular-nums; }
+.viz-change { stroke: var(--text3); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.viz-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.viz-dot { stroke: var(--bg2); stroke-width: 2; }
+.viz-hit { fill: transparent; }
+.viz-pt { cursor: pointer; }
+.viz-pt:hover .viz-dot { r: 5.5; }
+.viz-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; color: var(--text); }
+.viz-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.viz-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.viz-muted { color: var(--text3); }
+.viz-table { margin-top: 8px; font-size: 12px; }
+.viz-table summary { color: var(--tint); cursor: pointer; font-weight: 500; padding: 4px 0; }
+.viz-table table { width: 100%; border-collapse: collapse; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.viz-table th { text-align: left; color: var(--text2); font-weight: 500; padding: 4px 4px; border-bottom: 0.5px solid var(--separator); }
+.viz-table td { padding: 4px 4px; border-bottom: 0.5px solid var(--separator); color: var(--text); }
+.data-actions { display: flex; gap: 8px; margin-top: 12px; }
+.data-actions .backup-btn { flex: 1; }
+.data-actions .backup-btn:disabled { opacity: 0.4; }
+.audit-row { background: var(--bg2); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 6px; }
+.audit-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.audit-name { font-size: 15px; font-weight: 600; }
+.audit-chip { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+.audit-chip.ok { color: var(--accent); background: var(--accent-bg); }
+.audit-chip.warn { color: var(--orange); background: var(--orange-bg); }
+.audit-chip.bad { color: var(--red); background: var(--red-bg); }
+.audit-meta { font-size: 12px; color: var(--text2); margin-top: 4px; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.audit-ids { font-size: 13px; margin-top: 6px; line-height: 1.5; }
+.audit-ids code, .audit-meta code { font-size: 12px; background: var(--fill); padding: 1px 5px; border-radius: 4px; }
+.audit-missing { color: var(--red); }
+.audit-jumps { font-size: 12px; color: var(--orange); margin-top: 6px; }
+.audit-notes { font-size: 12px; color: var(--text2); margin-top: 6px; line-height: 1.4; border-left: 2px solid var(--separator); padding-left: 8px; user-select: text; -webkit-user-select: text; }
+.history-canon { display: block; font-size: 11px; color: var(--text3); font-weight: 400; }
+
 /* ─── Weight suggestions ────────────────────────────── */
 .suggestion-badge { font-size: 12px; padding: 2px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .suggestion-badge.up { color: var(--accent); background: var(--accent-bg); }
@@ -1035,6 +1087,7 @@ input.file-input-hidden { display: none; }
   </div>
 </div>
 
+<script src="exercises.js"></script>
 <script>
 const GOAL = {
   ronda: 10, fase: 'Recomposición',
@@ -1049,67 +1102,67 @@ const PROGRAM = {
     {
       id: 1, name: 'VIA 1', subtitle: 'Pull',
       exercises: [
-        { name: 'Dominadas cerradas', trackId: 'dominadas', sets: 3, reps: 6, rest: 150, step: 1.25, note: 'Calentar primero · RIR 1' },
-        { name: 'Jalón al pecho', trackId: 'jalon', sets: 2, reps: 8, rest: 120, step: 2.5, note: 'RIR 1' },
-        { name: 'Remo polea baja cerrado', trackId: 'remo-polea-cerrado', sets: 2, reps: 6, rest: 120, step: 2.5 },
-        { name: 'Remo polea baja abierto', trackId: 'remo-polea-abierto', sets: 2, reps: 8, rest: 120, step: 2.5 },
-        { name: 'Encogimientos con pesas', trackId: 'trapecio', sets: 2, reps: 10, rest: 90, step: 2.5 },
-        { name: 'Curl con barra Z', trackId: 'curl-barra', sets: 2, reps: 8, rest: 90, step: 1.25 },
-        { name: 'Curl polea baja', trackId: 'curl-polea', sets: 2, reps: 10, rest: 75, step: 1.25 },
-        { name: 'Elevaciones de piernas', trackId: 'abs-piernas', sets: 3, reps: 15, rest: 60, step: 0 },
+        { name: 'Dominadas cerradas', exerciseId: 'dominadas-cerradas', sets: 3, reps: 6, rest: 150, step: 1.25, note: 'Calentar primero · RIR 1' },
+        { name: 'Jalón al pecho', exerciseId: 'jalon-pecho', sets: 2, reps: 8, rest: 120, step: 2.5, note: 'RIR 1' },
+        { name: 'Remo polea baja cerrado', exerciseId: 'remo-polea-cerrado', sets: 2, reps: 6, rest: 120, step: 2.5 },
+        { name: 'Remo polea baja abierto', exerciseId: 'remo-polea-abierto', sets: 2, reps: 8, rest: 120, step: 2.5 },
+        { name: 'Encogimientos con pesas', exerciseId: 'encogimientos', sets: 2, reps: 10, rest: 90, step: 2.5 },
+        { name: 'Curl con barra Z', exerciseId: 'curl-barra-z', sets: 2, reps: 8, rest: 90, step: 1.25 },
+        { name: 'Curl polea baja', exerciseId: 'curl-polea-keiser', sets: 2, reps: 10, rest: 75, step: 1.25 },
+        { name: 'Elevaciones de piernas', exerciseId: 'elevaciones-piernas', sets: 3, reps: 15, rest: 60, step: 0 },
       ]
     },
     {
       id: 2, name: 'VIA 2', subtitle: 'Push',
       exercises: [
-        { name: 'Press sentado en máquina', trackId: 'press-maquina', sets: 2, reps: 6, rest: 150, step: 2.5, note: 'Calentar primero · RIR 1' },
-        { name: 'Press inclinado barra guiada', trackId: 'press-inclinado', sets: 2, reps: 8, rest: 120, step: 2.5, note: 'RIR 1' },
-        { name: 'Aperturas inclinadas con mancuernas', trackId: 'aperturas-inclinadas', sets: 2, reps: 10, rest: 90, step: 1.25 },
-        { name: 'Flexiones sobre banco', trackId: 'flexiones-banco', sets: 2, reps: 12, rest: 75, step: 0 },
-        { name: 'Elev. laterales sentado mancuernas', trackId: 'lateral-mancuerna', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Última serie descendente' },
-        { name: 'Tríceps en polea agarre prono', trackId: 'triceps-pushdown', sets: 3, reps: 8, rest: 90, step: 1.25 },
-        { name: 'Patada tríceps polea', trackId: 'patada-triceps', sets: 2, reps: 10, rest: 75, step: 1.25, note: 'x brazo' },
-        { name: 'Crunch en polea de pie', trackId: 'abs-crunch', sets: 3, reps: 15, rest: 60, step: 1.25 },
+        { name: 'Press sentado en máquina', exerciseId: 'press-sentado-maquina', sets: 2, reps: 6, rest: 150, step: 2.5, note: 'Calentar primero · RIR 1' },
+        { name: 'Press inclinado barra guiada', exerciseId: 'press-inclinado-guiada', sets: 2, reps: 8, rest: 120, step: 2.5, note: 'RIR 1' },
+        { name: 'Aperturas inclinadas con mancuernas', exerciseId: 'aperturas-inclinadas', sets: 2, reps: 10, rest: 90, step: 1.25 },
+        { name: 'Flexiones sobre banco', exerciseId: 'flexiones-banco', sets: 2, reps: 12, rest: 75, step: 0 },
+        { name: 'Elev. laterales sentado mancuernas', exerciseId: 'lateral-mancuerna-sentado', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Última serie descendente' },
+        { name: 'Tríceps en polea agarre prono', exerciseId: 'triceps-polea-keiser', sets: 3, reps: 8, rest: 90, step: 1.25 },
+        { name: 'Patada tríceps polea', exerciseId: 'patada-triceps', sets: 2, reps: 10, rest: 75, step: 1.25, note: 'x brazo' },
+        { name: 'Crunch en polea de pie', exerciseId: 'crunch-polea', sets: 3, reps: 15, rest: 60, step: 1.25 },
       ]
     },
     {
       id: 3, name: 'VIA 3', subtitle: 'Legs',
       exercises: [
-        { name: 'Hip thrust', trackId: 'hip-thrust', sets: 2, reps: 6, rest: 150, step: 2.5, note: 'Calentar primero · RIR 1' },
-        { name: 'Prensa inclinada', trackId: 'prensa', sets: 2, reps: 8, rest: 120, step: 5, note: 'RIR 1' },
-        { name: 'Sentadilla con cinturón', trackId: 'sentadilla', sets: 2, reps: 10, rest: 120, step: 2.5 },
-        { name: 'Cuádriceps en máquina', trackId: 'quad-extension', sets: 2, reps: 12, rest: 90, step: 2.5 },
-        { name: 'Isquios sentado en máquina', trackId: 'isquios', sets: 3, reps: 12, rest: 90, step: 2.5 },
-        { name: 'Gemelos en prensa horizontal', trackId: 'gemelos', sets: 3, reps: 15, rest: 60, step: 5 },
-        { name: 'Máquina aductores', trackId: 'aductores', sets: 3, reps: 15, rest: 60, step: 2.5 },
-        { name: 'Máquina abductores', trackId: 'abductores', sets: 3, reps: 15, rest: 60, step: 2.5 },
+        { name: 'Hip thrust', exerciseId: 'hip-thrust', sets: 2, reps: 6, rest: 150, step: 2.5, note: 'Calentar primero · RIR 1' },
+        { name: 'Prensa inclinada', exerciseId: 'prensa-inclinada', sets: 2, reps: 8, rest: 120, step: 5, note: 'RIR 1' },
+        { name: 'Sentadilla con cinturón', exerciseId: 'sentadilla-cinturon', sets: 2, reps: 10, rest: 120, step: 2.5 },
+        { name: 'Cuádriceps en máquina', exerciseId: 'extension-cuadriceps', sets: 2, reps: 12, rest: 90, step: 2.5 },
+        { name: 'Isquios sentado en máquina', exerciseId: 'isquios-sentado', sets: 3, reps: 12, rest: 90, step: 2.5 },
+        { name: 'Gemelos en prensa horizontal', exerciseId: 'gemelos-prensa', sets: 3, reps: 15, rest: 60, step: 5 },
+        { name: 'Máquina aductores', exerciseId: 'aductores', sets: 3, reps: 15, rest: 60, step: 2.5 },
+        { name: 'Máquina abductores', exerciseId: 'abductores', sets: 3, reps: 15, rest: 60, step: 2.5 },
       ]
     },
     {
       id: 4, name: 'VIA 4', subtitle: 'Full Body',
       exercises: [
-        { name: 'Remo bajo en máquina', trackId: 'remo-maquina', sets: 3, reps: 10, rest: 90, step: 2.5, note: 'RIR 1' },
-        { name: 'Remo alto en máquina', trackId: 'remo-alto', sets: 3, reps: 12, rest: 75, step: 2.5 },
-        { name: 'Press plano con barra libre o guiada', trackId: 'press-plano', sets: 3, reps: 10, rest: 90, step: 2.5, note: 'RIR 1' },
-        { name: 'Press vertical en máquina', trackId: 'press-vertical', sets: 3, reps: 10, rest: 90, step: 2.5 },
-        { name: 'Elevaciones laterales en polea', trackId: 'lateral-polea', sets: 3, reps: 12, rest: 75, step: 1.25, note: 'x brazo' },
-        { name: 'Curl simultáneo mancuernas', trackId: 'curl-simultaneo', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Series alternas con Press francés' },
-        { name: 'Press francés mancuernas', trackId: 'french-mancuernas', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Series alternas con Curl simultáneo' },
-        { name: 'Ab wheel de rodillas', trackId: 'abs-wheel', sets: 3, reps: 15, rest: 60, step: 0, note: '15 pasadas' },
+        { name: 'Remo bajo en máquina', exerciseId: 'remo-bajo-maquina', sets: 3, reps: 10, rest: 90, step: 2.5, note: 'RIR 1' },
+        { name: 'Remo alto en máquina', exerciseId: 'remo-alto', sets: 3, reps: 12, rest: 75, step: 2.5 },
+        { name: 'Press plano con barra libre o guiada', exerciseId: 'press-plano-barra', sets: 3, reps: 10, rest: 90, step: 2.5, note: 'RIR 1' },
+        { name: 'Press vertical en máquina', exerciseId: 'press-vertical-maquina', sets: 3, reps: 10, rest: 90, step: 2.5 },
+        { name: 'Elevaciones laterales en polea', exerciseId: 'lateral-polea', sets: 3, reps: 12, rest: 75, step: 1.25, note: 'x brazo' },
+        { name: 'Curl simultáneo mancuernas', exerciseId: 'curl-simultaneo', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Series alternas con Press francés' },
+        { name: 'Press francés mancuernas', exerciseId: 'french-mancuernas', sets: 3, reps: 10, rest: 90, step: 1.25, note: 'Series alternas con Curl simultáneo' },
+        { name: 'Ab wheel de rodillas', exerciseId: 'ab-wheel', sets: 3, reps: 15, rest: 60, step: 0, note: '15 pasadas' },
       ]
     },
     {
       id: 5, name: 'VIA 5', subtitle: 'Brazos', bonus: true,
       exercises: [
-        { name: 'Curl barra de pie (barra recta)', trackId: 'curl-recta', sets: 2, reps: 6, rest: 120, step: 1.25, note: 'Calentar primero' },
-        { name: 'Curl mancuernas simultáneo banco inclinado', trackId: 'curl-inclinado', sets: 2, reps: 8, rest: 90, step: 1.25 },
-        { name: 'Curl concentrado mancuerna', trackId: 'curl-concentrado', sets: 2, reps: 10, rest: 90, step: 1.25, note: 'x brazo' },
-        { name: 'Curl 2 poleas', trackId: 'curl-2poleas', sets: 2, reps: 15, rest: 75, step: 1.25 },
-        { name: 'Extensiones en polea agarre prono', trackId: 'triceps-pushdown', sets: 2, reps: 8, rest: 120, step: 1.25, note: 'Calentar primero' },
-        { name: 'Press francés + Press cerrado barra Z', trackId: 'french-combo', sets: 2, reps: 10, rest: 120, step: 1.25, note: 'Superseries · 10+10' },
-        { name: 'Fondos para tríceps con propio peso', trackId: 'fondos-bw', sets: 2, reps: 12, rest: 90, step: 0 },
-        { name: 'Extensiones en polea a 1 mano agarre supino', trackId: 'triceps-1mano', sets: 2, reps: 12, rest: 90, step: 1.25, note: 'x brazo' },
-        { name: 'Curl antebrazo barra', trackId: 'antebrazo', sets: 2, reps: 15, rest: 75, step: 1.25 },
+        { name: 'Curl barra de pie (barra recta)', exerciseId: 'curl-recta', sets: 2, reps: 6, rest: 120, step: 1.25, note: 'Calentar primero' },
+        { name: 'Curl mancuernas simultáneo banco inclinado', exerciseId: 'curl-inclinado', sets: 2, reps: 8, rest: 90, step: 1.25 },
+        { name: 'Curl concentrado mancuerna', exerciseId: 'curl-concentrado', sets: 2, reps: 10, rest: 90, step: 1.25, note: 'x brazo' },
+        { name: 'Curl 2 poleas', exerciseId: 'curl-2poleas', sets: 2, reps: 15, rest: 75, step: 1.25 },
+        { name: 'Extensiones en polea agarre prono', exerciseId: 'triceps-polea-keiser', sets: 2, reps: 8, rest: 120, step: 1.25, note: 'Calentar primero' },
+        { name: 'Press francés + Press cerrado barra Z', exerciseId: 'french-combo', sets: 2, reps: 10, rest: 120, step: 1.25, note: 'Superseries · 10+10' },
+        { name: 'Fondos para tríceps con propio peso', exerciseId: 'fondos-peso-corporal', sets: 2, reps: 12, rest: 90, step: 0 },
+        { name: 'Extensiones en polea a 1 mano agarre supino', exerciseId: 'triceps-1mano', sets: 2, reps: 12, rest: 90, step: 1.25, note: 'x brazo' },
+        { name: 'Curl antebrazo barra', exerciseId: 'antebrazo', sets: 2, reps: 15, rest: 75, step: 1.25 },
       ]
     }
   ],
@@ -1314,127 +1367,126 @@ function getSelectedDayKey() {
   return workoutDateKey();
 }
 
-const LEGACY_NAME_TO_TRACK = {
-  'Extensiones en banco romano': 'lumbar',
-  'Remo con mancuerna en banco': 'remo-1brazo',
-  'Remo sentado máquina codos altos': 'remo-alto',
-  'Jalón cerrado en polea': 'jalon',
-  'Pájaros en máquina': 'rear-delt',
-  'Encogimientos pesas': 'trapecio',
-  'Curl polea baja': 'curl-polea',
-  'Elevaciones de piernas': 'abs-piernas',
-  'Press inclinado barra guiada': 'press-inclinado',
-  'Press sentado en máquina': 'press-maquina',
-  'Contractora': 'pec-fly',
-  'Cruces de poleas hacia abajo': 'cruces',
-  'Elev. laterales pesas de pie': 'lateral-mancuerna',
-  'Tríceps en polea agarre prono': 'triceps-pushdown',
-  'Press francés en polea': 'french-polea',
-  'Crunch en polea de pie': 'abs-crunch',
-  'Abductores en máquina': 'abductores',
-  'Gemelos en prensa': 'gemelos',
-  'Isquios sentado en máquina': 'isquios',
-  'Isquios tumbado en máquina': 'isquios',
-  'Cuádriceps en máquina': 'quad-extension',
-  'Sentadilla cinturón/máquina/hack': 'sentadilla',
-  'Prensa inclinada': 'prensa',
-  'Aductores en máquina': 'aductores',
-  'Dominadas con lastre': 'dominadas',
-  'Remo bajo en máquina': 'remo-maquina',
-  'Fondos en máquina': 'fondos',
-  'Elev. laterales en máquina': 'lateral-maquina',
-  'Curl barra Z de pie': 'curl-barra',
-  'Press francés barra Z': 'french-barra',
-  'Ab wheel de rodillas': 'abs-wheel',
-  'Curl barra recta de pie': 'curl-recta',
-  'Curl mancuernas banco inclinado': 'curl-inclinado',
-  'Curl concentrado mancuerna': 'curl-concentrado',
-  'Curl 2 poleas': 'curl-2poleas',
-  'Extensiones polea agarre prono': 'triceps-pushdown',
-  'Press francés + Press cerrado barra Z': 'french-combo',
-  'Fondos tríceps peso propio': 'fondos-bw',
-  'Extensiones polea 1 mano supino': 'triceps-1mano',
-  'Curl antebrazo barra': 'antebrazo',
-};
+// ─── Ejercicios canónicos (catálogo en exercises.js) ────────────────
+// Cada ejercicio guardado se identifica por exerciseId. Los registros antiguos
+// sin id se resuelven con los alias del catálogo (y la migración lo deja escrito).
+const XL = window.ExerciseLib;
 
-function resolveTrackId(viaId, exerciseIdx) {
+function getCustomExercises() { return getStorage('exercise-custom') || []; }
+function getMachineSwaps() { return getStorage('exercise-swaps') || {}; }
+function exDef(id) { return XL.getExercise(id, getCustomExercises()); }
+
+// Id vigente de un hueco de la rutina: el del PROGRAM, siguiendo los cambios de máquina.
+function resolveSlotExerciseId(viaId, exerciseIdx) {
   const via = PROGRAM.vias.find(v => v.id === viaId);
   if (!via || !via.exercises[exerciseIdx]) return null;
-  return via.exercises[exerciseIdx].trackId || null;
+  return XL.followSwaps(via.exercises[exerciseIdx].exerciseId, getMachineSwaps());
 }
 
-function getSavedTrackId(savedEx) {
-  // El press vertical (hombro) se guardó antes con el id del press sentado (pecho): se separa al leer.
-  if (savedEx.name === 'Press vertical en máquina') return 'press-vertical';
-  if (savedEx.trackId) return savedEx.trackId;
-  return LEGACY_NAME_TO_TRACK[savedEx.name] || savedEx.name;
+function getSavedExerciseId(savedEx, date) {
+  return XL.resolveExerciseId(savedEx, date);
 }
 
-function findMatchingExercises(savedExercises, trackId) {
-  if (!savedExercises || !trackId) return [];
-  return savedExercises.filter(ex => getSavedTrackId(ex) === trackId);
+function findMatchingExercises(savedExercises, exerciseId, date) {
+  if (!savedExercises || !exerciseId) return [];
+  return savedExercises.filter(ex => getSavedExerciseId(ex, date) === exerciseId);
+}
+
+// Peso corporal en una fecha (el último registrado ese día o antes), para ejercicios con peso corporal.
+function getBodyweightOn(dateStr) {
+  const hist = getWeightHistory();
+  let bw = null;
+  for (const h of hist) { if (h.date <= dateStr) bw = h.weight; else break; }
+  return bw || (hist.length ? hist[0].weight : null);
+}
+
+// Mejor serie (e1RM con carga total) de un ejercicio guardado.
+function savedBestSet(savedEx, exerciseId, date) {
+  const def = exDef(exerciseId);
+  return XL.bestSet(savedEx.sets, def, def && def.loadModel === 'bodyweight' ? getBodyweightOn(date) : null);
+}
+
+// Todas las sesiones de un id canónico, en orden cronológico.
+function getIdSessions(exerciseId) {
+  if (!exerciseId) return [];
+  return Object.keys(localStorage).filter(k => k.startsWith('workout-')).sort().reduce((acc, k) => {
+    const d = getStorage(k);
+    if (!d || !d.exercises) return acc;
+    d.exercises.forEach(ex => {
+      if (getSavedExerciseId(ex, d.date) !== exerciseId || !ex.sets) return;
+      const { best, top } = savedBestSet(ex, exerciseId, d.date);
+      const maxRaw = Math.max(0, ...ex.sets.map(s => parseFloat(s.weight) || 0));
+      if (best || top || maxRaw > 0) acc.push({ date: d.date, best, top, maxRaw, sets: ex.sets });
+    });
+    return acc;
+  }, []);
 }
 
 function getOccurrenceIndex(viaId, exerciseIdx) {
   const via = PROGRAM.vias.find(v => v.id === viaId);
   if (!via) return 0;
-  const targetTrack = via.exercises[exerciseIdx].trackId;
+  const target = resolveSlotExerciseId(viaId, exerciseIdx);
   let count = 0;
   for (let i = 0; i < exerciseIdx; i++) {
-    if (via.exercises[i].trackId === targetTrack) count++;
+    if (resolveSlotExerciseId(viaId, i) === target) count++;
   }
   return count;
 }
 
-function getPreviousExerciseData(viaId, exerciseIdx, trackIdOverride) {
-  const trackId = trackIdOverride || resolveTrackId(viaId, exerciseIdx);
-  if (!trackId) return null;
-  const occIdx = trackIdOverride ? 0 : getOccurrenceIndex(viaId, exerciseIdx);
+function getPreviousExerciseData(viaId, exerciseIdx, idOverride) {
+  const exerciseId = idOverride || resolveSlotExerciseId(viaId, exerciseIdx);
+  if (!exerciseId) return null;
+  const occIdx = idOverride ? 0 : getOccurrenceIndex(viaId, exerciseIdx);
+  const def = exDef(exerciseId);
+  const isBodyweight = def && def.loadModel === 'bodyweight';
   const allKeys = Object.keys(localStorage).filter(k => k.startsWith('workout-')).sort().reverse();
   const currentKey = 'workout-' + getSelectedDayKey();
   for (const key of allKeys) {
     if (key === currentKey) continue;
     const data = getStorage(key);
     if (!data) continue;
-    const matches = findMatchingExercises(data.exercises, trackId);
+    const matches = findMatchingExercises(data.exercises, exerciseId, data.date);
     const ex = matches[occIdx] || matches[0];
     if (ex && ex.sets) {
       const maxWeight = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
-      if (maxWeight > 0) return { maxWeight, sets: ex.sets, feedback: ex.feedback || null, rir: ex.rir != null ? ex.rir : null };
+      const bodyweightReps = isBodyweight && ex.sets.some(s => parseInt(s.reps) > 0);
+      if (maxWeight > 0 || bodyweightReps) return { maxWeight, sets: ex.sets, date: data.date, feedback: ex.feedback || null, rir: ex.rir != null ? ex.rir : null };
     }
   }
   return null;
 }
 
 // excludeKey (opcional, p.ej. 'workout-2026-09-20'): ignora esa sesión, para saber qué tocaba ANTES de ella.
-function getExerciseAllHistory(viaId, exerciseIdx, trackIdOverride, excludeKey) {
-  const trackId = trackIdOverride || resolveTrackId(viaId, exerciseIdx);
-  if (!trackId) return [];
-  const occIdx = trackIdOverride ? 0 : getOccurrenceIndex(viaId, exerciseIdx);
+function getExerciseAllHistory(viaId, exerciseIdx, idOverride, excludeKey) {
+  const exerciseId = idOverride || resolveSlotExerciseId(viaId, exerciseIdx);
+  if (!exerciseId) return [];
+  const occIdx = idOverride ? 0 : getOccurrenceIndex(viaId, exerciseIdx);
+  const def = exDef(exerciseId);
+  const isBodyweight = def && def.loadModel === 'bodyweight';
   return Object.keys(localStorage)
     .filter(k => k.startsWith('workout-') && k !== excludeKey).sort()
     .reduce((acc, k) => {
       const d = getStorage(k);
       if (!d) return acc;
-      const matches = findMatchingExercises(d.exercises, trackId);
+      const matches = findMatchingExercises(d.exercises, exerciseId, d.date);
       const ex = matches[occIdx] || matches[0];
       if (ex && ex.sets) {
         const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
-        if (maxW > 0) acc.push({ date: d.date, weight: maxW, sets: ex.sets, rir: ex.rir != null ? ex.rir : null });
+        if (maxW > 0 || (isBodyweight && ex.sets.some(s => parseInt(s.reps) > 0))) acc.push({ date: d.date, weight: maxW, sets: ex.sets, rir: ex.rir != null ? ex.rir : null });
       }
       return acc;
     }, []);
 }
 
-function getAllTimePR(viaId, exerciseIdx, trackIdOverride) {
-  const trackId = trackIdOverride || resolveTrackId(viaId, exerciseIdx);
-  if (!trackId) return 0;
+function getAllTimePR(viaId, exerciseIdx, idOverride) {
+  const exerciseId = idOverride || resolveSlotExerciseId(viaId, exerciseIdx);
+  if (!exerciseId) return 0;
   return Object.keys(localStorage)
     .filter(k => k.startsWith('workout-'))
     .reduce((best, k) => {
       const d = getStorage(k);
       if (!d) return best;
-      const matches = findMatchingExercises(d.exercises, trackId);
+      const matches = findMatchingExercises(d.exercises, exerciseId, d.date);
       matches.forEach(ex => {
         if (ex && ex.sets) {
           const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
@@ -1443,6 +1495,64 @@ function getAllTimePR(viaId, exerciseIdx, trackIdOverride) {
       });
       return best;
     }, 0);
+}
+
+// Comprueba que la rutina solo use ejercicios del catálogo (y que estén completos).
+function getProgramIssues() {
+  const issues = [];
+  PROGRAM.vias.forEach(via => via.exercises.forEach(ex => {
+    const def = ex.exerciseId ? exDef(ex.exerciseId) : null;
+    if (!ex.exerciseId) issues.push(`${via.name}: "${ex.name}" no tiene exerciseId`);
+    else if (!def) issues.push(`${via.name}: "${ex.name}" usa "${ex.exerciseId}", que no está en el catálogo`);
+    else if (!def.pattern || !def.muscle || !def.equipment) issues.push(`${via.name}: "${ex.exerciseId}" no tiene patrón, músculo o equipo`);
+  }));
+  return issues;
+}
+
+// Cambio de máquina: crea una variante nueva desde hoy y cierra la anterior.
+function changeMachine(ei) {
+  const via = PROGRAM.vias.find(v => v.id === selectedVia);
+  if (!via || !via.exercises[ei]) return;
+  const slot = via.exercises[ei];
+  const swaps = getMachineSwaps();
+  const custom = getCustomExercises();
+  const currentId = resolveSlotExerciseId(via.id, ei);
+  const cur = exDef(currentId);
+  const prevKey = Object.keys(swaps).find(k => swaps[k].to === currentId);
+
+  if (prevKey) {
+    const prev = exDef(prevKey);
+    const used = getIdSessions(currentId).length;
+    if (confirm(`Ahora registras "${cur.name}" (desde ${formatSessionDate(swaps[prevKey].since)}).\n\n¿Volver a "${prev ? prev.name : prevKey}"?` + (used ? `\n\nLas ${used} sesiones guardadas con la máquina nueva se conservan.` : '') + `\n\nCancelar = registrar otra máquina distinta.`)) {
+      delete swaps[prevKey];
+      const i = custom.findIndex(c => c.id === prevKey);
+      if (i >= 0) { delete custom[i].active; delete custom[i].retiredOn; if (Object.keys(custom[i]).length === 1) custom.splice(i, 1); }
+      setStorage('exercise-swaps', swaps);
+      setStorage('exercise-custom', custom);
+      showToast('Cambio de máquina deshecho');
+      renderExercises();
+      return;
+    }
+  }
+
+  const label = prompt(`Cambio de máquina en "${slot.name}".\n\nDesde hoy se registra como una variante nueva, con su propio historial y sugerencias. Lo anterior sigue visible en Progreso › Patrones.\n\n¿Cómo identificas la máquina nueva? (p. ej. Keiser, Technogym, polea del fondo…)`);
+  if (!label || !label.trim()) return;
+  const extraStr = prompt('¿Hay que sumar un peso fijo que la máquina no marca (barra guiada, carro…)? En kg; 0 si no.', String(cur.extraLoadKg || 0));
+  if (extraStr === null) return;
+  const extra = parseFloat(String(extraStr).replace(',', '.')) || 0;
+  const since = getSelectedDayKey();
+  const slug = XL.norm(label).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'nueva';
+  const baseName = cur.name.replace(/\s*\([^)]*\)\s*$/, '');
+  let id = `${currentId.split('--')[0]}--${slug}`;
+  if (exDef(id)) id += '-' + since;
+  custom.push({ id, name: `${baseName} (${label.trim()})`, pattern: cur.pattern, muscle: cur.muscle, equipment: cur.equipment, extraLoadKg: extra, loadModel: cur.loadModel, active: true, variantOf: currentId, since, createdBy: 'app' });
+  const old = custom.find(c => c.id === currentId);
+  if (old) { old.active = false; old.retiredOn = since; } else custom.push({ id: currentId, active: false, retiredOn: since });
+  swaps[currentId] = { to: id, since };
+  setStorage('exercise-custom', custom);
+  setStorage('exercise-swaps', swaps);
+  showToast(`Variante nueva: ${baseName} (${label.trim()})`);
+  renderExercises();
 }
 
 function getWeightSuggestion(ex, viaId, exerciseIdx, excludeKey) {
@@ -1539,21 +1649,22 @@ function openRmCalc(ei) {
 
 // Historial de un ejercicio (todas las sesiones guardadas, la más reciente primero)
 function getExerciseSessions(viaId, exerciseIdx) {
-  const trackId = resolveTrackId(viaId, exerciseIdx);
-  if (!trackId) return [];
+  const exerciseId = resolveSlotExerciseId(viaId, exerciseIdx);
+  if (!exerciseId) return [];
   const occIdx = getOccurrenceIndex(viaId, exerciseIdx);
   return Object.keys(localStorage)
     .filter(k => k.startsWith('workout-')).sort().reverse()
     .reduce((acc, k) => {
       const d = getStorage(k);
       if (!d || !d.exercises) return acc;
-      const matches = findMatchingExercises(d.exercises, trackId);
+      const matches = findMatchingExercises(d.exercises, exerciseId, d.date);
       const ex = matches[occIdx] || matches[0];
       if (!ex || !ex.sets) return acc;
       const sets = ex.sets.filter(s => parseFloat(s.weight) > 0 || parseInt(s.reps) > 0);
       if (sets.length === 0) return acc;
       const top = Math.max(...sets.map(s => parseFloat(s.weight) || 0));
-      acc.push({ date: d.date, top, sets, rir: ex.rir != null && ex.rir !== '' ? ex.rir : null, comment: ex.comment || '' });
+      const { best } = savedBestSet(ex, exerciseId, d.date);
+      acc.push({ date: d.date, top, sets, e1rm: best ? best.e1rm : 0, rir: ex.rir != null && ex.rir !== '' ? ex.rir : null, comment: ex.comment || '' });
       return acc;
     }, []);
 }
@@ -1564,7 +1675,8 @@ function openExHistory(ei) {
   if (!ex) return;
   const sessions = getExerciseSessions(via.id, ei);
   document.getElementById('exHistTitle').textContent = ex.name;
-  document.getElementById('exHistSub').textContent = `Objetivo ${ex.sets}×${ex.reps}` + (sessions.length ? ` · ${sessions.length} ${sessions.length === 1 ? 'sesión' : 'sesiones'}` : '');
+  const def = exDef(resolveSlotExerciseId(via.id, ei));
+  document.getElementById('exHistSub').textContent = `Objetivo ${ex.sets}×${ex.reps}` + (sessions.length ? ` · ${sessions.length} ${sessions.length === 1 ? 'sesión' : 'sesiones'}` : '') + (def ? ` · ${def.name}` : '') + (def && def.extraLoadKg ? ` · 1RM con +${def.extraLoadKg} kg de barra` : '');
 
   let html = '';
   if (sessions.length === 0) {
@@ -1574,7 +1686,7 @@ function openExHistory(ei) {
     if (weighted.length) {
       const pr = Math.max(...weighted.map(s => s.top));
       const last = weighted[0];
-      const bestE1rm = Math.max(...weighted.map(s => Math.max(...s.sets.map(x => calculate1RM(parseFloat(x.weight) || 0, parseInt(x.reps) || 0)))));
+      const bestE1rm = Math.max(0, ...sessions.map(s => s.e1rm || 0));
       html += `<div class="eh-stats">
         <div class="eh-stat"><div class="eh-stat-val">${last.top}</div><div class="eh-stat-label">Último (kg)</div></div>
         <div class="eh-stat"><div class="eh-stat-val" style="color:var(--accent)">${pr}</div><div class="eh-stat-label">Récord (kg)</div></div>
@@ -1805,6 +1917,8 @@ function renderExercises() {
 
   const via = PROGRAM.vias.find(v => v.id === selectedVia);
   let html = '';
+  const programIssues = getProgramIssues();
+  if (programIssues.length) html += `<div class="stall-alert">⚠ La rutina usa ejercicios que no están en el catálogo. No se guardará bien su historial hasta corregirlo en exercises.js:<br>${programIssues.map(escapeHtml).join('<br>')}</div>`;
 
   const isSavedThisVia = savedWorkout && savedWorkout.viaId === via.id;
   if (isSavedThisVia) {
@@ -1827,22 +1941,26 @@ function renderExercises() {
       suggBadge = `<span class="suggestion-badge ${suggestion.status}" title="${suggestion.reason}">${icons[suggestion.status]} ${suggestion.suggested}kg</span>`;
     }
 
+    const slotId = resolveSlotExerciseId(via.id, ei);
+    const def = exDef(slotId);
+    const swapped = slotId !== ex.exerciseId;
     let e1rm = '';
-    if (prevData && prevWeight > 0 && typeof ex.reps === 'number' && ex.reps <= 12) {
-      const bestSet = prevData.sets.reduce((best, s) => {
-        const w = parseFloat(s.weight) || 0; const r = parseInt(s.reps) || 0;
-        return (w * r > (best.w * best.r)) ? { w, r } : best;
-      }, { w: 0, r: 0 });
-      if (bestSet.w > 0) e1rm = `<span class="e1rm-badge">1RM≈${calculate1RM(bestSet.w, bestSet.r)}kg</span>`;
+    if (prevData) {
+      const { best } = savedBestSet({ sets: prevData.sets }, slotId, prevData.date);
+      if (best) e1rm = `<span class="e1rm-badge" title="Mejor serie: ${best.load} kg × ${best.reps}">1RM≈${best.e1rm}kg</span>`;
     }
+    const variantLine = swapped && def ? `<div class="exercise-variant">⇄ ${escapeHtml(def.name)}${def.since ? ` · desde ${formatSessionDate(def.since)}` : ''}</div>` : '';
+    const loadNote = def && def.extraLoadKg ? ` · +${def.extraLoadKg} kg barra en el 1RM` : '';
 
     html += `<div class="exercise-card" id="ex-${ei}">
       <div class="exercise-header">
         <div>
           <div class="exercise-name">${ex.name}${prevWeight ? `<span class="previous-weight">prev: ${prevWeight}kg</span>` : ''}${e1rm}${suggBadge}</div>
-          <div class="exercise-target">${ex.sets}×${ex.reps}${ex.note ? ' · ' + ex.note : ''}</div>
+          <div class="exercise-target">${ex.sets}×${ex.reps}${ex.note ? ' · ' + ex.note : ''}${loadNote}</div>
+          ${variantLine}
         </div>
         <div class="exercise-meta">
+          <button class="calc-badge" onclick="changeMachine(${ei})" title="Cambio de máquina" aria-label="Cambio de máquina"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg></button>
           <button class="calc-badge" onclick="openExHistory(${ei})" title="Historial de pesos" aria-label="Historial de pesos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 4v4h4"/><path d="M12 7.5V12l3 2"/></svg></button>
           <button class="calc-badge" onclick="openRmCalc(${ei})" title="Calculadora 1RM" aria-label="Calculadora 1RM"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7h7M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg></button>
           <span class="rest-badge">${ex.rest}s</span>
@@ -2109,7 +2227,7 @@ function collectWorkoutData() {
     }
     const commentEl = document.querySelector(`textarea[data-ex="${ei}"]`);
     const rirBtn = document.querySelector(`.rir-btn.active[data-ex="${ei}"]`);
-    return { name: ex.name, trackId: ex.trackId, target: `${ex.sets}×${ex.reps}`, sets, comment: commentEl ? commentEl.value : '', rir: rirBtn ? parseInt(rirBtn.dataset.rir) : null };
+    return { name: ex.name, originalName: ex.name, exerciseId: resolveSlotExerciseId(via.id, ei), mappedBy: 'app', target: `${ex.sets}×${ex.reps}`, sets, comment: commentEl ? commentEl.value : '', rir: rirBtn ? parseInt(rirBtn.dataset.rir) : null };
   });
 
   const cardioDone = getStorage('cardio-' + getSelectedDayKey()) || false;
@@ -2137,7 +2255,7 @@ function saveWorkout() {
   const prsAfter = via ? via.exercises.map((ex, ei) => getAllTimePR(via.id, ei)) : [];
   const newPRs = [];
   prsAfter.forEach((pr, i) => {
-    if (pr > prsBefore[i] && pr > 0) newPRs.push(`${via.exercises[i].name}: ${pr}kg`);
+    if (prsBefore[i] > 0 && pr > prsBefore[i]) newPRs.push(`${via.exercises[i].name}: ${pr}kg`);
   });
 
   if (newPRs.length > 0) {
@@ -2261,8 +2379,10 @@ function renderProgress() {
   let html = renderGoalCard();
   html += `<div class="segmented">
     <button class="filter-btn active" id="pt-resumen" onclick="switchProgressView('resumen')">Resumen</button>
-    <button class="filter-btn" id="pt-pesos" onclick="switchProgressView('pesos')">Pesos</button>
+    <button class="filter-btn" id="pt-ejercicios" onclick="switchProgressView('ejercicios')">Ejercicios</button>
+    <button class="filter-btn" id="pt-patrones" onclick="switchProgressView('patrones')">Patrones</button>
     <button class="filter-btn" id="pt-registros" onclick="switchProgressView('registros')">Registros</button>
+    <button class="filter-btn" id="pt-datos" onclick="switchProgressView('datos')">Datos</button>
   </div><div id="progressContent"></div>
   <button class="share-btn" onclick="shareProgress()">📤 Compartir mi progreso</button>`;
   document.getElementById('historyInner').innerHTML = html;
@@ -2270,7 +2390,7 @@ function renderProgress() {
 }
 
 function switchProgressView(view) {
-  ['resumen','pesos','registros'].forEach(v => {
+  ['resumen','ejercicios','patrones','registros','datos'].forEach(v => {
     const b = document.getElementById('pt-' + v);
     if (b) b.classList.toggle('active', v === view);
   });
@@ -2278,8 +2398,10 @@ function switchProgressView(view) {
   if (!c) return;
   switch(view) {
     case 'resumen': c.innerHTML = buildSummaryView(); break;
-    case 'pesos': c.innerHTML = buildWeightView(); break;
+    case 'ejercicios': c.innerHTML = buildExerciseView(); break;
+    case 'patrones': c.innerHTML = buildPatternView(); break;
     case 'registros': c.innerHTML = buildHistoryEntries(); break;
+    case 'datos': c.innerHTML = buildDataView(); break;
   }
 }
 
@@ -2410,12 +2532,11 @@ function buildWeeklySummary() {
   const cardioCount = weekWorkouts.filter(w => w.cardio).length;
   const prsThisWeek = [];
   weekWorkouts.forEach(w => {
-    const via = PROGRAM.vias.find(v => v.id === w.viaId);
-    if (!via) return;
-    (w.exercises || []).forEach((ex, ei) => {
+    (w.exercises || []).forEach(ex => {
       const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
-      const tId = getSavedTrackId(ex);
-      const pr = getAllTimePR(via.id, 0, tId);
+      const id = getSavedExerciseId(ex, w.date);
+      if (!id) return;
+      const pr = getAllTimePR(null, 0, id);
       if (maxW > 0 && maxW >= pr) prsThisWeek.push({ name: ex.name, weight: maxW });
     });
   });
@@ -2433,57 +2554,42 @@ function buildWeeklySummary() {
   return html;
 }
 
-function getExerciseHistory(trackId) {
-  if (!trackId) return [];
-  return Object.keys(localStorage)
-    .filter(k => k.startsWith('workout-'))
-    .sort()
-    .reduce((acc, k) => {
-      const d = getStorage(k);
-      if (!d || !d.exercises) return acc;
-      d.exercises.forEach(ex => {
-        if (getSavedTrackId(ex) === trackId) {
-          const maxW = Math.max(...ex.sets.map(s => parseFloat(s.weight) || 0));
-          if (maxW > 0) acc.push({ date: d.date, weight: maxW });
-        }
-      });
-      return acc;
-    }, []);
-}
-
-function buildWeightView() {
-  let html = '';
+// ─── Progreso por ejercicio (rutina actual, por id canónico) ─────────
+function buildExerciseView() {
+  let html = `<div class="viz-note">1RM estimado (Epley) con la carga total de la mejor serie de cada sesión: incluye la barra guiada y, en dominadas y fondos, tu peso corporal.</div>`;
   PROGRAM.vias.forEach(via => {
     html += `<div class="progress-via-header">${via.name} · ${via.subtitle}</div>`;
     via.exercises.forEach((ex, ei) => {
-      const hist = getExerciseHistory(ex.trackId);
+      const id = resolveSlotExerciseId(via.id, ei);
+      const def = exDef(id);
+      const hist = getIdSessions(id).filter(h => h.best);
       const suggestion = getWeightSuggestion(ex, via.id, ei);
+      const name = escapeHtml(ex.name);
       html += `<div class="progress-ex">`;
-      if (hist.length === 0) {
-        html += `<div class="progress-ex-head"><span class="progress-ex-name">${ex.name}</span><span class="progress-no-data">Sin datos</span></div>`;
+      if (!def || def.loadModel === 'none') {
+        html += `<div class="progress-ex-head"><span class="progress-ex-name">${name}</span><span class="progress-no-data">Sin carga · se sigue por reps</span></div>`;
+      } else if (hist.length === 0) {
+        html += `<div class="progress-ex-head"><span class="progress-ex-name">${name}</span><span class="progress-no-data">Sin datos</span></div>`;
       } else {
-        const last = hist[hist.length - 1];
-        const first = hist[0];
-        const trend = last.weight - first.weight;
-        const max = Math.max(...hist.map(h => h.weight));
-        const e1rm = ex.reps <= 12 ? calculate1RM(last.weight, ex.reps) : 0;
-
+        const last = hist[hist.length - 1].best;
+        const first = hist[0].best;
+        const trend = Math.round((last.e1rm - first.e1rm) * 10) / 10;
+        const max = Math.max(...hist.map(h => h.best.e1rm));
         let statusIcon = '';
         if (suggestion) {
           const icons = { up: '↑', hold: '=', down: '↓', stall: '⚠', pr: '★' };
           statusIcon = `<span class="suggestion-badge ${suggestion.status}" style="font-size:10px;margin-left:4px;">${icons[suggestion.status]}</span>`;
         }
-
         html += `<div class="progress-ex-head">
-          <span class="progress-ex-name">${ex.name}${statusIcon}${e1rm > 0 ? `<span class="e1rm-badge">1RM≈${e1rm}kg</span>` : ''}</span>
-          <span class="progress-ex-val">${last.weight}kg</span>
+          <span class="progress-ex-name">${name}${statusIcon}</span>
+          <span class="progress-ex-val">${last.e1rm}<span class="progress-ex-unit"> kg 1RM</span></span>
           ${hist.length > 1 && trend !== 0 ? `<span class="progress-trend ${trend > 0 ? 'up' : 'down'}">${trend > 0 ? '+' : ''}${trend.toFixed(1)}</span>` : ''}
         </div>
+        <div class="progress-ex-sub">Última mejor serie ${last.load} kg × ${last.reps}${def.extraLoadKg ? ` (${last.raw} + ${def.extraLoadKg} barra)` : ''} · ${hist.length} ${hist.length === 1 ? 'sesión' : 'sesiones'} desde ${formatSessionDate(hist[0].date)}</div>
         <div class="sparkline">`;
-        hist.slice(-8).forEach((h, i, arr) => {
-          const pct = max > 0 ? Math.max(10, (h.weight / max) * 100) : 10;
-          const isLast = i === arr.length - 1;
-          html += `<div class="spark-bar" style="height:${pct}%;${isLast ? 'background:var(--green);opacity:1' : ''}" title="${h.date}: ${h.weight}kg"></div>`;
+        hist.slice(-12).forEach((h, i, arr) => {
+          const pct = max > 0 ? Math.max(10, (h.best.e1rm / max) * 100) : 10;
+          html += `<div class="spark-bar" style="height:${pct}%" title="${h.date}: 1RM≈${h.best.e1rm} kg (${h.best.load}×${h.best.reps})"></div>`;
         });
         html += `</div>`;
       }
@@ -2491,6 +2597,210 @@ function buildWeightView() {
     });
   });
   return html;
+}
+
+// ─── Progreso por patrón de movimiento: todas las variantes superpuestas ─────
+const SERIES_SLOTS = 8;
+
+function getAllIdSessions() {
+  const byId = {};
+  Object.keys(localStorage).filter(k => k.startsWith('workout-')).sort().forEach(k => {
+    const d = getStorage(k);
+    if (!d || !d.exercises) return;
+    d.exercises.forEach(ex => {
+      const id = getSavedExerciseId(ex, d.date);
+      if (!id || !ex.sets) return;
+      const { best } = savedBestSet(ex, id, d.date);
+      if (!best) return;
+      const list = byId[id] || (byId[id] = []);
+      const same = list.find(p => p.date === d.date);
+      if (same) { if (best.e1rm > same.best.e1rm) same.best = best; }
+      else list.push({ date: d.date, best });
+    });
+  });
+  return byId;
+}
+
+function buildPatternView() {
+  const byId = getAllIdSessions();
+  const patterns = {};
+  Object.keys(byId).forEach(id => {
+    const def = exDef(id);
+    if (!def || def.loadModel === 'none') return;
+    (patterns[def.pattern] || (patterns[def.pattern] = [])).push({ id, def, points: byId[id] });
+  });
+  const order = Object.keys(XL.PATTERNS).filter(p => patterns[p]);
+  if (!order.length) return `<div class="empty-state"><p>Aún no hay series con carga para comparar.</p></div>`;
+  let html = `<div class="viz-note">Cada línea es un ejercicio o variante; el color sigue al ejercicio. La línea discontinua marca un cambio de máquina. Toca un punto para ver la serie.</div>`;
+  order.forEach(p => {
+    const series = patterns[p].sort((a, b) => a.points[0].date.localeCompare(b.points[0].date)).slice(0, SERIES_SLOTS);
+    html += `<div class="chart-card pattern-card">
+      <div class="pattern-title">${escapeHtml(XL.PATTERNS[p])}</div>
+      ${patternChartSvg(series)}
+      <div class="viz-legend">${series.map((s, i) => `<span class="viz-legend-item"><span class="viz-swatch" style="background:var(--series-${i + 1})"></span>${escapeHtml(s.def.name)}${s.def.active === false ? ' <span class="viz-muted">(antiguo)</span>' : ''}</span>`).join('')}</div>
+      <details class="viz-table"><summary>Ver datos</summary><table><thead><tr><th>Fecha</th><th>Ejercicio</th><th>Mejor serie</th><th>1RM≈</th></tr></thead><tbody>
+        ${series.flatMap(s => s.points.map(pt => ({ s, pt }))).sort((a, b) => b.pt.date.localeCompare(a.pt.date)).map(({ s, pt }) => `<tr><td>${formatSessionDate(pt.date)}</td><td>${escapeHtml(s.def.name)}</td><td>${pt.best.load}×${pt.best.reps}</td><td>${pt.best.e1rm}</td></tr>`).join('')}
+      </tbody></table></details>
+    </div>`;
+  });
+  return html;
+}
+
+function patternChartSvg(series) {
+  const W = 340, H = 150, padL = 34, padR = 10, padT = 10, padB = 22;
+  const day = d => new Date(d + 'T12:00:00').getTime();
+  const all = series.flatMap(s => s.points);
+  let x0 = Math.min(...all.map(p => day(p.date))), x1 = Math.max(...all.map(p => day(p.date)));
+  if (x1 === x0) { x0 -= 86400000 * 7; x1 += 86400000 * 7; }
+  let y0 = Math.min(...all.map(p => p.best.e1rm)), y1 = Math.max(...all.map(p => p.best.e1rm));
+  const padY = Math.max(2, (y1 - y0) * 0.12);
+  y0 = Math.max(0, Math.floor((y0 - padY) / 5) * 5); y1 = Math.ceil((y1 + padY) / 5) * 5;
+  const X = t => padL + (t - x0) / (x1 - x0) * (W - padL - padR);
+  const Y = v => padT + (1 - (v - y0) / (y1 - y0)) * (H - padT - padB);
+  const ticks = [y0, Math.round((y0 + y1) / 2), y1];
+  let svg = `<svg class="pattern-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="1RM estimado por fecha">`;
+  ticks.forEach(t => { svg += `<line class="viz-grid" x1="${padL}" x2="${W - padR}" y1="${Y(t)}" y2="${Y(t)}"/><text class="viz-axis" x="${padL - 6}" y="${Y(t) + 3.5}" text-anchor="end">${t}</text>`; });
+  const fmtShort = t => { const d = new Date(t); return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }).replace('.', ''); };
+  svg += `<text class="viz-axis" x="${padL}" y="${H - 6}">${fmtShort(x0)}</text><text class="viz-axis" x="${W - padR}" y="${H - 6}" text-anchor="end">${fmtShort(x1)}</text>`;
+  // Cambios de máquina: inicio de cada variante cuyo padre también está en el gráfico
+  series.forEach(s => {
+    if (s.def.variantOf && series.some(o => o.id === s.def.variantOf)) {
+      const x = X(day(s.def.since || s.points[0].date));
+      svg += `<line class="viz-change" x1="${x}" x2="${x}" y1="${padT}" y2="${H - padB}"><title>Cambio de máquina: ${escapeHtml(s.def.name)}</title></line>`;
+    }
+  });
+  series.forEach((s, i) => {
+    const pts = s.points.map(p => [X(day(p.date)), Y(p.best.e1rm), p]);
+    const col = `var(--series-${i + 1})`;
+    if (pts.length > 1) svg += `<polyline class="viz-line" style="stroke:${col}" points="${pts.map(q => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join(' ')}"/>`;
+    pts.forEach(([x, y, p]) => {
+      svg += `<g class="viz-pt"><circle class="viz-hit" cx="${x}" cy="${y}" r="10"/><circle class="viz-dot" style="fill:${col}" cx="${x}" cy="${y}" r="4"/><title>${formatSessionDate(p.date)} · ${escapeHtml(s.def.name)}\n1RM≈${p.best.e1rm} kg (${p.best.load} kg × ${p.best.reps})</title></g>`;
+    });
+  });
+  return svg + `</svg>`;
+}
+
+// ─── Datos: auditoría de nombres y migración ─────────────────────────
+let auditFilter = 'todos';
+
+function getWorkoutStore() {
+  const s = {};
+  Object.keys(localStorage).filter(k => k.startsWith('workout-')).forEach(k => { s[k] = getStorage(k); });
+  return s;
+}
+
+function buildDataView() {
+  const store = getWorkoutStore();
+  const rows = XL.audit(store);
+  const stats = XL.countStats(store);
+  const plan = XL.migrate(store);
+  const backup = getStorage('exercise-migration-backup');
+  const pending = plan.changes.length;
+  const counts = {
+    dudoso: rows.filter(r => r.confidence === 'dudoso').length,
+    sin: rows.filter(r => r.confidence === 'sin asignar').length,
+    saltos: rows.filter(r => r.jumps.length).length,
+  };
+
+  let html = `<div class="weekly-summary-card">
+    <div class="weekly-summary-title">🗂 Ejercicios canónicos</div>
+    <div class="ws-row"><span class="ws-label">Sesiones · ejercicios · series</span><span class="ws-val">${stats.sessions} · ${stats.exercises} · ${stats.sets}</span></div>
+    <div class="ws-row"><span class="ws-label">Ejercicios con id guardado</span><span class="ws-val">${stats.withId}/${stats.exercises}</span></div>
+    <div class="ws-row"><span class="ws-label">Pendientes de migrar</span><span class="ws-val">${pending}</span></div>
+    <div class="ws-row"><span class="ws-label">Sin asignar</span><span class="ws-val" style="color:${plan.unmapped.length ? 'var(--red)' : 'var(--accent)'}">${plan.unmapped.length}</span></div>
+    <div class="data-actions">
+      <button class="backup-btn" onclick="runMigration(true)">Simular</button>
+      <button class="backup-btn export" onclick="runMigration(false)" ${pending ? '' : 'disabled'}>Migrar</button>
+      <button class="backup-btn" onclick="undoMigration()" ${backup ? '' : 'disabled'}>Deshacer</button>
+    </div>
+    <div id="migrationReport"></div>
+  </div>`;
+
+  html += `<div class="section-title">Auditoría de nombres</div>
+    <div class="viz-note">Una fila por nombre + trackId tal como se guardó. "Dudoso" = la asignación es una suposición razonable que conviene confirmar. Los saltos de carga ≥25 % suelen indicar otra máquina o variante.</div>
+    <div class="segmented">
+      ${[['todos', `Todos ${rows.length}`], ['dudoso', `Dudosos ${counts.dudoso}`], ['sin', `Sin id ${counts.sin}`], ['saltos', `Saltos ${counts.saltos}`]].map(([k, l]) => `<button class="filter-btn ${auditFilter === k ? 'active' : ''}" onclick="setAuditFilter('${k}')">${l}</button>`).join('')}
+    </div>`;
+
+  const shown = rows.filter(r => auditFilter === 'todos' || (auditFilter === 'dudoso' && r.confidence === 'dudoso') || (auditFilter === 'sin' && r.confidence === 'sin asignar') || (auditFilter === 'saltos' && r.jumps.length));
+  if (!shown.length) html += `<div class="empty-state"><p>Nada que mostrar con este filtro.</p></div>`;
+  shown.forEach(r => {
+    const chip = { seguro: 'ok', app: 'ok', dudoso: 'warn', 'sin asignar': 'bad' }[r.confidence];
+    const range = r.minW != null ? (r.minW === r.maxW ? `${r.minW} kg` : `${r.minW}–${r.maxW} kg`) : 'sin peso';
+    const reps = r.minR != null ? (r.minR === r.maxR ? `${r.minR} reps` : `${r.minR}–${r.maxR} reps`) : '';
+    html += `<div class="audit-row">
+      <div class="audit-head"><span class="audit-name">${escapeHtml(r.name)}</span><span class="audit-chip ${chip}">${r.confidence}</span></div>
+      <div class="audit-meta">${r.trackId ? `trackId <code>${escapeHtml(r.trackId)}</code> · ` : 'sin trackId · '}${formatSessionDate(r.first)}${r.first !== r.last ? ' → ' + formatSessionDate(r.last) : ''} · ${r.sessions} ses. · ${r.sets} series · ${range}${reps ? ' · ' + reps : ''}</div>
+      <div class="audit-ids">→ ${r.ids.map(id => id === '—' ? '<b class="audit-missing">sin asignar</b>' : `<code>${escapeHtml(id)}</code> ${exDef(id) ? escapeHtml(exDef(id).name) : ''}`).join('<br>→ ')}</div>
+      ${r.jumps.length ? `<div class="audit-jumps">⚠ Salto de carga: ${r.jumps.map(j => `${formatSessionDate(j.date)} ${j.from}→${j.to} kg`).join(' · ')}</div>` : ''}
+      ${r.notes.length ? `<div class="audit-notes">${r.notes.map(escapeHtml).join('<br>')}</div>` : ''}
+    </div>`;
+  });
+  html += `<div class="data-actions"><button class="backup-btn export" onclick="downloadAuditCsv()">Descargar auditoría (CSV)</button></div>`;
+  return html;
+}
+
+function setAuditFilter(f) {
+  auditFilter = f;
+  const c = document.getElementById('progressContent');
+  if (c) c.innerHTML = buildDataView();
+}
+
+function downloadFile(name, text, type) {
+  const blob = new Blob([text], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function downloadAuditCsv() {
+  downloadFile(`marc-tracker-auditoria-${dateKey()}.csv`, '﻿' + XL.auditToCsv(XL.audit(getWorkoutStore())), 'text/csv');
+}
+
+function renderMigrationReport(title, result, validation) {
+  const el = document.getElementById('migrationReport');
+  if (!el) return;
+  const byConf = c => result.changes.filter(x => x.confidence === c).length;
+  let html = `<div class="ss-block"><div class="ss-block-title">${title}</div>
+    <div class="ss-more"><div>${result.changes.length} ejercicios reciben id (${byConf('seguro')} seguros, ${byConf('dudoso')} dudosos).</div>
+    <div>${result.unmapped.length ? `⚠ ${result.unmapped.length} sin asignar: ${[...new Set(result.unmapped.map(u => u.name))].map(escapeHtml).join(', ')}` : '0 sin asignar.'}</div></div>`;
+  if (validation) html += `<div class="ss-more">${validation.checks.map(c => `<div>${c.ok ? '✓' : '✗'} ${c.label}: ${c.detail}</div>`).join('')}</div>`;
+  el.innerHTML = html + `</div>`;
+}
+
+function runMigration(dry) {
+  const before = getWorkoutStore();
+  const result = XL.migrate(before);
+  const after = {};
+  Object.keys(before).forEach(k => { after[k] = result.store[k]; });
+  const validation = XL.validateMigration(before, after);
+  if (dry) { renderMigrationReport('Simulación (no se ha escrito nada)', result, validation); return; }
+  if (!confirm(`Se van a asignar ${result.changes.length} ids de ejercicio. Antes se descarga una copia de seguridad completa.\n\n¿Migrar?`)) return;
+  const allData = {};
+  for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (isBackupKey(k)) allData[k] = getStorage(k); }
+  downloadFile(`marc-tracker-premigracion-${dateKey()}.json`, JSON.stringify(allData, null, 2), 'application/json');
+  let inAppBackup = true;
+  try { setStorage('exercise-migration-backup', { createdAt: new Date().toISOString(), store: before }); }
+  catch (e) { inAppBackup = false; }
+  Object.keys(after).forEach(k => setStorage(k, after[k]));
+  setStorage('exercise-migration-meta', Object.assign({ migratedAt: new Date().toISOString() }, result.store['exercise-migration-meta']));
+  const check = XL.validateMigration(before, getWorkoutStore());
+  switchProgressView('datos');
+  renderMigrationReport('Migración hecha' + (inAppBackup ? '' : ' (sin copia interna: usa el fichero descargado para deshacer)'), result, check);
+  showToast(check.ok ? 'Migración completada' : 'Migración con avisos: revisa el informe');
+}
+
+function undoMigration() {
+  const backup = getStorage('exercise-migration-backup');
+  if (!backup) return;
+  if (!confirm(`¿Restaurar los entrenos como estaban el ${new Date(backup.createdAt).toLocaleString('es-ES')}?`)) return;
+  Object.keys(backup.store).forEach(k => setStorage(k, backup.store[k]));
+  localStorage.removeItem('exercise-migration-backup');
+  localStorage.removeItem('exercise-migration-meta');
+  switchProgressView('datos');
+  showToast('Migración deshecha');
 }
 
 function buildHistoryEntries() {
@@ -2530,7 +2840,10 @@ function buildHistoryEntries() {
         const setsStr = ex.sets.filter(s => s.weight || s.reps).map(s => `${s.weight || '?'}kg×${s.reps || '?'}`).join(' | ');
         const rirStr = ex.rir != null ? ` · RIR ${ex.rir}` : '';
         if (setsStr) {
-          html += `<div class="history-exercise"><div class="history-exercise-name">${ex.name}</div><div class="history-sets">${setsStr}${rirStr}${ex.comment ? ' · ' + ex.comment : ''}</div></div>`;
+          const cid = getSavedExerciseId(ex, data.date);
+          const cdef = cid ? exDef(cid) : null;
+          const canon = cdef && XL.norm(cdef.name) !== XL.norm(ex.name) ? `<span class="history-canon">→ ${escapeHtml(cdef.name)}</span>` : (cid ? '' : '<span class="history-canon audit-missing">sin id</span>');
+          html += `<div class="history-exercise"><div class="history-exercise-name">${escapeHtml(ex.name)}${canon}</div><div class="history-sets">${setsStr}${rirStr}${ex.comment ? ' · ' + ex.comment : ''}</div></div>`;
         }
       });
       html += `<button class="delete-entry-btn" onclick="confirmDelete('${entry.key}', 'workout', event)">Eliminar</button></div></div>`;
@@ -2694,11 +3007,16 @@ switchTab('workout');
 })();
 
 // BACKUP: Export / Import
+function isBackupKey(key) {
+  if (key === 'exercise-migration-backup') return false; // copia interna, ya va en el fichero de backup
+  return ['workout-', 'diet-', 'medidas-', 'cardio-', 'weight-', 'exercise-'].some(p => key.startsWith(p));
+}
+
 function exportData() {
   const data = {};
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key.startsWith('workout-') || key.startsWith('diet-') || key.startsWith('medidas-') || key.startsWith('cardio-') || key.startsWith('weight-')) {
+    if (isBackupKey(key)) {
       data[key] = getStorage(key);
     }
   }
@@ -2727,14 +3045,15 @@ function importData(event) {
       if (keys.length === 0) { showToast('Fichero vacío'); return; }
       let count = 0;
       keys.forEach(key => {
-        if (key.startsWith('workout-') || key.startsWith('diet-') || key.startsWith('medidas-') || key.startsWith('cardio-') || key.startsWith('weight-')) {
+        if (isBackupKey(key)) {
           setStorage(key, data[key]);
           count++;
         }
       });
       showToast(`${count} registros importados`);
       render();
-      if (document.querySelector('.tab[data-tab="history"]').classList.contains('active')) renderProgress();
+      const histTab = document.querySelector('.nav-item[data-tab="history"]');
+      if (histTab && histTab.classList.contains('active')) renderProgress();
     } catch (err) {
       showToast('Error al importar');
     }
