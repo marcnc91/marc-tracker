@@ -836,25 +836,15 @@ input.file-input-hidden { display: none; }
 .progress-ex-unit { font-size: 12px; font-weight: 500; color: var(--text2); }
 .progress-ex-sub { font-size: 12px; color: var(--text2); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
 .viz-note { font-size: 13px; color: var(--text2); line-height: 1.4; margin: 0 4px 12px; }
-.pattern-title { font-size: 15px; font-weight: 600; margin: 2px 2px 6px; }
-.pattern-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.ex-svg { width: 100%; height: auto; display: block; margin-top: 4px; overflow: visible; }
+.progress-trend:not(.up):not(.down) { color: var(--text2); background: var(--fill); }
 .viz-grid { stroke: var(--separator); stroke-width: 1; }
 .viz-axis { fill: var(--text3); font-size: 10px; font-variant-numeric: tabular-nums; }
-.viz-change { stroke: var(--text3); stroke-width: 1.5; stroke-dasharray: 3 3; }
 .viz-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
 .viz-dot { stroke: var(--bg2); stroke-width: 2; }
 .viz-hit { fill: transparent; }
 .viz-pt { cursor: pointer; }
 .viz-pt:hover .viz-dot { r: 5.5; }
-.viz-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; color: var(--text); }
-.viz-legend-item { display: inline-flex; align-items: center; gap: 6px; }
-.viz-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
-.viz-muted { color: var(--text3); }
-.viz-table { margin-top: 8px; font-size: 12px; }
-.viz-table summary { color: var(--tint); cursor: pointer; font-weight: 500; padding: 4px 0; }
-.viz-table table { width: 100%; border-collapse: collapse; margin-top: 4px; font-variant-numeric: tabular-nums; }
-.viz-table th { text-align: left; color: var(--text2); font-weight: 500; padding: 4px 4px; border-bottom: 0.5px solid var(--separator); }
-.viz-table td { padding: 4px 4px; border-bottom: 0.5px solid var(--separator); color: var(--text); }
 .history-canon { display: block; font-size: 11px; color: var(--text3); font-weight: 400; }
 
 /* ─── Weight suggestions ────────────────────────────── */
@@ -1519,7 +1509,7 @@ function changeMachine(ei) {
     }
   }
 
-  const label = prompt(`Cambio de máquina en "${slot.name}".\n\nDesde hoy se registra como una variante nueva, con su propio historial y sugerencias. Lo anterior sigue visible en Progreso › Patrones.\n\n¿Cómo identificas la máquina nueva? (p. ej. Keiser, Technogym, polea del fondo…)`);
+  const label = prompt(`Cambio de máquina en "${slot.name}".\n\nDesde hoy se registra como una variante nueva, con su propio historial y sugerencias.\n\n¿Cómo identificas la máquina nueva? (p. ej. Keiser, Technogym, polea del fondo…)`);
   if (!label || !label.trim()) return;
   const extraStr = prompt('¿Hay que sumar un peso fijo que la máquina no marca (barra guiada, carro…)? En kg; 0 si no.', String(cur.extraLoadKg || 0));
   if (extraStr === null) return;
@@ -1637,7 +1627,7 @@ function getExerciseSessions(viaId, exerciseIdx) {
   if (!exerciseId) return [];
   const occIdx = getOccurrenceIndex(viaId, exerciseIdx);
   return Object.keys(localStorage)
-    .filter(k => k.startsWith('workout-')).sort().reverse()
+    .filter(k => k.startsWith('workout-') && k.slice(8) >= roundStart()).sort().reverse()
     .reduce((acc, k) => {
       const d = getStorage(k);
       if (!d || !d.exercises) return acc;
@@ -1660,11 +1650,11 @@ function openExHistory(ei) {
   const sessions = getExerciseSessions(via.id, ei);
   document.getElementById('exHistTitle').textContent = ex.name;
   const def = exDef(resolveSlotExerciseId(via.id, ei));
-  document.getElementById('exHistSub').textContent = `Objetivo ${ex.sets}×${ex.reps}` + (sessions.length ? ` · ${sessions.length} ${sessions.length === 1 ? 'sesión' : 'sesiones'}` : '') + (def ? ` · ${def.name}` : '') + (def && def.extraLoadKg ? ` · 1RM con +${def.extraLoadKg} kg de barra` : '');
+  document.getElementById('exHistSub').textContent = `Objetivo ${ex.sets}×${ex.reps} · Ronda ${GOAL.ronda}` + (sessions.length ? ` · ${sessions.length} ${sessions.length === 1 ? 'sesión' : 'sesiones'}` : '') + (def && def.extraLoadKg ? ` · 1RM con +${def.extraLoadKg} kg de barra` : '');
 
   let html = '';
   if (sessions.length === 0) {
-    html = `<div class="rm-calc-empty">Todavía no hay registros de este ejercicio.<br>Guarda un entreno y aparecerá aquí.</div>`;
+    html = `<div class="rm-calc-empty">Todavía no hay registros de este ejercicio en esta ronda.<br>Guarda un entreno y aparecerá aquí.</div>`;
   } else {
     const weighted = sessions.filter(s => s.top > 0);
     if (weighted.length) {
@@ -2364,7 +2354,6 @@ function renderProgress() {
   html += `<div class="segmented">
     <button class="filter-btn active" id="pt-resumen" onclick="switchProgressView('resumen')">Resumen</button>
     <button class="filter-btn" id="pt-ejercicios" onclick="switchProgressView('ejercicios')">Ejercicios</button>
-    <button class="filter-btn" id="pt-patrones" onclick="switchProgressView('patrones')">Patrones</button>
     <button class="filter-btn" id="pt-registros" onclick="switchProgressView('registros')">Registros</button>
   </div><div id="progressContent"></div>
   <button class="share-btn" onclick="shareProgress()">📤 Compartir mi progreso</button>`;
@@ -2373,7 +2362,7 @@ function renderProgress() {
 }
 
 function switchProgressView(view) {
-  ['resumen','ejercicios','patrones','registros'].forEach(v => {
+  ['resumen','ejercicios','registros'].forEach(v => {
     const b = document.getElementById('pt-' + v);
     if (b) b.classList.toggle('active', v === view);
   });
@@ -2382,7 +2371,6 @@ function switchProgressView(view) {
   switch(view) {
     case 'resumen': c.innerHTML = buildSummaryView(); break;
     case 'ejercicios': c.innerHTML = buildExerciseView(); break;
-    case 'patrones': c.innerHTML = buildPatternView(); break;
     case 'registros': c.innerHTML = buildHistoryEntries(); break;
   }
 }
@@ -2536,44 +2524,35 @@ function buildWeeklySummary() {
   return html;
 }
 
-// ─── Progreso por ejercicio (rutina actual, por id canónico) ─────────
+// ─── Progreso por ejercicio: solo la ronda actual ─────────────────────
+// Las rondas anteriores siguen guardadas, pero aquí no se mezclan: otros ejercicios,
+// otras máquinas y otros rangos de reps hacen la comparación confusa.
+function roundStart() { return GOAL.fechaInicio; }
+
 function buildExerciseView() {
-  let html = `<div class="viz-note">1RM estimado (Epley) con la carga total de la mejor serie de cada sesión: incluye la barra guiada y, en dominadas y fondos, tu peso corporal.</div>`;
+  let html = `<div class="viz-note">Ronda ${GOAL.ronda}, desde el ${formatSessionDate(roundStart())}. Cada gráfica es el 1RM estimado de tu mejor serie de cada sesión (con la barra guiada y el peso corporal incluidos donde toca).</div>`;
   PROGRAM.vias.forEach(via => {
     html += `<div class="progress-via-header">${via.name} · ${via.subtitle}</div>`;
     via.exercises.forEach((ex, ei) => {
       const id = resolveSlotExerciseId(via.id, ei);
       const def = exDef(id);
-      const hist = getIdSessions(id).filter(h => h.best);
-      const suggestion = getWeightSuggestion(ex, via.id, ei);
+      const hist = getIdSessions(id).filter(h => h.best && h.date >= roundStart());
       const name = escapeHtml(ex.name);
       html += `<div class="progress-ex">`;
       if (!def || def.loadModel === 'none') {
-        html += `<div class="progress-ex-head"><span class="progress-ex-name">${name}</span><span class="progress-no-data">Sin carga · se sigue por reps</span></div>`;
+        html += `<div class="progress-ex-head"><span class="progress-ex-name">${name}</span><span class="progress-no-data">Sin carga</span></div>`;
       } else if (hist.length === 0) {
-        html += `<div class="progress-ex-head"><span class="progress-ex-name">${name}</span><span class="progress-no-data">Sin datos</span></div>`;
+        html += `<div class="progress-ex-head"><span class="progress-ex-name">${name}</span><span class="progress-no-data">Sin datos esta ronda</span></div>`;
       } else {
         const last = hist[hist.length - 1].best;
-        const first = hist[0].best;
-        const trend = Math.round((last.e1rm - first.e1rm) * 10) / 10;
-        const max = Math.max(...hist.map(h => h.best.e1rm));
-        let statusIcon = '';
-        if (suggestion) {
-          const icons = { up: '↑', hold: '=', down: '↓', stall: '⚠', pr: '★' };
-          statusIcon = `<span class="suggestion-badge ${suggestion.status}" style="font-size:10px;margin-left:4px;">${icons[suggestion.status]}</span>`;
-        }
+        const trend = Math.round((last.e1rm - hist[0].best.e1rm) * 10) / 10;
         html += `<div class="progress-ex-head">
-          <span class="progress-ex-name">${name}${statusIcon}</span>
-          <span class="progress-ex-val">${last.e1rm}<span class="progress-ex-unit"> kg 1RM</span></span>
-          ${hist.length > 1 && trend !== 0 ? `<span class="progress-trend ${trend > 0 ? 'up' : 'down'}">${trend > 0 ? '+' : ''}${trend.toFixed(1)}</span>` : ''}
+          <span class="progress-ex-name">${name}</span>
+          <span class="progress-ex-val">${last.e1rm}<span class="progress-ex-unit"> kg</span></span>
+          ${hist.length > 1 ? `<span class="progress-trend ${trend > 0 ? 'up' : trend < 0 ? 'down' : ''}">${trend > 0 ? '+' : ''}${trend.toFixed(1)}</span>` : ''}
         </div>
-        <div class="progress-ex-sub">Última mejor serie ${last.load} kg × ${last.reps}${def.extraLoadKg ? ` (${last.raw} + ${def.extraLoadKg} barra)` : ''} · ${hist.length} ${hist.length === 1 ? 'sesión' : 'sesiones'} desde ${formatSessionDate(hist[0].date)}</div>
-        <div class="sparkline">`;
-        hist.slice(-12).forEach((h, i, arr) => {
-          const pct = max > 0 ? Math.max(10, (h.best.e1rm / max) * 100) : 10;
-          html += `<div class="spark-bar" style="height:${pct}%" title="${h.date}: 1RM≈${h.best.e1rm} kg (${h.best.load}×${h.best.reps})"></div>`;
-        });
-        html += `</div>`;
+        <div class="progress-ex-sub">Última: ${last.raw} kg × ${last.reps}${def.extraLoadKg ? ` (+${def.extraLoadKg} barra)` : ''}${def.loadModel === 'bodyweight' ? ' + peso corporal' : ''} · ${hist.length} ${hist.length === 1 ? 'sesión' : 'sesiones'}</div>
+        ${hist.length > 1 ? exerciseChartSvg(hist) : ''}`;
       }
       html += `</div>`;
     });
@@ -2581,83 +2560,27 @@ function buildExerciseView() {
   return html;
 }
 
-// ─── Progreso por patrón de movimiento: todas las variantes superpuestas ─────
-const SERIES_SLOTS = 8;
-
-function getAllIdSessions() {
-  const byId = {};
-  Object.keys(localStorage).filter(k => k.startsWith('workout-')).sort().forEach(k => {
-    const d = getStorage(k);
-    if (!d || !d.exercises) return;
-    d.exercises.forEach(ex => {
-      const id = getSavedExerciseId(ex, d.date);
-      if (!id || !ex.sets) return;
-      const { best } = savedBestSet(ex, id, d.date);
-      if (!best) return;
-      const list = byId[id] || (byId[id] = []);
-      const same = list.find(p => p.date === d.date);
-      if (same) { if (best.e1rm > same.best.e1rm) same.best = best; }
-      else list.push({ date: d.date, best });
-    });
-  });
-  return byId;
-}
-
-function buildPatternView() {
-  const byId = getAllIdSessions();
-  const patterns = {};
-  Object.keys(byId).forEach(id => {
-    const def = exDef(id);
-    if (!def || def.loadModel === 'none') return;
-    (patterns[def.pattern] || (patterns[def.pattern] = [])).push({ id, def, points: byId[id] });
-  });
-  const order = Object.keys(XL.PATTERNS).filter(p => patterns[p]);
-  if (!order.length) return `<div class="empty-state"><p>Aún no hay series con carga para comparar.</p></div>`;
-  let html = `<div class="viz-note">Cada línea es un ejercicio o variante; el color sigue al ejercicio. La línea discontinua marca un cambio de máquina. Toca un punto para ver la serie.</div>`;
-  order.forEach(p => {
-    const series = patterns[p].sort((a, b) => a.points[0].date.localeCompare(b.points[0].date)).slice(0, SERIES_SLOTS);
-    html += `<div class="chart-card pattern-card">
-      <div class="pattern-title">${escapeHtml(XL.PATTERNS[p])}</div>
-      ${patternChartSvg(series)}
-      <div class="viz-legend">${series.map((s, i) => `<span class="viz-legend-item"><span class="viz-swatch" style="background:var(--series-${i + 1})"></span>${escapeHtml(s.def.name)}${s.def.active === false ? ' <span class="viz-muted">(antiguo)</span>' : ''}</span>`).join('')}</div>
-      <details class="viz-table"><summary>Ver datos</summary><table><thead><tr><th>Fecha</th><th>Ejercicio</th><th>Mejor serie</th><th>1RM≈</th></tr></thead><tbody>
-        ${series.flatMap(s => s.points.map(pt => ({ s, pt }))).sort((a, b) => b.pt.date.localeCompare(a.pt.date)).map(({ s, pt }) => `<tr><td>${formatSessionDate(pt.date)}</td><td>${escapeHtml(s.def.name)}</td><td>${pt.best.load}×${pt.best.reps}</td><td>${pt.best.e1rm}</td></tr>`).join('')}
-      </tbody></table></details>
-    </div>`;
-  });
-  return html;
-}
-
-function patternChartSvg(series) {
-  const W = 340, H = 150, padL = 34, padR = 10, padT = 10, padB = 22;
+function exerciseChartSvg(hist) {
+  const W = 340, H = 92, padL = 30, padR = 8, padT = 8, padB = 18;
   const day = d => new Date(d + 'T12:00:00').getTime();
-  const all = series.flatMap(s => s.points);
-  let x0 = Math.min(...all.map(p => day(p.date))), x1 = Math.max(...all.map(p => day(p.date)));
-  if (x1 === x0) { x0 -= 86400000 * 7; x1 += 86400000 * 7; }
-  let y0 = Math.min(...all.map(p => p.best.e1rm)), y1 = Math.max(...all.map(p => p.best.e1rm));
-  const padY = Math.max(2, (y1 - y0) * 0.12);
-  y0 = Math.max(0, Math.floor((y0 - padY) / 5) * 5); y1 = Math.ceil((y1 + padY) / 5) * 5;
-  const X = t => padL + (t - x0) / (x1 - x0) * (W - padL - padR);
+  const x0 = day(hist[0].date), x1 = day(hist[hist.length - 1].date);
+  const vals = hist.map(h => h.best.e1rm);
+  const spread = Math.max(2, (Math.max(...vals) - Math.min(...vals)) * 0.2);
+  const y0 = Math.floor(Math.min(...vals) - spread), y1 = Math.ceil(Math.max(...vals) + spread);
+  const X = t => padL + (t - x0) / ((x1 - x0) || 1) * (W - padL - padR);
   const Y = v => padT + (1 - (v - y0) / (y1 - y0)) * (H - padT - padB);
-  const ticks = [y0, Math.round((y0 + y1) / 2), y1];
-  let svg = `<svg class="pattern-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="1RM estimado por fecha">`;
-  ticks.forEach(t => { svg += `<line class="viz-grid" x1="${padL}" x2="${W - padR}" y1="${Y(t)}" y2="${Y(t)}"/><text class="viz-axis" x="${padL - 6}" y="${Y(t) + 3.5}" text-anchor="end">${t}</text>`; });
-  const fmtShort = t => { const d = new Date(t); return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }).replace('.', ''); };
-  svg += `<text class="viz-axis" x="${padL}" y="${H - 6}">${fmtShort(x0)}</text><text class="viz-axis" x="${W - padR}" y="${H - 6}" text-anchor="end">${fmtShort(x1)}</text>`;
-  // Cambios de máquina: inicio de cada variante cuyo padre también está en el gráfico
-  series.forEach(s => {
-    if (s.def.variantOf && series.some(o => o.id === s.def.variantOf)) {
-      const x = X(day(s.def.since || s.points[0].date));
-      svg += `<line class="viz-change" x1="${x}" x2="${x}" y1="${padT}" y2="${H - padB}"><title>Cambio de máquina: ${escapeHtml(s.def.name)}</title></line>`;
-    }
-  });
-  series.forEach((s, i) => {
-    const pts = s.points.map(p => [X(day(p.date)), Y(p.best.e1rm), p]);
-    const col = `var(--series-${i + 1})`;
-    if (pts.length > 1) svg += `<polyline class="viz-line" style="stroke:${col}" points="${pts.map(q => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join(' ')}"/>`;
-    pts.forEach(([x, y, p]) => {
-      svg += `<g class="viz-pt"><circle class="viz-hit" cx="${x}" cy="${y}" r="10"/><circle class="viz-dot" style="fill:${col}" cx="${x}" cy="${y}" r="4"/><title>${formatSessionDate(p.date)} · ${escapeHtml(s.def.name)}\n1RM≈${p.best.e1rm} kg (${p.best.load} kg × ${p.best.reps})</title></g>`;
-    });
+  const fmt = t => new Date(t).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }).replace('.', '');
+  const pts = hist.map(h => [X(day(h.date)), Y(h.best.e1rm), h]);
+  let svg = `<svg class="ex-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="1RM estimado por sesión">
+    <line class="viz-grid" x1="${padL}" x2="${W - padR}" y1="${Y(y0)}" y2="${Y(y0)}"/>
+    <line class="viz-grid" x1="${padL}" x2="${W - padR}" y1="${Y(y1)}" y2="${Y(y1)}"/>
+    <text class="viz-axis" x="${padL - 5}" y="${Y(y1) + 3.5}" text-anchor="end">${y1}</text>
+    <text class="viz-axis" x="${padL - 5}" y="${Y(y0) + 3.5}" text-anchor="end">${y0}</text>
+    <text class="viz-axis" x="${padL}" y="${H - 4}">${fmt(x0)}</text>
+    <text class="viz-axis" x="${W - padR}" y="${H - 4}" text-anchor="end">${fmt(x1)}</text>
+    <polyline class="viz-line" style="stroke:var(--series-1)" points="${pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ')}"/>`;
+  pts.forEach(([x, y, h], i) => {
+    svg += `<g class="viz-pt"><circle class="viz-hit" cx="${x}" cy="${y}" r="10"/><circle class="viz-dot" style="fill:var(--series-1)" cx="${x}" cy="${y}" r="${i === pts.length - 1 ? 4.5 : 3.5}"/><title>${formatSessionDate(h.date)}: ${h.best.raw} kg × ${h.best.reps} → 1RM≈${h.best.e1rm} kg</title></g>`;
   });
   return svg + `</svg>`;
 }
